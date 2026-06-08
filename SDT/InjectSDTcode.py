@@ -88,11 +88,9 @@ def includesPathList(filepath: str):
 import os
 
 def findMainFunction(filepath: str, shader_root: str) -> bool:
-    print(f"Check de {os.path.basename(filepath)} pour la fonction main...")
     
     if hasMain(filepath):
-        print(f"✅ [Found] Fonction main trouvée dans {os.path.basename(filepath)}")
-        return True
+        return os.path.abspath(filepath)
         
     includes = includesPathList(filepath)
     
@@ -108,10 +106,35 @@ def findMainFunction(filepath: str, shader_root: str) -> bool:
         else:
             print(f"[Warning] Impossible de localiser le fichier inclus : {i}")
             continue
-        if findMainFunction(include_path, shader_root):
-            return True
-
+        return findMainFunction(include_path, shader_root)
     return False
+
+def inject_SDTfunctionsinmain(filepath: str, relative_to_root: str):
+    if ".fsh" in filepath.lower():
+        #implement ApplyTextureSynthesis(inout vec4 color, in vec3 fragPos)
+        pass
+    elif ".vsh" in filepath.lower():
+        #implement  PrepareTextureSynthesisVSH()
+        pass
+    else:
+        # implement both in correct mains
+        pass
+
+def injectFSHSDTinmain(filepath: str, relative_to_root: str):
+    """
+    injecte la fonction ApplyTextureSynthesis(inout vec4 color, in vec3 fragPos) dans le main d'un fsh
+    """
+
+def injectVSHSTinmain(filepath: str, relative_to_root: str):
+    """
+    injecte la fonction PrepareTextureSynthesisVSH() dans le main d'un vsh
+    """
+
+def injectBothSDTinmains(filepath: str, relative_to_root: str):
+    """
+    injecte les fonctions ApplyTextureSynthesis(inout vec4 color, in vec3 fragPos) et PrepareTextureSynthesisVSH() dans les mains d'un shader contenant a la fois le fragment et le vertex
+    """
+
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
@@ -121,7 +144,7 @@ if __name__ == "__main__":
     
     shaders = find_gbuffers_terrain(dir_path)
     for i in shaders:
-        findMainFunction(i[0],i[1])
+        print(findMainFunction(i[0],i[1]))
     
 
 
