@@ -1,5 +1,6 @@
 import os
 import sys
+import re
 
 def find_gbuffers_terrain(directory_path: str, shader_root: str = None):
     if shader_root is None:
@@ -71,6 +72,46 @@ def includeSTDlibs(filepath: str, relative_to_root: str):
     else:
         print(f"[Skipped] {os.path.basename(filepath)} (Toutes les lignes sont déjà présentes)")
 
+def hasMain(filepath: str):
+    with open(filepath, 'r', encoding='utf-8') as file:
+        content = file.read()
+        if re.search(r'(\s*)void\s+main\s*\([^)]*\)\s*\{', content):
+            return True
+        return False
+
+def includesPathList(filepath: str):
+    with open(filepath, 'r', encoding='utf-8') as file:
+        content = file.read()
+    includes = re.findall(r'#include\s+"([^"]+)"', content)
+    return includes
+
+import os
+
+def findMainFunction(filepath: str, shader_root: str) -> bool:
+    print(f"Check de {os.path.basename(filepath)} pour la fonction main...")
+    
+    if hasMain(filepath):
+        print(f"✅ [Found] Fonction main trouvée dans {os.path.basename(filepath)}")
+        return True
+        
+    includes = includesPathList(filepath)
+    
+    for i in includes:
+        i_clean = i.lstrip("/\\")
+        path_relative_to_root = os.path.join(shader_root, i_clean)
+        path_relative_to_file = os.path.join(os.path.dirname(filepath), i_clean)
+        
+        if os.path.isfile(path_relative_to_root):
+            include_path = path_relative_to_root
+        elif os.path.isfile(path_relative_to_file):
+            include_path = path_relative_to_file
+        else:
+            print(f"[Warning] Impossible de localiser le fichier inclus : {i}")
+            continue
+        if findMainFunction(include_path, shader_root):
+            return True
+
+    return False
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
@@ -80,7 +121,7 @@ if __name__ == "__main__":
     
     shaders = find_gbuffers_terrain(dir_path)
     for i in shaders:
-        includeSTDlibs(i[0], i[1])
+        findMainFunction(i[0],i[1])
     
 
 
