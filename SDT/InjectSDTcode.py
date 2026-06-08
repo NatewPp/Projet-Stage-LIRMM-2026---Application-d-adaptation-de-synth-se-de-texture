@@ -111,21 +111,18 @@ def findMainFunction(filepath: str, shader_root: str) -> bool:
 
 def inject_SDTfunctionsinmain(filepath: str, relative_to_root: str):
     if ".fsh" in filepath.lower():
-        #implement ApplyTextureSynthesis(inout vec4 color, in vec3 fragPos)
-        pass
+        inject_SDTfunctionsinmain(filepath, relative_to_root)
     elif ".vsh" in filepath.lower():
-        #implement  PrepareTextureSynthesisVSH()
-        pass
+        inject_SDTfunctionsinmain(filepath, relative_to_root)
     else:
-        # implement both in correct mains
-        pass
+        injectBothSDTinmains(filepath, relative_to_root)
 
 def injectFSHSDTinmain(filepath: str, relative_to_root: str):
     """
     injecte la fonction ApplyTextureSynthesis(inout vec4 color, in vec3 fragPos) dans le main d'un fsh
     """
 
-def injectVSHSTinmain(filepath: str, relative_to_root: str):
+def injectVSHSDTinmain(filepath: str, relative_to_root: str):
     """
     injecte la fonction PrepareTextureSynthesisVSH() dans le main d'un vsh
     """
