@@ -1,6 +1,4 @@
-import os
 import sys
-import re
 
 from pythonLibs.Searchers import find_gbuffers_terrain, hasMain, includesPathList,findMainFunction
 from pythonLibs.Injectors import includeSTDlibs, inject_SDTfunctionsinmain,injectModified, injectFSHSDTinmain, injectVSHSDTinmain, injectBothSDTinmains,injecter_debut_main
