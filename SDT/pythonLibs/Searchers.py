@@ -1,6 +1,5 @@
 import os
 import re
-
 def find_gbuffers_terrain(directory_path: str, shader_root: str = None):
     if shader_root is None:
         shader_root = directory_path
@@ -50,9 +49,9 @@ import os
 def findMainFunction(filepath: str, shader_root: str) -> bool:
     if hasMain(filepath):
         if not ".vsh" in filepath.lower():
-            return [filepath, obtenir_nom_variable_couleur_universel(filepath)]
+            return [filepath,shader_root ,obtenir_nom_variable_couleur_universel(filepath)]
         else:
-            return [filepath]
+            return [filepath,shader_root]
         
     includes = includesPathList(filepath)
     for i in includes:
@@ -143,7 +142,6 @@ def obtenir_nom_variable_couleur_universel(chemin_fichier):
             match = re.search(pattern_texture, contenu_main)
             if match:
                 nom_variable = match.group(1)
-                print(f"[Succès] Variable '{nom_variable}' trouvée dans le main() n°{index + 1}.")
                 return nom_variable
                 
         print("[!] Aucun main() ne correspond aux critères de texture principale.")
@@ -153,44 +151,3 @@ def obtenir_nom_variable_couleur_universel(chemin_fichier):
         print(f"[X] Erreur : {e}")
         return False
     
-def obtenir_nom_variable_couleur_dans_main(chemin_fichier):
-    try:
-        with open(chemin_fichier, 'r', encoding='utf-8') as f:
-            contenu = f.read()
-            
-        # 1. ÉTAPE : Extraire uniquement le contenu de void main()
-        # On cible le main du fragment shader
-        pattern_main = r"void\s+main\s*\(\s*\)\s*\{(.*)\}\s*#endif"
-        match_main = re.search(pattern_main, contenu, re.DOTALL | re.IGNORECASE)
-        
-        if not match_main:
-            # Si pas de structure spécifique avec #endif à la fin, on prend le main classique
-            pattern_main = r"void\s+main\s*\(\s*\)\s*\{(.*)\}"
-            match_main = re.search(pattern_main, contenu, re.DOTALL)
-            
-        if not match_main:
-            return False
-            
-        contenu_main = match_main.group(1)
-        
-        # regex permettant de trouver l'assignation de la variable color
-        # avec un appel a unne fonction commencant par texture avec texture/tex ou gtexture en argument
-        pattern_texture = r"\b([a-zA-Z_][a-zA-Z0-9_]*)\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b"
-        
-        match_texture = re.search(pattern_texture, contenu_main)
-        
-        if match_texture:
-            return match_texture.group(1)
-        
-        return False
-            
-    except Exception as e:
-        print(f"[X] Une erreur est survenue : {e}")
-        return False
-            
-    except FileNotFoundError:
-        print(f"[X] Erreur : Le fichier {chemin_fichier} est introuvable.")
-        return False
-    except Exception as e:
-        print(f"[X] Une erreur est survenue : {e}")
-        return False

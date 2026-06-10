@@ -99,8 +99,8 @@ void ApplyTextureSynthesis(inout vec4 color) {
     #if ANISOTROPIC_FILTER == 0
         // Loop through normal blocks
         for (int i = 0; i < NUM_NORMAL_BLOCKS; i++) {
-            vec2 minUVValue = minUsdtNormal(i);
-            vec2 maxUVValue = maxUsdtNormal(i);
+            vec2 minUVValue = minUVNormal(i);
+            vec2 maxUVValue = maxUVNormal(i);
             if (texCoord.x >= minUVValue.x && texCoord.x <= maxUVValue.x && texCoord.y >= minUVValue.y && texCoord.y <= maxUVValue.y) {
                 applyTilingAndBlending = true;
                 color.rgba = TilingAndBlendingMethod(tex, texCoord, blockPosFrag, worldGeoNormal, 1).rgba;
