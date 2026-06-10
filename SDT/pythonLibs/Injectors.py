@@ -57,13 +57,12 @@ def injectModified(filepath: str):
     with open(filepath, 'w', encoding='utf-8') as file:
         file.write(content)
 
-def injectFSHSDTinmain(filepath: str, colorvariable: str):
+def injectFSHSDTinmain(filepath: str, colorvariable: str) -> bool:
     """
     Injecte la fonction ApplyTextureSynthesis(colorvariable);
-    juste après l'assignation de la texture principale en réutilisant extraire_blocs_main.
+    juste après l'assignation de la texture principale en gérant les fichiers.
     """
     isNotModified = injectModified(filepath)
-    print(isNotModified)
     if isNotModified is False:
         return False
     try:
@@ -75,24 +74,13 @@ def injectFSHSDTinmain(filepath: str, colorvariable: str):
             print(f"[!] Aucun bloc main trouvé par extraire_blocs_main dans {filepath}")
             return False
             
-        contenu_main_original = blocs[0] 
-        
-        # on cherche colorvariable = {fonctiontexture}(texture/gtexture/tex...)
-        pattern_assignation = rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b[^;]*;"
-        
-        match_ligne = re.search(pattern_assignation, contenu_main_original)
-        if not match_ligne:
+        contenu_main_original = blocs[0]
+        contenu_main_modifie = inserer_applyFSH_dans_bloc_main(contenu_main_original, colorvariable)     
+        if contenu_main_modifie is None:
             print(f"[!] Impossible de trouver l'assignation de texture pour '{colorvariable}' dans le main de {filepath}")
             return False
-            
-        ligne_originale = match_ligne.group(0)
         
-        ligne_modifiee = f"{ligne_originale}\n    ApplyTextureSynthesis({colorvariable});"
-        
-        # on remplace la ligne originale par la ligne modifiée dans le contenu du main
-        contenu_main_modifie = contenu_main_original.replace(ligne_originale, ligne_modifiee, 1)
-        
-        #on reinjecte le main modifié dans le contenu total du fichier
+        # On reinjecte le main modifie a la place du main original
         content_modifie = content.replace(contenu_main_original, contenu_main_modifie, 1)
         
         with open(filepath, 'w', encoding='utf-8') as file:
@@ -110,37 +98,67 @@ def injectVSHSDTinmain(filepath: str):
     """
     injecte la fonction PrepareTextureSynthesisVSH() dans le main d'un vsh
     """
+    isNotModified = injectModified(filepath)
+    if isNotModified is False:
+        return False
+    try:
+        with open(filepath, 'r', encoding='utf-8') as file:
+            content = file.read()
+
+        blocs = extraire_blocs_main(content)
+        if not blocs:
+            print(f"[!] Aucun bloc main trouvé par extraire_blocs_main dans {filepath}")
+            return False
+            
+        contenu_main_original = blocs[0]
+        contenu_main_modifie = inserer_prepareVSH_dans_bloc_main(contenu_main_original)     
+        if contenu_main_modifie is None:
+            print(f"[!] Impossible d'injecter PrepareTextureSynthesisVSH() dans le main de {filepath}")
+            return False
+
+        content_modifie = content.replace(contenu_main_original, contenu_main_modifie, 1)
+        with open(filepath, 'w', encoding='utf-8') as file:
+            file.write(content_modifie)
+        
+        print(f"[Succès] PrepareTextureSynthesisVSH() injectée dans le main de {filepath}")
+        return True
+    except Exception as e:
+        print(f"[X] Erreur lors de l'injection dans {filepath} : {e}")
+        return False
 
 def injectBothSDTinmains(filepath: str,colorvariable: str):
     """
     injecte les fonctions ApplyTextureSynthesis(inout vec4 color, in vec3 fragPos) et PrepareTextureSynthesisVSH() dans les mains d'un shader contenant a la fois le fragment et le vertex
     """
 
-def injecter_debut_main(filepath: str, code_a_injecter: str,colorvariable: str = None):
+def inserer_applyFSH_dans_bloc_main(contenu_main: str, colorvariable: str) -> str | None:
     """
-    template d'injection simple
+    Prend en entrée le contenu textuel d'un bloc main et le nom de la variable couleur.
+    Retourne le bloc main modifié, ou None si l'assignation de texture n'a pas été trouvée.
     """
-    with open(filepath, 'r', encoding='utf-8', errors='ignore') as file:
-        content = file.read()
+    # Regex pour cibler "colorvariable = {fonctiontexture}(texture/gtexture/tex...)""
+    pattern_assignation = rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b[^;]*;"
+    
+    match_ligne = re.search(pattern_assignation, contenu_main)
+    if not match_ligne:
+        return None
+        
+    ligne_originale = match_ligne.group(0)
+    ligne_modifiee = f"{ligne_originale}\n    ApplyTextureSynthesis({colorvariable});"
 
-    if "#modified" in content:
-        return
+    return contenu_main.replace(ligne_originale, ligne_modifiee, 1)
 
-    match_main = re.search(r'void\s+main\s*\([^)]*\)\s*\{', content)
-    if not match_main:
-        print(f"Impossible de trouver le main() dans {os.path.basename(filepath)}")
-        return
-    index_insertion = match_main.end()
-    "ApplyTextureSynthesis(inout vec4 color, in vec3 fragPos); for fsh and PrepareTextureSynthesisVSH() for vsh"
-    bloc_injection = f"\n    // Début d'injection\n {code_a_injecter.strip()}\n"
+def inserer_prepareVSH_dans_bloc_main(contenu_main: str) -> str:
+    """
+    Prend en entrée le contenu textuel d'un bloc main de vertex shader (déjà extrait sans ses accolades).
+    Retourne le bloc main modifié avec PrepareTextureSynthesisVSH() injecté au tout début.
+    """
+    ligne_injection = "\n   PrepareTextureSynthesisVSH();\n"
+    
+    return ligne_injection + contenu_main
 
-    # 4. Insertion dans la chaîne de caractères
-    contenu_modifie = content[:index_insertion] + bloc_injection + content[index_insertion:]
 
-    # 6. Écriture du fichier
-    with open(filepath, 'w', encoding='utf-8') as file:
-        file.write(contenu_modifie)
 
-    print(f"✅ [Success] Code injecté au début du main() dans : {os.path.basename(filepath)}")
-    return True
+
+
 

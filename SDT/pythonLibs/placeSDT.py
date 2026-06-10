@@ -16,8 +16,4 @@ def copySdtToShaders(filepath: str):
     
     dest_path = filepath + "/shaders/lib/sdt"
     
-    print(f"[Info] Filepath reçu      : {filepath}")
-    print(f"[Info] A COPIER (Source)  : {source_path}")
-    print(f"[Info] DESTINATION        : {dest_path}")
-
     copy_folder_with_overwrite(source_path, dest_path)
