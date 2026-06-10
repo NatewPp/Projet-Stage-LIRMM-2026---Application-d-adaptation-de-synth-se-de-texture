@@ -8,8 +8,6 @@ def includeSTDlibs(filepath: str, relative_to_root: str):
     # Lignes à inclure
     lignes_a_verifier = [
         f"{define_tag}\n",
-        f'#include "/lib/sdt/textureSynthesis.glsl"\n',
-        f'#include "/lib/sdt/textureSunthesisUVHints.glsl"\n',
         f'#include "/lib/sdt/SDTmain.glsl"\n'
     ]
 
@@ -161,22 +159,39 @@ def injectBothSDTinmains(filepath: str,colorvariable: str):
         return False
 
 
+import re
+
 def inserer_applyFSH_dans_bloc_main(contenu_main: str, colorvariable: str) -> str | None:
     """
     Prend en entrée le contenu textuel d'un bloc main et le nom de la variable couleur.
-    Retourne le bloc main modifié, ou None si l'assignation de texture n'a pas été trouvée.
+    Modifie la ligne d'assignation pour appliquer ApplyTextureSynthesis, et déporte 
+    les opérations subséquentes (ex: * glcolor) après l'appel.
     """
-    # Regex pour cibler "colorvariable = {fonctiontexture}(texture/gtexture/tex...)""
-    pattern_assignation = rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b[^;]*;"
+    # Échappement pour la regex
+    color_esc = re.escape(colorvariable)
     
-    match_ligne = re.search(pattern_assignation, contenu_main)
-    if not match_ligne:
+    # Explication de la regex :
+    # Group 1 : L'assignation de base de la texture -> color = texture(...stuff...)
+    # Group 2 : Le "reste" optionnel de l'opération avant le point-virgule -> * glcolor
+    pattern = rf"(\b{color_esc}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture[a-zA-Z0-9_]*\b\s*\([^;]*?\))(.*?);"
+    
+    match = re.search(pattern, contenu_main)
+    if not match:
         return None
         
-    ligne_originale = match_ligne.group(0)
-    ligne_modifiee = f"{ligne_originale}\n    ApplyTextureSynthesis({colorvariable});"
-
-    return contenu_main.replace(ligne_originale, ligne_modifiee, 1)
+    ligne_originale = match.group(0) # La ligne entière trouvée
+    assignation_texture = match.group(1) # color = texture(...)
+    operations_extra = match.group(2).strip() # ex: * glcolor
+    
+    # Construction du nouveau bloc de code
+    nouvelle_sequence = f"{assignation_texture};"
+    nouvelle_sequence += f"\n    ApplyTextureSynthesis({colorvariable});"
+    
+   
+    if operations_extra:
+        nouvelle_sequence += f"\n    {colorvariable} = {colorvariable} {operations_extra};"
+        
+    return contenu_main.replace(ligne_originale, nouvelle_sequence, 1)
 
 def inserer_prepareVSH_dans_bloc_main(contenu_main: str) -> str:
     """

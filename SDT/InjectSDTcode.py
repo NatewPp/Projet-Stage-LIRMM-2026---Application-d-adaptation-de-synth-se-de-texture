@@ -20,9 +20,10 @@ if __name__ == "__main__":
     else:
         dir_path = input("Enter the shader root directory path: ")
     shader_name = dir_path.split("/")[-1]
-    copy_folder_with_overwrite(dir_path, dir_path + "/../" + shader_name + "_SDT")
-    shaders = find_gbuffers_terrain(dir_path)
-    copySdtToShaders(dir_path)
+    shaderSdtPath = dir_path + "/../" + shader_name.strip("/\\") + "_SDT"
+    copy_folder_with_overwrite(dir_path, shaderSdtPath)
+    shaders = find_gbuffers_terrain(shaderSdtPath)
+    copySdtToShaders(shaderSdtPath)
     for shader_path, shader_root, relative_to_root in shaders:
 
         shadersbis = [findMainFunction(shader_path, shader_root)]
