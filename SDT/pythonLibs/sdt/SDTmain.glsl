@@ -1,7 +1,28 @@
 // Required includes for texture synthesis
-#include "/lib/materials/materialMethods/textureSynthesis.glsl"
-#include "/lib/materials/materialHandling/textureSynthesisUVHints.glsl"
 
+#ifndef gbufferModelViewInverse
+uniform mat4 gbufferModelViewInverse; 
+#endif
+
+#ifndef gbufferProjectionInverse
+uniform mat4 gbufferProjectionInverse; 
+#endif
+
+#ifndef viewWidth
+uniform float viewWidth;  
+#endif
+
+#ifndef viewHeight
+uniform float viewHeight;
+#endif
+
+#ifndef cameraPosition
+uniform vec3 cameraPosition;
+#endif
+
+#ifndef tex
+uniform sampler2D tex;
+#endif
 #ifdef VSHSDT
 //========== VERTEX SHADER COMPONENT ==========
 
@@ -37,30 +58,13 @@ varying vec2 sdtTexCoord;
 varying vec3 sdtNormal;
 varying vec4 sdtWavingOffset;
 varying vec3 sdtPlayerPos;
-
-#ifndef gbufferModelViewInverse
-uniform mat4 gbufferModelViewInverse; 
+#include "/lib/sdt/textureSynthesis.glsl"
+#ifndef atlasSize
+uniform ivec2 atlasSize;
 #endif
 
-#ifndef gbufferProjectionInverse
-uniform mat4 gbufferProjectionInverse; 
-#endif
+#include "/lib/sdt/textureSynthesisUVHints.glsl"
 
-#ifndef viewWidth
-uniform float viewWidth;  
-#endif
-
-#ifndef viewHeight
-uniform float viewHeight;
-#endif
-s
-#ifndef cameraPosition
-uniform vec3 cameraPosition;
-#endif
-
-#ifndef tex
-uniform sampler2D tex;
-#endif
 
 vec3 ViewToPlayer(vec3 pos) {
     return mat3(gbufferModelViewInverse) * pos + gbufferModelViewInverse[3].xyz;
@@ -93,7 +97,7 @@ void ApplyTextureSynthesis(inout vec4 color) {
     bool applyTilingAndBlending = false;
 
     #ifndef ANISOTROPIC_FILTER
-        s#define ANISOTROPIC_FILTER 0
+        #define ANISOTROPIC_FILTER 0
     #endif
 
     #if ANISOTROPIC_FILTER == 0
