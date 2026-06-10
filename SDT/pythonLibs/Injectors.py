@@ -2,11 +2,10 @@ import os
 import re
 from .Searchers import extraire_blocs_main
 def includeSTDlibs(filepath: str, relative_to_root: str):  
-
     ext = ".fsh" if ".fsh" in filepath.lower() else ".vsh"
     define_tag = "#define FSHSDT" if ext == ".fsh" else "#define VSHSDT"
 
-    #lignes à include
+    # Lignes à inclure
     lignes_a_verifier = [
         f"{define_tag}\n",
         f'#include "/lib/sdt/textureSynthesis.glsl"\n',
@@ -16,27 +15,26 @@ def includeSTDlibs(filepath: str, relative_to_root: str):
 
     with open(filepath, 'r', encoding='utf-8') as file:
         lignes_fichier = file.readlines()
+        if "#modified\n" in lignes_fichier:
+            print(f"[!] {filepath} semble déjà modifié, vérifiez la présence de '#modified' au début du fichier.")
+            return
+    
+    # Par défaut, si pas de main(), on écrit au début
     index_insertion = 0
     
-    # si version on injecte juste apres
+    # On cherche l'indice du "void main"
     for i, ligne in enumerate(lignes_fichier):
-        if "#version" in ligne:
-            index_insertion = i + 1
+        if "void main" in ligne:
+            index_insertion = i
             break
 
-    #verifie si des lignes ne sont pas deja ecrites
-    fichiers_modifie = False 
-    for ligne_sdt in reversed(lignes_a_verifier):
-        if ligne_sdt not in lignes_fichier:
-            lignes_fichier.insert(index_insertion, ligne_sdt)
-            fichiers_modifie = True
+    # On insère les lignes juste avant l'index trouvé
+    # (Utiliser un slice évite les boucles d'insertion complexes)
+    lignes_fichier[index_insertion:index_insertion] = lignes_a_verifier
 
-    if fichiers_modifie:
-        with open(filepath, 'w', encoding='utf-8') as file:
-            file.writelines(lignes_fichier)
-        print(f"[Success] Lignes SDT insérées au début de {os.path.basename(filepath)}")
-    else:
-        print(f"[Skipped] {os.path.basename(filepath)} (Toutes les lignes sont déjà présentes)")
+    # Réécriture du fichier avec les modifications
+    with open(filepath, 'w', encoding='utf-8') as file:
+        file.writelines(lignes_fichier)
 
 def inject_SDTfunctionsinmain(filepath: str, shader_root: str, colorvariable: str = None):
     includeSTDlibs(filepath, shader_root)
@@ -64,6 +62,7 @@ def injectFSHSDTinmain(filepath: str, colorvariable: str) -> bool:
     """
     isNotModified = injectModified(filepath)
     if isNotModified is False:
+        print("already modified")
         return False
     try:
         with open(filepath, 'r', encoding='utf-8') as file:
@@ -130,6 +129,37 @@ def injectBothSDTinmains(filepath: str,colorvariable: str):
     """
     injecte les fonctions ApplyTextureSynthesis(inout vec4 color, in vec3 fragPos) et PrepareTextureSynthesisVSH() dans les mains d'un shader contenant a la fois le fragment et le vertex
     """
+    isNotModified = injectModified(filepath)
+    if isNotModified is False:
+        return False
+    try:
+        with open(filepath, 'r', encoding='utf-8') as file:
+            content = file.read()
+            mains = extraire_blocs_main(content)
+            if len(mains) < 2:
+                print(f"[!] Moins de 2 blocs main trouvés dans {filepath}, impossible d'injecter les fonctions SDT.")
+                return False
+            for main in mains:
+                if re.search(rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b", main):
+                    contenu_main_modifie = inserer_applyFSH_dans_bloc_main(main, colorvariable)
+                    if contenu_main_modifie is None:
+                        print(f"[!] Impossible de trouver l'assignation de texture pour '{colorvariable}' dans le main de {filepath}")
+                        return False
+                    content = content.replace(main, contenu_main_modifie, 1)
+                else:
+                    contenu_main_modifie = inserer_prepareVSH_dans_bloc_main(main)
+                    if contenu_main_modifie is None:
+                        print(f"[!] Impossible d'injecter PrepareTextureSynthesisVSH() dans le main de {filepath}")
+                        return False
+                    content = content.replace(main, contenu_main_modifie, 1)
+        with open(filepath, 'w', encoding='utf-8') as file:
+            file.write(content)
+        print(f"[Succès] Fonctions SDT injectées dans les mains de {filepath}")
+        return True
+    except Exception as e:
+        print(f"[X] Erreur lors de l'injection dans {filepath} : {e}")
+        return False
+
 
 def inserer_applyFSH_dans_bloc_main(contenu_main: str, colorvariable: str) -> str | None:
     """

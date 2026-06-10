@@ -134,7 +134,6 @@ def obtenir_nom_variable_couleur_universel(chemin_fichier):
             
         # 1. On extrait proprement tous les corps de main()
         les_main = extraire_blocs_main(contenu)
-        
         # meme regex que dans obtenir_nom_variable_couleur mais appliquée à chaque main() trouvé
         pattern_texture = r"\b([a-zA-Z_][a-zA-Z0-9_]*)\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b"
         

@@ -2,7 +2,7 @@ import sys
 
 from pythonLibs.Searchers import find_gbuffers_terrain, findMainFunction
 from pythonLibs.Injectors import inject_SDTfunctionsinmain
-from pythonLibs.placeSDT import copySdtToShaders
+from pythonLibs.placeSDT import copySdtToShaders, copy_folder_with_overwrite
 """
 if __name__ == "__main__":
     if len(sys.argv) > 1:
@@ -19,6 +19,8 @@ if __name__ == "__main__":
         dir_path = sys.argv[1]
     else:
         dir_path = input("Enter the shader root directory path: ")
+    shader_name = dir_path.split("/")[-1]
+    copy_folder_with_overwrite(dir_path, dir_path + "/../" + shader_name + "_SDT")
     shaders = find_gbuffers_terrain(dir_path)
     copySdtToShaders(dir_path)
     for shader_path, shader_root, relative_to_root in shaders:
