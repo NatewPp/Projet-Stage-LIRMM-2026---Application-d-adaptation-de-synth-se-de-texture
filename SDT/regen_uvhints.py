@@ -162,7 +162,6 @@ def regenerate(atlas_path, blockdir, glsl_path, out_path):
     """Modifie le fichier glsl mis en argument lors de l'éxécution du script python"""
     tile = detect_tile_size(blockdir)
     A = build_atlas_index(atlas_path, tile)
-    print(f"Tuile detectee: {tile}px | Atlas : {A['w']}x{A['h']}  ({A['w']//tile}x{A['h']//tile} tuiles)")
     src = open(glsl_path, encoding="utf-8", errors="ignore").read().split("\n")
     out = []
     n_ok = n_verif = n_fail = 0
@@ -187,15 +186,25 @@ def regenerate(atlas_path, blockdir, glsl_path, out_path):
             n_fail += 1
             fail.append(name)
     open(out_path, "w", encoding="utf-8").write("\n".join(out))
-    print(f"\nPlacés fiables (exact/opaque) : {n_ok}")
-    print(f"Placés best-match (à vérifier): {n_verif}")
-    print(f"Non placés (custom shaderpack): {n_fail}")
-    if verif:
+    return {"tile": tile, "w": A["w"], "h": A["h"], "out": out_path,
+            "n_ok": n_ok, "n_verif": n_verif, "n_fail": n_fail,
+            "verif": verif, "fail": fail}
+
+
+def print_report(res):
+    """Affiche le résumé d'un résultat de regenerate() (utilisé par la CLI)."""
+    tile = res["tile"]
+    print(f"Tuile detectee: {tile}px | Atlas : {res['w']}x{res['h']}  "
+          f"({res['w']//tile}x{res['h']//tile} tuiles)")
+    print(f"\nPlacés fiables (exact/opaque) : {res['n_ok']}")
+    print(f"Placés best-match (à vérifier): {res['n_verif']}")
+    print(f"Non placés (custom shaderpack): {res['n_fail']}")
+    if res["verif"]:
         print("\nÀ vérifier en jeu :")
-        for name, pos, how in verif:
+        for name, pos, how in res["verif"]:
             print(f"   {name:28} -> {pos}  {how}")
-    if fail:
-        print("\nCustom shaderpack (fournir les PNG source) :", ", ".join(fail))
+    if res["fail"]:
+        print("\nCustom shaderpack (fournir les PNG source) :", ", ".join(res["fail"]))
 
 
 def main():
@@ -218,7 +227,8 @@ def main():
     blockdir, tmp = resolve_textures(textures)
     try:
         out = args.out or (args.glsl + ".generated")
-        regenerate(args.atlas, blockdir, args.glsl, out)
+        res = regenerate(args.atlas, blockdir, args.glsl, out)
+        print_report(res)
         if args.apply:
             bak = args.glsl + ".bak"
             if not os.path.exists(bak):
