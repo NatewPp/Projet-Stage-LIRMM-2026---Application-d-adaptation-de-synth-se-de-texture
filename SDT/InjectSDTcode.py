@@ -15,28 +15,30 @@ if __name__ == "__main__":
     obtenir_nom_variable_couleur()
 """
 
+def inject_sdt(pack_path, dest=None):
+    """Copie le shaderpack vers dest (ou <pack>_SDT à côté), y injecte le code SDT.
+    Renvoie le chemin du pack créé."""
+    if dest is None:
+        dir_path = os.path.dirname(os.path.abspath(pack_path))
+        base_name = os.path.splitext(os.path.basename(pack_path))
+        dest = os.path.join(dir_path, base_name[0] + "_SDT" + base_name[1])
+
+    copy_folder_with_overwrite(pack_path, dest)
+    shaders = find_gbuffers_terrain(dest)
+    copySdtToShaders(dest)
+    for shader_path, shader_root, relative_to_root in shaders:
+        shader = findMainFunction(shader_path, shader_root)
+        if len(shader) == 2:
+            inject_SDTfunctionsinmain(shader[0], shader[1])
+        elif len(shader) == 3:
+            inject_SDTfunctionsinmain(shader[0], shader[1], shader[2])
+    inject_DefineChecksForUniforms(searchforSDTUniforms(dest))
+    return dest
+
+
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         file_path = sys.argv[1]
     else:
         file_path = input("Enter the shader root directory path: ")
-    dir_path = os.path.dirname(os.path.abspath(file_path))
-    base_name = os.path.splitext(os.path.basename(file_path))  # ('nomfichier', '.ext')
-    
-    new_name = base_name[0] + "_SDT" + base_name[1]            # 'nomfichier_SDT.ext'
-    shaderSdtPath = os.path.join(dir_path, new_name)
-    
-    copy_folder_with_overwrite(file_path, shaderSdtPath)
-
-    shaders = find_gbuffers_terrain(shaderSdtPath)
-    copySdtToShaders(shaderSdtPath)
-    for shader_path, shader_root, relative_to_root in shaders:
-
-        shadersbis = [findMainFunction(shader_path, shader_root)]
-        for shader in shadersbis:
-            if len(shader) == 2:
-                inject_SDTfunctionsinmain(shader[0], shader[1])
-            elif len(shader) == 3:
-                inject_SDTfunctionsinmain(shader[0], shader[1], shader[2])
-    found_uniforms = searchforSDTUniforms(shaderSdtPath)
-    inject_DefineChecksForUniforms(found_uniforms)
+    inject_sdt(file_path)

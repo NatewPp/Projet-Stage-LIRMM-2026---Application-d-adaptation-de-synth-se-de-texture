@@ -19,7 +19,9 @@ def includeSTDlibs(filepath: str, relative_to_root: str, colorvariable: str):
         print(f"[!] Aucun bloc main détecté dans {filepath}")
         return
 
-    regex_fsh = rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b"
+    regex_fsh = None
+    if colorvariable:
+        regex_fsh = rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b"
     
     matches_main = list(re.finditer(r"\bvoid\s+main\s*\(\s*\)", content))
     if len(matches_main) != len(liste_interieurs_mains):
@@ -32,7 +34,7 @@ def includeSTDlibs(filepath: str, relative_to_root: str, colorvariable: str):
         match = matches_main[i]
         interieur_main = liste_interieurs_mains[i]
         
-        if re.search(regex_fsh, interieur_main):
+        if regex_fsh and re.search(regex_fsh, interieur_main):
             define_tag = "#define FSHSDT"
         else:
             define_tag = "#define VSHSDT"
@@ -56,12 +58,18 @@ def includeSTDlibs(filepath: str, relative_to_root: str, colorvariable: str):
         print(f"[~] Aucune modification nécessaire pour {filepath}\n")
 
 def inject_SDTfunctionsinmain(filepath: str, shader_root: str, colorvariable: str = None):
-    includeSTDlibs(filepath, shader_root,colorvariable)
+    includeSTDlibs(filepath, shader_root, colorvariable)
     if ".fsh" in filepath.lower():
+        if not colorvariable:
+            print(f"[!] Variable couleur introuvable, injection FSH sautée : {filepath}")
+            return
         injectFSHSDTinmain(filepath, colorvariable)
     elif ".vsh" in filepath.lower():
         injectVSHSDTinmain(filepath)
     else:
+        if not colorvariable:
+            print(f"[!] Variable couleur introuvable, injection sautée : {filepath}")
+            return
         injectBothSDTinmains(filepath, colorvariable)
 
 def injectModified(filepath: str):

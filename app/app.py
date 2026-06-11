@@ -26,6 +26,9 @@ import random
 
 # le script principal
 import regen_uvhints as engine
+SDT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "SDT")
+sys.path.append(SDT_DIR)
+import InjectSDTcode as ISDT
 
 # Palette "Minecraft" (gris pierre + vert Done)
 MC = {
@@ -42,6 +45,7 @@ MC = {
 }
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+DOWNLOADS = os.path.join(os.path.expanduser("~"), "Downloads")
 DEFAULT_REF = os.path.join(HERE, "reference_blocks")   # textures de référence embarquées
 GLSL_NAME = "textureSynthesisUVHints.glsl"
 
@@ -114,11 +118,12 @@ class App(ctk.CTk):
         self.canvas.pack(fill="both", expand=True)
         self.canvas.bind("<Configure>", self._redraw_bg)   # redessine au redimensionnement
         self._bg_ref = None
+        self._ui_off = (0, 0)
 
         self.title("Implémentation synthèse de texture pour shaders minecraft")
         self.geometry("760x620")
-        self.minsize(680, 560)
-        self.resizable(False, False)
+        self.minsize(760, 620)
+        #self.resizable(False, False)
 
         #fond + icone
         ctk.set_appearance_mode("dark")
@@ -136,19 +141,21 @@ class App(ctk.CTk):
             pass
 
         self.click_snd = None
+        self.error_snd = None
         try:
             pygame.mixer.init()
-            self.click_snd = pygame.mixer.Sound(os.path.join(HERE,"sound", "button.wav"))
+            self.click_snd = pygame.mixer.Sound(os.path.join(HERE, "sound", "button.wav"))
+            self.error_snd = pygame.mixer.Sound(os.path.join(HERE, "sound", "boom.wav"))
         except Exception:
-            pass 
+            pass
 
         pad = {"padx": 16, "pady": 6}
 
         # Titre
         self.canvas.create_text(382, 32, text="Texture Synthesis Implementer",
-                                font=("Monocraft", 22, "bold"), fill="#3f3f3f")   # ombre
+                                font=("Monocraft", 22, "bold"), fill="#3f3f3f",tags="ui")   # ombre
         self.canvas.create_text(380, 30, text="Texture Synthesis Implementer",
-                                font=("Monocraft", 22, "bold"), fill="white")
+                                font=("Monocraft", 22, "bold"), fill="white",tags="ui")
 
         # --- Atlas ---
         self.atlas_var = ctk.StringVar()
@@ -160,19 +167,12 @@ class App(ctk.CTk):
 
 
         # --- Option appliquer ---
-        self.apply_var = ctk.BooleanVar(value=True)
-        cb1 = ctk.CTkCheckBox(self.canvas, text="Appliquer directement (sauvegarde .bak)",
-                        variable=self.apply_var, corner_radius=0,
-                        fg_color=MC["green"], hover_color=MC["green_hi"],
-                        font=mc_font(12), text_color=MC["text"],command=self._click)
-        self.canvas.create_window(16, 225, window=cb1, anchor="nw")
-        
         self.debug_var = ctk.BooleanVar(value=False)
         cb2 = ctk.CTkCheckBox(self.canvas, text="Pour voir les lignes de debug ou non",
                         variable=self.debug_var, corner_radius=0,
                         fg_color=MC["green"], hover_color=MC["green_hi"],
                         font=mc_font(12), text_color=MC["text"],command=self._click)
-        self.canvas.create_window(16, 262, window=cb2, anchor="nw")
+        self.canvas.create_window(16, 262, window=cb2, anchor="nw",tags="ui")
 
         # --- Bouton lancer ---
         self.run_btn = tk.Button(
@@ -183,22 +183,22 @@ class App(ctk.CTk):
             highlightthickness=0, cursor="hand2",
             command=self._run)
         self.canvas.create_window(16, 305, window=self.run_btn, anchor="nw",
-                                  width=728, height=46)
+                                  width=728, height=46,tags="ui")
         #self.run_btn.pack(fill="x", padx=16, pady=12, ipady=10)
         self.run_btn.bind("<Enter>", lambda e: self.run_btn.config(bg=MC["green_hi"]))
         self.run_btn.bind("<Leave>", lambda e: self.run_btn.config(bg=MC["green"]))
 
         # --- Statut ---
         self.canvas.create_text(17, 371, text="Prêt.", anchor="w",
-                                font=("Monocraft", 12), fill="black", tags="status_sh")
+                                font=("Monocraft", 12), fill="black", tags=("status_sh","ui"))
         self.canvas.create_text(16, 370, text="Prêt.", anchor="w",
-                                font=("Monocraft", 12), fill=MC["subtext"], tags="status")
+                                font=("Monocraft", 12), fill=MC["subtext"], tags=("status","ui"))
         # --- Zone de log ---
         self.log = ctk.CTkTextbox(self.canvas, corner_radius=0, fg_color=MC["entry"],
                                   border_color=MC["entry_bd"], border_width=2,
                                   font=mc_font(12))
         self.canvas.create_window(16, 390, window=self.log, anchor="nw",
-                                  width=728, height=212)
+                                  width=728, height=212,tags="ui")
         self.log.configure(state="disabled")
 
     #Sound
@@ -206,24 +206,30 @@ class App(ctk.CTk):
         if self.click_snd:
             self.click_snd.play()
 
+    def _error(self, title, msg):
+        """Boom + boîte d'erreur."""
+        if self.error_snd:
+            self.error_snd.play()
+        messagebox.showerror(title, msg)
+
     # ---------- helpers UI ----------
     def _row(self, y, label, var, browse_cmd):
         self.canvas.create_text(17, y + 1, text=label, anchor="w",
-                                font=("Monocraft", 13), fill="black")       # ombre
+                                font=("Monocraft", 13), fill="black",tags="ui")       # ombre
         self.canvas.create_text(16, y, text=label, anchor="w",
-                                font=("Monocraft", 13), fill=MC["text"])
+                                font=("Monocraft", 13), fill=MC["text"],tags="ui")
         entry = ctk.CTkEntry(self.canvas, textvariable=var, corner_radius=0,
                              fg_color=MC["entry"], border_color=MC["entry_bd"],
                              border_width=2, font=mc_font(12))
         self.canvas.create_window(16, y + 16, window=entry, anchor="nw",
-                                  width=610, height=30)
+                                  width=610, height=30,tags="ui")
         btn = ctk.CTkButton(self.canvas, text="Parcourir", width=110, corner_radius=0,
                             fg_color=MC["stone"], hover_color=MC["stone_hi"],
                             border_color=MC["border"], border_width=2,
                             font=mc_font(12),
                             command=lambda: (self._click(), browse_cmd()))
         self.canvas.create_window(634, y + 16, window=btn, anchor="nw",
-                                  width=110, height=30)
+                                  width=110, height=30,tags="ui")
 
     def _pick_atlas(self):
         f = filedialog.askopenfilename(title="Choisir l'atlas",
@@ -280,13 +286,19 @@ class App(ctk.CTk):
         self.canvas.delete("bg")
         self.canvas.create_image(0, 0, image=self._bg_ref, anchor="nw", tags="bg")
         self.canvas.tag_lower("bg")
+        off_x = max(0, (event.width - 760) // 2)
+        off_y = max(0, (event.height - 620) // 2)
+        dx = off_x - self._ui_off[0]
+        dy = off_y - self._ui_off[1]
+        if dx or dy:
+            self.canvas.move("ui", dx, dy)
+        self._ui_off = (off_x, off_y)
 
     # ---------- action principale ----------
     def _run(self):
         atlas = self.atlas_var.get().strip()
         pack = self.pack_var.get().strip()
         textures = DEFAULT_REF
-        apply = self.apply_var.get()
 
         #nettoyage des logs
         self._clear_log()
@@ -297,11 +309,18 @@ class App(ctk.CTk):
         if not atlas or not os.path.exists(atlas):
             Error_sound = pygame.mixer.Sound(os.path.join(HERE, "sound", "boom.wav"))
             Error_sound.play()
-            messagebox.showerror("Atlas manquant", "Choisis un fichier d'atlas.")
-
+            self._error("Atlas manquant", "Choisis un fichier d'atlas.")
+            return
+        if not os.path.isdir(os.path.join(pack, "shaders")):
+            Error_sound = pygame.mixer.Sound(os.path.join(HERE, "sound", "boom.wav"))
+            Error_sound.play()
+            self._error("Pas un shaderpack",
+                        f"Pas de dossier shaders/ dans :\n{pack}")
             return
         # doit être un .png ET un vrai PNG ouvrable
         if not atlas.lower().endswith(".png"):
+            Error_sound = pygame.mixer.Sound(os.path.join(HERE, "sound", "boom.wav"))
+            Error_sound.play()
             messagebox.showerror("Mauvais format", "L'atlas doit être un fichier .png")
             return
         try:
@@ -309,64 +328,50 @@ class App(ctk.CTk):
                 if im.format != "PNG":
                     raise ValueError
         except Exception:
+            Error_sound = pygame.mixer.Sound(os.path.join(HERE, "sound", "boom.wav"))
+            Error_sound.play()
             messagebox.showerror("Fichier invalide", "Ce fichier n'est pas une image PNG valide.")
             return
         w, h = im.size
         if w % 16 or h % 16 or w < 256:
+            Error_sound = pygame.mixer.Sound(os.path.join(HERE, "sound", "boom.wav"))
+            Error_sound.play()
             messagebox.showerror("Pas un atlas",
             f"Dimensions {w}x{h} : ne ressemble pas à un atlas de blocs.")
             return
-        glsl = find_glsl(pack)
-        if not glsl:
-            messagebox.showerror("Pas un shader compatible",
-                f"Aucun {GLSL_NAME} trouvé dans :\n{pack}\n\n"
-                "Ce dossier n'est pas un shader avec texture synthesis.")
-            return
-        ok, info = validate_glsl(glsl)
-        if not ok:
-            messagebox.showerror("Shader non compatible", info)
-            return
 
         self._say(f"Atlas    : {atlas}", append=False)
-        self._say(f"Cible    : {glsl}")
-        self._say(f"Textures : {textures}")
-        self._say(f"Appliquer: {'oui' if apply else 'non (fichier .generated)'}\n")
+        self._say(f"Pack     : {pack}")
+        self._say(f"Textures : {textures}\n")
         self._set_running(True)
+        self._set_status("Injection + régénération en cours…", "orange")
         self._set_status("Régénération en cours…", "orange")
 
         # le calcul tourne dans un THREAD pour ne pas geler la fenêtre
-        threading.Thread(target=self._work, args=(atlas, textures, glsl, apply), daemon=True).start()
+        threading.Thread(target=self._work, args=(atlas, pack, textures), daemon=True).start()
 
-    def _work(self, atlas, textures, glsl, apply):
+    def _work(self, atlas, pack, textures):
         tmp = None
         try:
+            # 1) Copie + injection SDT, directement dans Téléchargements
+            name = os.path.basename(os.path.normpath(pack)) + "_SDT"
+            out_pack = os.path.join(DOWNLOADS, name)
+            self._say("Injection du code SDT…")
+            ISDT.inject_sdt(pack, dest=out_pack)
+
+            # 2) Régénération de la table UVHints à partir de l'atlas
+            glsl = find_glsl(out_pack)
+            if not glsl:
+                raise RuntimeError("Injection SDT : aucun glsl de synthèse dans " + out_pack)
             blockdir, tmp = engine.resolve_textures(textures)
             out = glsl + ".generated"
             res = engine.regenerate(atlas, blockdir, glsl, out)
+            shutil.move(out, glsl)        # on applique direct : c'est notre copie
 
-            self._say(f"Tuile détectée : {res['tile']} px")
-            self._say(f"Atlas : {res['w']}x{res['h']}  ({res['w']//res['tile']}x{res['h']//res['tile']} tuiles)\n")
             self._say(f"✅ Placés fiables  : {res['n_ok']}")
             self._say(f"⚠️  À vérifier      : {res['n_verif']}")
             self._say(f"🔧 Non placés      : {res['n_fail']}")
-            if res["verif"]:
-                self._say("\nÀ vérifier en jeu :")
-                for name, pos, how in res["verif"]:
-                    self._say(f"   {name:28} -> {pos}  {how}")
-            if res["fail"]:
-                self._say("\nCustom shaderpack (non placés) : " + ", ".join(res["fail"]))
-
-            if apply:
-                bak = glsl + ".bak"
-                if not os.path.exists(bak):
-                    shutil.copyfile(glsl, bak)
-                    self._say(f"\nSauvegarde -> {os.path.basename(bak)}")
-                shutil.move(out, glsl)
-                self._say(f"Appliqué -> {os.path.basename(glsl)}")
-                self._set_status("Terminé et appliqué ✔  (recharge les shaders dans Minecraft)", "lightgreen")
-            else:
-                self._say(f"\nFichier généré : {out}")
-                self._set_status("Terminé (fichier .generated) ✔", "lightgreen")
+            self._set_status(f"Terminé ✔  Pack créé : Téléchargements/{name}", "lightgreen")
 
         except Exception as e:
             self._say("\nERREUR : " + str(e))
