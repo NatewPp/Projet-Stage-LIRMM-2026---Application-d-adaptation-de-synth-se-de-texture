@@ -1,28 +1,21 @@
 // Required includes for texture synthesis
 
-#ifndef GBUFFERMODELVIEWINVERSE
+
 #ifndef GBUFFERMODELVIEWINVERSE
 uniform mat4 gbufferModelViewInverse;
-#define GBUFFERMODELVIEWINVERSE
-#endif 
-#define GBUFFERMODELVIEWINVERSE
 #endif
 
-#ifndef GBUFFERPROJECTIONINVERSE
 #ifndef GBUFFERPROJECTIONINVERSE
 uniform mat4 gbufferProjectionInverse;
 #define GBUFFERPROJECTIONINVERSE
 #endif 
-#define GBUFFERPROJECTIONINVERSE
-#endif
 
-#ifndef VIEWWIDTH
+
 #ifndef VIEWWIDTH
 uniform float viewWidth;
 #define VIEWWIDTH
 #endif  
-#define VIEWWIDTH
-#endif
+
 
 #ifndef VIEWHEIGHT
 uniform float viewHeight;
@@ -75,10 +68,7 @@ varying vec4 sdtWavingOffset;
 varying vec3 sdtPlayerPos;
 #include "/lib/sdt/textureSynthesis.glsl"
 #ifndef ATLAS_SIZE
-#ifndef ATLASSIZE
 uniform ivec2 atlasSize;
-#define ATLASSIZE
-#endif
 #define ATLAS_SIZE
 #endif
 
