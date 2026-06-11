@@ -15,12 +15,14 @@ import os
 import shutil
 import threading
 import traceback
-from tkinter import filedialog, messagebox, PhotoImage
-from PIL import Image
+import tkinter as tk
+from PIL import Image, ImageDraw, ImageTk
 import sys
 import customtkinter as ctk
 import tkinter.font as tkfont
 import pygame
+from tkinter import filedialog, messagebox
+import random
 
 # le script principal
 import regen_uvhints as engine
@@ -75,15 +77,48 @@ def mc_font(size, weight="normal"):
     fam = next((f for f in ("Monocraft", "Minecraft", "Consolas") if f in fams), "Consolas")
     return ctk.CTkFont(family=fam, size=size, weight=weight)
 
+def mc_button_img(w, h, base=(110, 110, 110)):
+    """Dessine un bouton style Minecraft : pierre bruitée + relief 3D + contour noir."""
+    img = Image.new("RGB", (w, h), base)
+    px = img.load()
+    for y in range(h):                       # léger bruit type pierre
+        for x in range(w):
+            n = random.randint(-10, 10)
+            r, g, b = px[x, y]
+            px[x, y] = (r + n, g + n, b + n)
+    d = ImageDraw.Draw(img)
+    d.rectangle([1, 1, w - 2, 2], fill=(160, 160, 160))      # liseré clair haut
+    d.rectangle([1, 1, 2, h - 2], fill=(160, 160, 160))      # liseré clair gauche
+    d.rectangle([1, h - 4, w - 2, h - 2], fill=(60, 60, 60)) # ombre bas
+    d.rectangle([w - 4, 1, w - 2, h - 2], fill=(60, 60, 60)) # ombre droite
+    d.rectangle([0, 0, w - 1, h - 1], outline=(0, 0, 0), width=1)  # contour noir
+    return img
+
+def tiled_bg(w, h, scale=4, dark=0.35):
+    """Fond menu Minecraft : dirt.png répété, pixels nets, assombri."""
+    tex = Image.open(os.path.join(DEFAULT_REF, "dirt.png")).convert("RGB")
+    tex = tex.resize((tex.width * scale, tex.height * scale), Image.NEAREST)
+    bg = Image.new("RGB", (w, h))
+    for x in range(0, w, tex.width):
+        for y in range(0, h, tex.height):
+            bg.paste(tex, (x, y))
+    return Image.eval(bg, lambda v: int(v * dark))
+
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
 
+        self.canvas = tk.Canvas(self, highlightthickness=0, bg=MC["bg"])
+        self.canvas.pack(fill="both", expand=True)
+        self.canvas.bind("<Configure>", self._redraw_bg)   # redessine au redimensionnement
+        self._bg_ref = None
+
         self.title("Implémentation synthèse de texture pour shaders minecraft")
         self.geometry("760x620")
         self.minsize(680, 560)
+        self.resizable(False, False)
 
         #fond + icone
         ctk.set_appearance_mode("dark")
@@ -100,67 +135,95 @@ class App(ctk.CTk):
         except Exception:
             pass
 
+        self.click_snd = None
+        try:
+            pygame.mixer.init()
+            self.click_snd = pygame.mixer.Sound(os.path.join(HERE,"sound", "button.wav"))
+        except Exception:
+            pass 
+
         pad = {"padx": 16, "pady": 6}
 
         # Titre
-        ctk.CTkLabel(self, text="Texture Synthesis Implementer",
-                     font=mc_font(22, "bold"), text_color=MC["text"]).pack(**pad)
-        ctk.CTkLabel(self, text="Implemente une synthèse de texture dans ton shader",
-                     font=mc_font(13), text_color=MC["subtext"]).pack(padx=16, pady=(0, 10))
+        self.canvas.create_text(382, 32, text="Texture Synthesis Implementer",
+                                font=("Monocraft", 22, "bold"), fill="#3f3f3f")   # ombre
+        self.canvas.create_text(380, 30, text="Texture Synthesis Implementer",
+                                font=("Monocraft", 22, "bold"), fill="white")
 
         # --- Atlas ---
         self.atlas_var = ctk.StringVar()
-        self._row("1. Atlas de ta version (PNG)", self.atlas_var, self._pick_atlas)
+        self._row(80, "1. Atlas de ta version (PNG)", self.atlas_var, self._pick_atlas)
 
         # --- Shaderpack ---
         self.pack_var = ctk.StringVar()
-        self._row("2. Dossier du shaderpack", self.pack_var, self._pick_pack)
+        self._row(150, "2. Dossier du shaderpack", self.pack_var, self._pick_pack)
+
 
         # --- Option appliquer ---
         self.apply_var = ctk.BooleanVar(value=True)
-        ctk.CTkCheckBox(self, text="Appliquer directement (sauvegarde .bak)",
+        cb1 = ctk.CTkCheckBox(self.canvas, text="Appliquer directement (sauvegarde .bak)",
                         variable=self.apply_var, corner_radius=0,
                         fg_color=MC["green"], hover_color=MC["green_hi"],
-                        font=mc_font(12), text_color=MC["text"]).pack(anchor="w", padx=16, pady=(8, 4))
+                        font=mc_font(12), text_color=MC["text"],command=self._click)
+        self.canvas.create_window(16, 225, window=cb1, anchor="nw")
         
         self.debug_var = ctk.BooleanVar(value=False)
-        ctk.CTkCheckBox(self, text="Pour voir les lignes de debug ou non",
+        cb2 = ctk.CTkCheckBox(self.canvas, text="Pour voir les lignes de debug ou non",
                         variable=self.debug_var, corner_radius=0,
                         fg_color=MC["green"], hover_color=MC["green_hi"],
-                        font=mc_font(12), text_color=MC["text"]).pack(anchor="w", padx=16, pady=(8, 4))
+                        font=mc_font(12), text_color=MC["text"],command=self._click)
+        self.canvas.create_window(16, 262, window=cb2, anchor="nw")
 
         # --- Bouton lancer ---
-        self.run_btn = ctk.CTkButton(
-            self, text="Régénérer", height=46, corner_radius=0,
-            fg_color=MC["green"], hover_color=MC["green_hi"],
-            border_color=MC["border"], border_width=3,
-            font=mc_font(16, "bold"), command=self._run)
-        self.run_btn.pack(fill="x", padx=16, pady=12)
+        self.run_btn = tk.Button(
+            self.canvas, text="Régénérer",
+            font=mc_font(16, "bold"),
+            fg="white", bg=MC["green"], activebackground=MC["green_hi"],
+            activeforeground="white", bd=3, relief="raised",
+            highlightthickness=0, cursor="hand2",
+            command=self._run)
+        self.canvas.create_window(16, 305, window=self.run_btn, anchor="nw",
+                                  width=728, height=46)
+        #self.run_btn.pack(fill="x", padx=16, pady=12, ipady=10)
+        self.run_btn.bind("<Enter>", lambda e: self.run_btn.config(bg=MC["green_hi"]))
+        self.run_btn.bind("<Leave>", lambda e: self.run_btn.config(bg=MC["green"]))
 
         # --- Statut ---
-        self.status = ctk.CTkLabel(self, text="Prêt.", font=mc_font(12), text_color=MC["subtext"])
-        self.status.pack(anchor="w", padx=16)
-
+        self.canvas.create_text(17, 371, text="Prêt.", anchor="w",
+                                font=("Monocraft", 12), fill="black", tags="status_sh")
+        self.canvas.create_text(16, 370, text="Prêt.", anchor="w",
+                                font=("Monocraft", 12), fill=MC["subtext"], tags="status")
         # --- Zone de log ---
-        self.log = ctk.CTkTextbox(self, corner_radius=0, fg_color=MC["entry"],
+        self.log = ctk.CTkTextbox(self.canvas, corner_radius=0, fg_color=MC["entry"],
                                   border_color=MC["entry_bd"], border_width=2,
                                   font=mc_font(12))
-        self.log.pack(fill="both", expand=True, padx=16, pady=(6, 16))
+        self.canvas.create_window(16, 390, window=self.log, anchor="nw",
+                                  width=728, height=212)
         self.log.configure(state="disabled")
 
+    #Sound
+    def _click(self):
+        if self.click_snd:
+            self.click_snd.play()
+
     # ---------- helpers UI ----------
-    def _row(self, label, var, browse_cmd):
-        ctk.CTkLabel(self, text=label, anchor="w",
-                     font=mc_font(13), text_color=MC["text"]).pack(fill="x", padx=16, pady=(8, 0))
-        frame = ctk.CTkFrame(self, fg_color="transparent")
-        frame.pack(fill="x", padx=16)
-        ctk.CTkEntry(frame, textvariable=var, corner_radius=0,
-                     fg_color=MC["entry"], border_color=MC["entry_bd"], border_width=2,
-                     font=mc_font(12)).pack(side="left", fill="x", expand=True)
-        ctk.CTkButton(frame, text="Parcourir", width=110, corner_radius=0,
-                      fg_color=MC["stone"], hover_color=MC["stone_hi"],
-                      border_color=MC["border"], border_width=2,
-                      font=mc_font(12), command=browse_cmd).pack(side="left", padx=(8, 0))
+    def _row(self, y, label, var, browse_cmd):
+        self.canvas.create_text(17, y + 1, text=label, anchor="w",
+                                font=("Monocraft", 13), fill="black")       # ombre
+        self.canvas.create_text(16, y, text=label, anchor="w",
+                                font=("Monocraft", 13), fill=MC["text"])
+        entry = ctk.CTkEntry(self.canvas, textvariable=var, corner_radius=0,
+                             fg_color=MC["entry"], border_color=MC["entry_bd"],
+                             border_width=2, font=mc_font(12))
+        self.canvas.create_window(16, y + 16, window=entry, anchor="nw",
+                                  width=610, height=30)
+        btn = ctk.CTkButton(self.canvas, text="Parcourir", width=110, corner_radius=0,
+                            fg_color=MC["stone"], hover_color=MC["stone_hi"],
+                            border_color=MC["border"], border_width=2,
+                            font=mc_font(12),
+                            command=lambda: (self._click(), browse_cmd()))
+        self.canvas.create_window(634, y + 16, window=btn, anchor="nw",
+                                  width=110, height=30)
 
     def _pick_atlas(self):
         f = filedialog.askopenfilename(title="Choisir l'atlas",
@@ -212,6 +275,12 @@ class App(ctk.CTk):
                 self.run_btn.configure(text="En cours…" if running else "Régénérer")
         self.after(0, do)
 
+    def _redraw_bg(self, event):
+        self._bg_ref = ImageTk.PhotoImage(tiled_bg(event.width, event.height))
+        self.canvas.delete("bg")
+        self.canvas.create_image(0, 0, image=self._bg_ref, anchor="nw", tags="bg")
+        self.canvas.tag_lower("bg")
+
     # ---------- action principale ----------
     def _run(self):
         atlas = self.atlas_var.get().strip()
@@ -222,9 +291,14 @@ class App(ctk.CTk):
         #nettoyage des logs
         self._clear_log()
 
+        self._click()
+
         # validations
         if not atlas or not os.path.exists(atlas):
+            Error_sound = pygame.mixer.Sound(os.path.join(HERE, "sound", "boom.wav"))
+            Error_sound.play()
             messagebox.showerror("Atlas manquant", "Choisis un fichier d'atlas.")
+
             return
         # doit être un .png ET un vrai PNG ouvrable
         if not atlas.lower().endswith(".png"):

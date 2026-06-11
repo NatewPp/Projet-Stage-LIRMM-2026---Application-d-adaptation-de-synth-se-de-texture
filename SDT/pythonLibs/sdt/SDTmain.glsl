@@ -1,17 +1,26 @@
 // Required includes for texture synthesis
 
 #ifndef GBUFFERMODELVIEWINVERSE
-uniform mat4 gbufferModelViewInverse; 
+#ifndef GBUFFERMODELVIEWINVERSE
+uniform mat4 gbufferModelViewInverse;
+#define GBUFFERMODELVIEWINVERSE
+#endif 
 #define GBUFFERMODELVIEWINVERSE
 #endif
 
 #ifndef GBUFFERPROJECTIONINVERSE
-uniform mat4 gbufferProjectionInverse; 
+#ifndef GBUFFERPROJECTIONINVERSE
+uniform mat4 gbufferProjectionInverse;
+#define GBUFFERPROJECTIONINVERSE
+#endif 
 #define GBUFFERPROJECTIONINVERSE
 #endif
 
 #ifndef VIEWWIDTH
-uniform float viewWidth;  
+#ifndef VIEWWIDTH
+uniform float viewWidth;
+#define VIEWWIDTH
+#endif  
 #define VIEWWIDTH
 #endif
 
@@ -66,18 +75,21 @@ varying vec4 sdtWavingOffset;
 varying vec3 sdtPlayerPos;
 #include "/lib/sdt/textureSynthesis.glsl"
 #ifndef ATLAS_SIZE
+#ifndef ATLASSIZE
 uniform ivec2 atlasSize;
+#define ATLASSIZE
+#endif
 #define ATLAS_SIZE
 #endif
 
 #include "/lib/sdt/textureSynthesisUVHints.glsl"
 
 
-vec3 ViewToPlayer(vec3 pos) {
+vec3 SDTViewToPlayer(vec3 pos) {
     return mat3(gbufferModelViewInverse) * pos + gbufferModelViewInverse[3].xyz;
 }
 
-vec3 ScreenToView(vec3 pos) {
+vec3 SDTSDTScreenToView(vec3 pos) {
     vec4 iProjDiag = vec4(gbufferProjectionInverse[0].x,
                           gbufferProjectionInverse[1].y,
                           gbufferProjectionInverse[2].zw);
@@ -94,13 +106,13 @@ void ApplyTextureSynthesis(inout vec4 color) {
     
     // Calculate player position from fragment position and camera position
     vec3 screenPos = vec3(gl_FragCoord.xy/ vec2(viewWidth, viewHeight), gl_FragCoord.z);
-    vec3 viewPos = ScreenToView(screenPos);
-    vec3 playerPos = ViewToPlayer(viewPos);
+    vec3 viewPos = SDTSDTScreenToView(screenPos);
+    vec3 playerPos = SDTViewToPlayer(viewPos);
     
     // Calculate required variables
     vec3 playerPosWithoutWaves = playerPos + wavingOffset.xyz;
     ivec3 blockPosFrag = ivec3(floor(playerPosWithoutWaves + cameraPosition + 0.001));
-    vec3 worldGeoNormal = normalize(ViewToPlayer(normal * 10000.0));
+    vec3 worldGeoNormal = normalize(SDTViewToPlayer(normal * 10000.0));
     bool applyTilingAndBlending = false;
 
     #ifndef ANISOTROPIC_FILTER
