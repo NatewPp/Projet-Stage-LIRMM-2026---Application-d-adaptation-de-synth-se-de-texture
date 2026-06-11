@@ -53,7 +53,7 @@ uniform float viewWidth;
 #ifndef viewHeight
 uniform float viewHeight;
 #endif
-s
+
 #ifndef cameraPosition
 uniform vec3 cameraPosition;
 #endif
