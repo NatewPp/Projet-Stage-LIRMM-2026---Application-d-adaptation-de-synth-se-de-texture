@@ -1,27 +1,33 @@
 // Required includes for texture synthesis
 
-#ifndef gbufferModelViewInverse
+#ifndef GBUFFERMODELVIEWINVERSE
 uniform mat4 gbufferModelViewInverse; 
+#define GBUFFERMODELVIEWINVERSE
 #endif
 
-#ifndef gbufferProjectionInverse
+#ifndef GBUFFERPROJECTIONINVERSE
 uniform mat4 gbufferProjectionInverse; 
+#define GBUFFERPROJECTIONINVERSE
 #endif
 
-#ifndef viewWidth
+#ifndef VIEWWIDTH
 uniform float viewWidth;  
+#define VIEWWIDTH
 #endif
 
-#ifndef viewHeight
+#ifndef VIEWHEIGHT
 uniform float viewHeight;
+#define VIEWHEIGHT
 #endif
 
-#ifndef cameraPosition
+#ifndef CAMERAPOSITION
 uniform vec3 cameraPosition;
+#define CAMERAPOSITION
 #endif
 
-#ifndef tex
+#ifndef TEX
 uniform sampler2D tex;
+#define TEX
 #endif
 #ifdef VSHSDT
 //========== VERTEX SHADER COMPONENT ==========
@@ -59,8 +65,9 @@ varying vec3 sdtNormal;
 varying vec4 sdtWavingOffset;
 varying vec3 sdtPlayerPos;
 #include "/lib/sdt/textureSynthesis.glsl"
-#ifndef atlasSize
+#ifndef ATLAS_SIZE
 uniform ivec2 atlasSize;
+#define ATLAS_SIZE
 #endif
 
 #include "/lib/sdt/textureSynthesisUVHints.glsl"

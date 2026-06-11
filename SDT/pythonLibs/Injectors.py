@@ -1,41 +1,62 @@
 import os
 import re
 from .Searchers import extraire_blocs_main
-def includeSTDlibs(filepath: str, relative_to_root: str):  
-    ext = ".fsh" if ".fsh" in filepath.lower() else ".vsh"
-    define_tag = "#define FSHSDT" if ext == ".fsh" else "#define VSHSDT"
+import re
 
-    # Lignes à inclure
-    lignes_a_verifier = [
-        f"{define_tag}\n",
-        f'#include "/lib/sdt/SDTmain.glsl"\n'
-    ]
+import re
 
+def includeSTDlibs(filepath: str, relative_to_root: str, colorvariable: str):  
     with open(filepath, 'r', encoding='utf-8') as file:
-        lignes_fichier = file.readlines()
-        if "#modified\n" in lignes_fichier:
-            print(f"[!] {filepath} semble déjà modifié, vérifiez la présence de '#modified' au début du fichier.")
-            return
-    
-    # Par défaut, si pas de main(), on écrit au début
-    index_insertion = 0
-    
-    # On cherche l'indice du "void main"
-    for i, ligne in enumerate(lignes_fichier):
-        if "void main" in ligne:
-            index_insertion = i
-            break
+        content = file.read()
+        
+    if "#modified" in content:
+        print(f"[!] {filepath} déjà modifié (présence de '#modified').")
+        return
 
-    # On insère les lignes juste avant l'index trouvé
-    # (Utiliser un slice évite les boucles d'insertion complexes)
-    lignes_fichier[index_insertion:index_insertion] = lignes_a_verifier
+    liste_interieurs_mains = extraire_blocs_main(content) 
+    
+    if not liste_interieurs_mains:
+        print(f"[!] Aucun bloc main détecté dans {filepath}")
+        return
 
-    # Réécriture du fichier avec les modifications
-    with open(filepath, 'w', encoding='utf-8') as file:
-        file.writelines(lignes_fichier)
+    regex_fsh = rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b"
+    
+    matches_main = list(re.finditer(r"\bvoid\s+main\s*\(\s*\)", content))
+    if len(matches_main) != len(liste_interieurs_mains):
+        print(f"[!] Erreur de correspondance des blocs main dans {filepath}")
+        return
+    
+    file_modified = False
+    
+    for i in reversed(range(len(matches_main))):
+        match = matches_main[i]
+        interieur_main = liste_interieurs_mains[i]
+        
+        if re.search(regex_fsh, interieur_main):
+            define_tag = "#define FSHSDT"
+        else:
+            define_tag = "#define VSHSDT"
+            
+        start_pos = match.start()
+        
+        segment_precedent = content[max(0, start_pos-60):start_pos]
+        if f"{define_tag}\n#include" in segment_precedent:
+            continue
+            
+        injection = f"{define_tag}\n#include \"/lib/sdt/SDTmain.glsl\"\n"
+        content = content[:start_pos] + injection + content[start_pos:]
+        file_modified = True
+        print(f"[+] Injection préparée avant le main n°{i+1} ({define_tag})")
+
+    if file_modified:
+        with open(filepath, 'w', encoding='utf-8') as file:
+            file.write(content)
+        print(f"[+++] Fichier {filepath} mis à jour avec succès.\n")
+    else:
+        print(f"[~] Aucune modification nécessaire pour {filepath}\n")
 
 def inject_SDTfunctionsinmain(filepath: str, shader_root: str, colorvariable: str = None):
-    includeSTDlibs(filepath, shader_root)
+    includeSTDlibs(filepath, shader_root,colorvariable)
     if ".fsh" in filepath.lower():
         injectFSHSDTinmain(filepath, colorvariable)
     elif ".vsh" in filepath.lower():
@@ -198,12 +219,40 @@ def inserer_prepareVSH_dans_bloc_main(contenu_main: str) -> str:
     Prend en entrée le contenu textuel d'un bloc main de vertex shader (déjà extrait sans ses accolades).
     Retourne le bloc main modifié avec PrepareTextureSynthesisVSH() injecté au tout début.
     """
-    ligne_injection = "\n   PrepareTextureSynthesisVSH();\n"
+    ligne_injection = "\nPrepareTextureSynthesisVSH();\n"
     
     return ligne_injection + contenu_main
 
+def inject_DefineChecksForUniforms(found_uniforms):
+    """
+    found_uniforms de la forme [[[uniform1, uniforme2], fichierpath], ...]
+    Remplace chaque uniforme par son bloc de vérification #ifndef à son emplacement d'origine.
+    """
+    for uniform_filepath in found_uniforms:
+        filepath = uniform_filepath[1]
+        uniforms_list = uniform_filepath[0]
+        try:
+            with open(filepath, 'r', encoding='utf-8') as file:
+                content = file.read()
+        except Exception as e:
+            print(f"Erreur de lecture sur {filepath} : {e}")
+            continue
 
+        file_modified = False
 
+        for uniform in uniforms_list:
+            define_name = uniform.strip().replace(";", "").split()[-1].upper()
+            injection = f"#ifndef {define_name}\n{uniform}\n#define {define_name}\n#endif"
 
+            if injection in content:
+                continue
+            if uniform in content:
+                content = content.replace(uniform, injection)
+                file_modified = True
 
-
+        if file_modified:
+            try:
+                with open(filepath, 'w', encoding='utf-8') as file_write:
+                    file_write.write(content)
+            except Exception as e:
+                print(f"Erreur d'écriture sur {filepath} : {e}")

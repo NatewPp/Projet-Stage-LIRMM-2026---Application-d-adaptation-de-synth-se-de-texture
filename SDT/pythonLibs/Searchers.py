@@ -150,3 +150,53 @@ def obtenir_nom_variable_couleur_universel(chemin_fichier):
         print(f"[X] Erreur : {e}")
         return False
     
+import os
+
+def searchforSDTUniforms(filepath: str):
+    """
+    Renvoie une liste de la forme : 
+    [[[uniform1, uniforme2], fichierpath], [[uniform1], fichierpath], ...]
+    """
+    SdtUniforms = [
+        "uniform mat4 gbufferModelViewInverse;",
+        "uniform mat4 gbufferProjectionInverse;",
+        "uniform float viewWidth;",
+        "uniform float viewHeight;",
+        "uniform vec3 cameraPosition;",
+        "uniform sampler2D tex;",
+        "uniform ivec2 atlasSize;"
+    ]
+    
+    found_uniforms = []
+    
+    try:
+        if os.path.isdir(filepath):
+            items = os.listdir(filepath)
+            for item in items:
+                item_path = os.path.join(filepath, item)
+                found_uniforms_rec = searchforSDTUniforms(item_path)
+                
+                if found_uniforms_rec:
+                        found_uniforms.extend(found_uniforms_rec)
+                        
+            return found_uniforms
+            
+        else:
+            if filepath.lower().endswith(('.vsh', '.fsh', '.glsl')):
+                file_uniforms = []
+                with open(filepath, 'r', encoding='utf-8') as file:
+                    content = file.read()
+                    for uniform in SdtUniforms:
+                        if uniform in content:
+                            
+                            file_uniforms.append(uniform)
+                if len(file_uniforms) > 0:
+                    return [[file_uniforms, filepath]]
+                else:
+                    return []
+            else:
+                return []
+                
+    except Exception as e:
+        print(f"Error reading file: {e}")
+        return []

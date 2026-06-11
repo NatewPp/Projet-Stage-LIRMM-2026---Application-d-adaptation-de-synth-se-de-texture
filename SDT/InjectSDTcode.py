@@ -1,8 +1,8 @@
 import sys
 import os
 
-from pythonLibs.Searchers import find_gbuffers_terrain, findMainFunction
-from pythonLibs.Injectors import inject_SDTfunctionsinmain
+from pythonLibs.Searchers import find_gbuffers_terrain, findMainFunction,searchforSDTUniforms
+from pythonLibs.Injectors import inject_SDTfunctionsinmain, inject_DefineChecksForUniforms
 from pythonLibs.placeSDT import copySdtToShaders, copy_folder_with_overwrite
 """
 if __name__ == "__main__":
@@ -38,3 +38,5 @@ if __name__ == "__main__":
                 inject_SDTfunctionsinmain(shader[0], shader[1])
             elif len(shader) == 3:
                 inject_SDTfunctionsinmain(shader[0], shader[1], shader[2])
+    found_uniforms = searchforSDTUniforms(shaderSdtPath)
+    inject_DefineChecksForUniforms(found_uniforms)
