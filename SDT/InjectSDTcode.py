@@ -2,8 +2,9 @@ import sys
 import os
 
 from pythonLibs.Searchers import find_gbuffers_terrain, findMainFunction,searchforSDTUniforms
-from pythonLibs.Injectors import inject_SDTfunctionsinmain, inject_DefineChecksForUniforms
+from pythonLibs.Injectors import inject_SDTfunctionsinmain, inject_DefineChecksForUniforms, upgrade_glsl_version
 from pythonLibs.placeSDT import copySdtToShaders, copy_folder_with_overwrite
+
 """
 if __name__ == "__main__":
     if len(sys.argv) > 1:
@@ -27,6 +28,7 @@ def inject_sdt(pack_path, dest=None):
     shaders = find_gbuffers_terrain(dest)
     copySdtToShaders(dest)
     for shader_path, shader_root, relative_to_root in shaders:
+        upgrade_glsl_version(shader_path) 
         shader = findMainFunction(shader_path, shader_root)
         if len(shader) == 2:
             inject_SDTfunctionsinmain(shader[0], shader[1])

@@ -21,7 +21,7 @@ def includeSTDlibs(filepath: str, relative_to_root: str, colorvariable: str):
 
     regex_fsh = None
     if colorvariable:
-        regex_fsh = rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b"
+        regex_fsh = rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture(?!Size\b)[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b"
     
     matches_main = list(re.finditer(r"\bvoid\s+main\s*\(\s*\)", content))
     if len(matches_main) != len(liste_interieurs_mains):
@@ -75,8 +75,8 @@ def inject_SDTfunctionsinmain(filepath: str, shader_root: str, colorvariable: st
 def injectModified(filepath: str):
     with open(filepath, 'r', encoding='utf-8') as file:
         content = file.read()
-        if not content.startswith("#modified\n"):
-            content = "#modified\n" + content
+        if not content.startswith("//#modified\n"):
+            content = "//#modified\n" + content
         else:
             return False
     with open(filepath, 'w', encoding='utf-8') as file:
@@ -167,7 +167,7 @@ def injectBothSDTinmains(filepath: str,colorvariable: str):
                 print(f"[!] Moins de 2 blocs main trouvés dans {filepath}, impossible d'injecter les fonctions SDT.")
                 return False
             for main in mains:
-                if re.search(rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b", main):
+                if re.search(rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture(?!Size\b)[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b", main):
                     contenu_main_modifie = inserer_applyFSH_dans_bloc_main(main, colorvariable)
                     if contenu_main_modifie is None:
                         print(f"[!] Impossible de trouver l'assignation de texture pour '{colorvariable}' dans le main de {filepath}")
@@ -191,30 +191,23 @@ def injectBothSDTinmains(filepath: str,colorvariable: str):
 import re
 
 def inserer_applyFSH_dans_bloc_main(contenu_main: str, colorvariable: str) -> str | None:
-    """
-    Prend en entrée le contenu textuel d'un bloc main et le nom de la variable couleur.
-    Modifie la ligne d'assignation pour appliquer ApplyTextureSynthesis, et déporte 
-    les opérations subséquentes (ex: * glcolor) après l'appel.
-    """
-    # Échappement pour la regex
+    """Insère ApplyTextureSynthesis après CHAQUE assignation de texture de la
+    variable couleur (les branches #ifdef exclusives en contiennent souvent plusieurs)."""
     color_esc = re.escape(colorvariable)
-    
-    # Explication de la regex :
-    # Group 1 : L'assignation de base de la texture -> color = texture(...stuff...)
-    # Group 2 : Le "reste" optionnel de l'opération avant le point-virgule -> * glcolor
-    pattern = rf"(\b{color_esc}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture[a-zA-Z0-9_]*\b\s*\([^;]*?\))(.*?);"
-    
-    match = re.search(pattern, contenu_main)
-    if not match:
+    pattern = rf"(\b{color_esc}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture(?!Size\b)[a-zA-Z0-9_]*\b\s*\([^;]*?\))(.*?);"
+
+    if not re.search(pattern, contenu_main):
         return None
-        
-    ligne_originale = match.group(0) # La ligne entière trouvée
-    assignation_texture = match.group(1) # color = texture(...)
-    operations_extra = match.group(2).strip() # ex: * glcolor
-    
-    # Construction du nouveau bloc de code
-    nouvelle_sequence = f"{assignation_texture};"
-    nouvelle_sequence += f"\n    ApplyTextureSynthesis({colorvariable});"
+
+    def _injecter(m):
+        assignation = m.group(1)            # data0 = texture2D(...)
+        extra = m.group(2).strip()          # ex: * color  (opérations à déporter)
+        seq = f"{assignation};\n    ApplyTextureSynthesis({colorvariable});"
+        if extra:
+            seq += f"\n    {colorvariable} = {colorvariable} {extra};"
+        return seq
+
+    return re.sub(pattern, _injecter, contenu_main)
     
    
     if operations_extra:
@@ -233,9 +226,20 @@ def inserer_prepareVSH_dans_bloc_main(contenu_main: str) -> str:
 
 def inject_DefineChecksForUniforms(found_uniforms):
     """
-    found_uniforms de la forme [[[uniform1, uniforme2], fichierpath], ...]
-    Remplace chaque uniforme par son bloc de vérification #ifndef à son emplacement d'origine.
+    found_uniforms de la forme [[[declaration1, declaration2], fichierpath], ...]
+    Remplace chaque déclaration par son bloc de vérification #ifndef à son emplacement d'origine.
+    Une déclaration groupée (uniform float viewWidth, viewHeight;) reçoit un #define
+    par uniform SDT qu'elle contient, pour neutraliser chaque garde de SDTmain.glsl.
     """
+    SDT_UNIFORM_MACROS = {
+        "gbufferModelViewInverse": "GBUFFERMODELVIEWINVERSE",
+        "gbufferProjectionInverse": "GBUFFERPROJECTIONINVERSE",
+        "viewWidth": "VIEWWIDTH",
+        "viewHeight": "VIEWHEIGHT",
+        "cameraPosition": "CAMERAPOSITION",
+        "tex": "TEX",
+        "atlasSize": "ATLASSIZE",
+    }
     for uniform_filepath in found_uniforms:
         filepath = uniform_filepath[1]
         uniforms_list = uniform_filepath[0]
@@ -248,14 +252,19 @@ def inject_DefineChecksForUniforms(found_uniforms):
 
         file_modified = False
 
-        for uniform in uniforms_list:
-            define_name = uniform.strip().replace(";", "").split()[-1].upper()
-            injection = f"#ifndef {define_name}\n{uniform}\n#define {define_name}\n#endif"
+        for declaration in uniforms_list:
+            # macros des uniforms SDT présents dans cette déclaration (1 ou plusieurs si groupée)
+            macros = [macro for name, macro in SDT_UNIFORM_MACROS.items()
+                      if re.search(rf"\b{name}\b", declaration)]
+            if not macros:
+                continue
+            defines = "\n".join(f"#define {macro}" for macro in macros)
+            injection = f"#ifndef {macros[0]}\n{declaration}\n{defines}\n#endif"
 
             if injection in content:
                 continue
-            if uniform in content:
-                content = content.replace(uniform, injection)
+            if declaration in content:
+                content = content.replace(declaration, injection)
                 file_modified = True
 
         if file_modified:
@@ -264,3 +273,24 @@ def inject_DefineChecksForUniforms(found_uniforms):
                     file_write.write(content)
             except Exception as e:
                 print(f"Erreur d'écriture sur {filepath} : {e}")
+
+def upgrade_glsl_version(filepath: str):
+    """Si le fichier déclare un #version < 130, le remplace par
+    '#version 330 compatibility' (requis par la lib SDT).
+    Renvoie True si le fichier a été modifié."""
+    with open(filepath, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    m = re.search(r"#version\s+(\d+)[^\n]*", content)
+    if m is None:
+        # pas de #version du tout : GLSL 1.10 implicite -> on en impose un en tête
+        content = "#version 330 compatibility\n" + content
+    else:
+        if int(m.group(1)) >= 130:
+            return False                       # déjà assez récent, rien à faire
+        content = content[:m.start()] + "#version 330 compatibility" + content[m.end():]
+
+    with open(filepath, 'w', encoding='utf-8') as f:
+        f.write(content)
+    print(f"[+] #version upgradé -> 330 compatibility : {filepath}")
+    return True

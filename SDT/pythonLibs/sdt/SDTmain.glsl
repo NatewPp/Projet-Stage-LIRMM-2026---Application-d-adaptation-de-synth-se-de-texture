@@ -3,6 +3,7 @@
 
 #ifndef GBUFFERMODELVIEWINVERSE
 uniform mat4 gbufferModelViewInverse;
+#define GBUFFERMODELVIEWINVERSE
 #endif
 
 #ifndef GBUFFERPROJECTIONINVERSE
@@ -53,7 +54,7 @@ void PrepareTextureSynthesisVSH() {
     sdtWavingOffset = vec4(0.0);
 
     // Pass player position (relative to camera)
-    sdtPlayerPos = vec3(0.0); // Will be calculated in FSH using vertex position
+    sdtPlayerPos = (gbufferModelViewInverse * (gl_ModelViewMatrix * gl_Vertex)).xyz;
 }
 
 #endif // VSHSDT
@@ -67,9 +68,9 @@ varying vec3 sdtNormal;
 varying vec4 sdtWavingOffset;
 varying vec3 sdtPlayerPos;
 #include "/lib/sdt/textureSynthesis.glsl"
-#ifndef ATLAS_SIZE
+#ifndef ATLASSIZE
 uniform ivec2 atlasSize;
-#define ATLAS_SIZE
+#define ATLASSIZE
 #endif
 
 #include "/lib/sdt/textureSynthesisUVHints.glsl"
@@ -95,9 +96,7 @@ void ApplyTextureSynthesis(inout vec4 color) {
     vec4 wavingOffset = sdtWavingOffset;
     
     // Calculate player position from fragment position and camera position
-    vec3 screenPos = vec3(gl_FragCoord.xy/ vec2(viewWidth, viewHeight), gl_FragCoord.z);
-    vec3 viewPos = SDTSDTScreenToView(screenPos);
-    vec3 playerPos = SDTViewToPlayer(viewPos);
+    vec3 playerPos = sdtPlayerPos;
     
     // Calculate required variables
     vec3 playerPosWithoutWaves = playerPos + wavingOffset.xyz;

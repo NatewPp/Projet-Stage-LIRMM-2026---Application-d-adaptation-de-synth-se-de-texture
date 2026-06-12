@@ -135,7 +135,7 @@ def obtenir_nom_variable_couleur_universel(chemin_fichier):
         # 1. On extrait proprement tous les corps de main()
         les_main = extraire_blocs_main(contenu)
         # meme regex que dans obtenir_nom_variable_couleur mais appliquée à chaque main() trouvé
-        pattern_texture = r"\b([a-zA-Z_][a-zA-Z0-9_]*)\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b"
+        pattern_texture = r"\b([a-zA-Z_][a-zA-Z0-9_]*)\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture(?!Size\b)[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b"
         
         for index, contenu_main in enumerate(les_main):
             match = re.search(pattern_texture, contenu_main)
@@ -154,49 +154,57 @@ import os
 
 def searchforSDTUniforms(filepath: str):
     """
-    Renvoie une liste de la forme : 
-    [[[uniform1, uniforme2], fichierpath], [[uniform1], fichierpath], ...]
+    Renvoie une liste de la forme :
+    [[[declaration1, declaration2], fichierpath], [[declaration1], fichierpath], ...]
+    Les déclarations sont trouvées par NOM d'uniform (regex), ce qui attrape
+    aussi les déclarations groupées : uniform float viewWidth, viewHeight;
     """
-    SdtUniforms = [
-        "uniform mat4 gbufferModelViewInverse;",
-        "uniform mat4 gbufferProjectionInverse;",
-        "uniform float viewWidth;",
-        "uniform float viewHeight;",
-        "uniform vec3 cameraPosition;",
-        "uniform sampler2D tex;",
-        "uniform ivec2 atlasSize;"
+    SdtUniformNames = [
+        "gbufferModelViewInverse",
+        "gbufferProjectionInverse",
+        "viewWidth",
+        "viewHeight",
+        "cameraPosition",
+        "tex",
+        "atlasSize",
     ]
-    
+
     found_uniforms = []
-    
+
     try:
         if os.path.isdir(filepath):
             items = os.listdir(filepath)
             for item in items:
                 item_path = os.path.join(filepath, item)
                 found_uniforms_rec = searchforSDTUniforms(item_path)
-                
+
                 if found_uniforms_rec:
                         found_uniforms.extend(found_uniforms_rec)
-                        
+
             return found_uniforms
-            
+
         else:
-            if filepath.lower().endswith(('.vsh', '.fsh', '.glsl')):
+            # la lib SDT (lib/sdt/) gère déjà ses propres gardes #ifndef : on ne la touche pas
+            if os.path.basename(os.path.dirname(filepath)) == "sdt":
+                return []
+            if filepath.lower().endswith(('.vsh', '.fsh', '.gsh', '.csh', '.glsl', '.inc')):
                 file_uniforms = []
                 with open(filepath, 'r', encoding='utf-8') as file:
                     content = file.read()
-                    for uniform in SdtUniforms:
-                        if uniform in content:
-                            
-                            file_uniforms.append(uniform)
+                for name in SdtUniformNames:
+                    # une déclaration complète (jusqu'au ;) contenant ce nom d'uniform
+                    pattern = rf"^[ \t]*uniform\s[^;]*\b{name}\b[^;]*;"
+                    for m in re.finditer(pattern, content, re.M):
+                        declaration = m.group(0).strip()
+                        if declaration not in file_uniforms:
+                            file_uniforms.append(declaration)
                 if len(file_uniforms) > 0:
                     return [[file_uniforms, filepath]]
                 else:
                     return []
             else:
                 return []
-                
+
     except Exception as e:
         print(f"Error reading file: {e}")
         return []
