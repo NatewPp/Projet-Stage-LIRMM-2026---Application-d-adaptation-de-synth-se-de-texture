@@ -5,17 +5,6 @@ from pythonLibs.Searchers import find_gbuffers_terrain, findMainFunction,searchf
 from pythonLibs.Injectors import inject_SDTfunctionsinmain, inject_DefineChecksForUniforms, upgrade_glsl_version
 from pythonLibs.placeSDT import copySdtToShaders, copy_folder_with_overwrite
 
-"""
-if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        dir_path = sys.argv[1]
-    else:
-        dir_path = input("Enter the shader root directory path: ")
-    
-    shaders = find_gbuffers_terrain(dir_path)
-    obtenir_nom_variable_couleur()
-"""
-
 def inject_sdt(pack_path, dest=None):
     """Copie le shaderpack vers dest (ou <pack>_SDT à côté), y injecte le code SDT.
     Renvoie le chemin du pack créé."""

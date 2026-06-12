@@ -1,6 +1,10 @@
 import os
 import re
 def find_gbuffers_terrain(directory_path: str, shader_root: str = None):
+    """Parcourt le dossier directory_path à la recherche des fichiers gbuffers_terrain (.vsh ou .fsh)
+      et retourne une liste de tuples :
+      (chemin_complet_du_fichier, shader_root, chemin_relatif_du_fichier_par_rapport_au_shader_root)
+    """
     if shader_root is None:
         shader_root = directory_path
     
@@ -15,11 +19,9 @@ def find_gbuffers_terrain(directory_path: str, shader_root: str = None):
         
         for item in items:
             item_path = os.path.join(directory_path, item)
-            
-            # Check if it's a gbuffers_terrain file
+
             if os.path.isfile(item_path):
                 if "gbuffers_terrain" in item.lower() and (item.lower().endswith('.vsh') or item.lower().endswith('.fsh')):
-                    # Calculate relative path FROM file TO shader root
                     relative_to_root = os.path.relpath(shader_root, os.path.dirname(item_path))
                     found_shaders.append((item_path, shader_root, relative_to_root))
             elif os.path.isdir(item_path):
@@ -32,6 +34,9 @@ def find_gbuffers_terrain(directory_path: str, shader_root: str = None):
         return []
     
 def hasMain(filepath: str):
+    """"
+    Retourne True si le fichier contient void main() sinon False.
+    """
     with open(filepath, 'r', encoding='utf-8') as file:
         content = file.read()
         if re.search(r'(\s*)void\s+main\s*\([^)]*\)\s*\{', content):
@@ -39,6 +44,9 @@ def hasMain(filepath: str):
         return False
     
 def includesPathList(filepath: str):
+    """"
+    retourne la liste des includes présents dans le ficchier passé en entrée
+    """
     with open(filepath, 'r', encoding='utf-8') as file:
         content = file.read()
     includes = re.findall(r'#include\s+"([^"]+)"', content)
@@ -47,6 +55,9 @@ def includesPathList(filepath: str):
 import os
 
 def findMainFunction(filepath: str, shader_root: str) -> bool:
+    """
+    Recherche la fonction main dans le fichier donné avec une récursive sur les includes.
+    """
     if hasMain(filepath):
         if not ".vsh" in filepath.lower():
             return [filepath,shader_root ,obtenir_nom_variable_couleur_universel(filepath)]
@@ -56,11 +67,6 @@ def findMainFunction(filepath: str, shader_root: str) -> bool:
     includes = includesPathList(filepath)
     for i in includes:
         i_clean = i.lstrip("/\\")
-        
-        # 1. Gestion de l'include ABSOLU (ex: /program/gbuffers_terrain.fsh)
-        # La racine GLSL est TOUJOURS le dossier 'shaders' du shaderpack.
-        # On s'assure que shader_root pointe bien vers 'MellowShaderv3/shaders'
-        
         shaders_dir = os.path.join(shader_root, "shaders")
             
         path_relative_to_root = os.path.join(shader_root, i_clean)
@@ -68,7 +74,6 @@ def findMainFunction(filepath: str, shader_root: str) -> bool:
 
         path_relative_to_file = os.path.join(os.path.dirname(filepath), i_clean)
         path_relative_to_fileBIS = os.path.join(os.path.dirname(filepath), "shaders", i_clean)
-        # Normalisation des chemins (résout les /../ et les // magiques)
         path_relative_to_root = os.path.normpath(path_relative_to_root)
         path_relative_to_file = os.path.normpath(path_relative_to_file)
         path_relative_to_fileBIS = os.path.normpath(path_relative_to_fileBIS)
@@ -128,6 +133,9 @@ def extraire_blocs_main(contenu_fichier):
     return blocs_main
 
 def obtenir_nom_variable_couleur_universel(chemin_fichier):
+    """"
+    Retourne le nom de la variable de couleur du pixel en cherchant dans les mains du shader passé en entrée.
+    """
     try:
         with open(chemin_fichier, 'r', encoding='utf-8') as f:
             contenu = f.read()

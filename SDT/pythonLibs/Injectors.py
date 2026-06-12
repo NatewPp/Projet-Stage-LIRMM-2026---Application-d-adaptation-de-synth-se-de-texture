@@ -6,6 +6,9 @@ import re
 import re
 
 def includeSTDlibs(filepath: str, relative_to_root: str, colorvariable: str):  
+    """"
+    Injecte l'includes de SDTmain.glsl avant chaque main des shaders ciblés, avec un #define FSHSDT ou VSHSDT 
+    en fonction de la présence de la variable couleur dans le main (FSH vs VSH)."""
     with open(filepath, 'r', encoding='utf-8') as file:
         content = file.read()
         
@@ -58,6 +61,12 @@ def includeSTDlibs(filepath: str, relative_to_root: str, colorvariable: str):
         print(f"[~] Aucune modification nécessaire pour {filepath}\n")
 
 def inject_SDTfunctionsinmain(filepath: str, shader_root: str, colorvariable: str = None):
+    """"
+    Injecte les fonctions d'injections de SDT selon le type de fichier shader ciblé :
+    - si FSH et colorvariable présente dans le main, on apelle InjectFSHSDTinmain()
+    - si VSH, on apelle InjectVSHSDTinmain()
+    - sinon, on apelle InjectBothSDTinmains()
+    """
     includeSTDlibs(filepath, shader_root, colorvariable)
     if ".fsh" in filepath.lower():
         if not colorvariable:
@@ -73,6 +82,9 @@ def inject_SDTfunctionsinmain(filepath: str, shader_root: str, colorvariable: st
         injectBothSDTinmains(filepath, colorvariable)
 
 def injectModified(filepath: str):
+    """
+    Injecte //#modified afin qu'il agisse comme garde-fou pour éviter qu'un même fichier soit modifié plusieurs fois.
+    """
     with open(filepath, 'r', encoding='utf-8') as file:
         content = file.read()
         if not content.startswith("//#modified\n"):
