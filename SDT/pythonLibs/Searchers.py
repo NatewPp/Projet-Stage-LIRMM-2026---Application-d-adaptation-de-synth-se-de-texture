@@ -4,6 +4,9 @@ def find_gbuffers_terrain(directory_path: str, shader_root: str = None):
     """Parcourt le dossier directory_path à la recherche des fichiers gbuffers_terrain (.vsh ou .fsh)
       et retourne une liste de tuples :
       (chemin_complet_du_fichier, shader_root, chemin_relatif_du_fichier_par_rapport_au_shader_root)
+
+      PRECONDITION : shader_root doit être un parent de directory_path ou égal à directory_path
+      POSTCONDITION : retourne une liste de tuples pour chaque fichier trouvé, ou une liste vide si aucun fichier n'est trouvé ou en cas d'erreur.s
     """
     if shader_root is None:
         shader_root = directory_path
@@ -36,6 +39,8 @@ def find_gbuffers_terrain(directory_path: str, shader_root: str = None):
 def hasMain(filepath: str):
     """"
     Retourne True si le fichier contient void main() sinon False.
+    PRECONDITION : le fichier doit être un fichier texte lisible.
+    POSTCONDITION : retourne True si le fichier contient void main() sinon False
     """
     with open(filepath, 'r', encoding='utf-8') as file:
         content = file.read()
@@ -45,7 +50,9 @@ def hasMain(filepath: str):
     
 def includesPathList(filepath: str):
     """"
-    retourne la liste des includes présents dans le ficchier passé en entrée
+    Retourne la liste des includes présents dans le ficchier passé en entrée
+    PRECONDITION : le fichier doit être un fichier texte lisible.
+    POSTCONDITION : retourne la liste des includes présents dans le fichier passé en entrée sous forme de liste de chaînes de caractères.
     """
     with open(filepath, 'r', encoding='utf-8') as file:
         content = file.read()
@@ -56,7 +63,11 @@ import os
 
 def findMainFunction(filepath: str, shader_root: str) -> bool:
     """
-    Recherche la fonction main dans le fichier donné avec une récursive sur les includes.
+    Recherche récursivement la fonction main() dans le fichier donné et ses fichiers inclus.
+    PRECONDITION : le fichier doit être un fichier texte lisible.
+    POSTCONDITION : retourne une liste [filepath, shader_root, nom_variable_couleur] ou [filepath, shader_root] 
+                    si le fichier contient void main() et est soit un fichier de fragment, 
+                    soit un fichier de vertex, sinon retourne False.
     """
     if hasMain(filepath):
         if not ".vsh" in filepath.lower():
@@ -103,6 +114,9 @@ def extraire_blocs_main(contenu_fichier):
     """
     Trouve toutes les fonctions void main() et extrait leur contenu exact
     en gérant correctement l'imbrication des accolades {}.
+    PRECONDITION : contenu_fichier doit être une chaîne de caractères représentant le contenu d'un fichier.
+    POSTCONDITION : retourne une liste de chaînes de caractères, chaque chaîne représentant
+                    le contenu d'une fonction main() trouvée dans le fichier.
     """
     blocs_main = []
     for match in re.finditer(r"\bvoid\s+main\s*\(\s*\)", contenu_fichier):
@@ -131,6 +145,8 @@ def extraire_blocs_main(contenu_fichier):
 def obtenir_nom_variable_couleur_universel(chemin_fichier):
     """"
     Retourne le nom de la variable de couleur du pixel en cherchant dans les mains du shader passé en entrée.
+    PRECONDITION : le fichier doit être un fichier texte lisible.
+    POSTCONDITION : retourne le nom de la variable de couleur du pixel si trouvé, sinon retourne False.
     """
     try:
         with open(chemin_fichier, 'r', encoding='utf-8') as f:
@@ -156,10 +172,12 @@ import os
 
 def searchforSDTUniforms(filepath: str):
     """
-    Renvoie une liste de la forme :
-    [[[declaration1, declaration2], fichierpath], [[declaration1], fichierpath], ...]
-    Les déclarations sont trouvées par NOM d'uniform (regex), ce qui attrape
-    aussi les déclarations groupées : uniform float viewWidth, viewHeight;
+    Recherche les déclarations d'uniforms dans le fichier donné et retourne une liste de tuples.
+    PRECONDITION : le fichier doit être un fichier texte lisible.
+    POSTCONDITION : retourne une liste de la forme :
+                    [[[declaration1, declaration2], fichierpath], [[declaration1], fichierpath], ...]
+                    Les déclarations sont trouvées par NOM d'uniform (regex), 
+                    ce qui attrape aussi les déclarations groupées : uniform float viewWidth, viewHeight;
     """
     SdtUniformNames = [
         "gbufferModelViewInverse",

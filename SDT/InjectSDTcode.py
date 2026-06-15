@@ -6,8 +6,11 @@ from pythonLibs.Injectors import inject_SDTfunctionsinmain, inject_DefineChecksF
 from pythonLibs.placeSDT import copySdtToShaders, copy_folder_with_overwrite
 
 def inject_sdt(pack_path, dest=None):
+    
     """Copie le shaderpack vers dest (ou <pack>_SDT à côté), y injecte le code SDT.
-    Renvoie le chemin du pack créé."""
+    PRECONDITION : pack_path doit être un chemin valide vers un shaderpack.
+    POSTCONDITION : le shaderpack est copié vers dest (ou <pack>_SDT à côté), avec le code SDT injecté dans les shaders.
+    """
     if dest is None:
         dir_path = os.path.dirname(os.path.abspath(pack_path))
         base_name = os.path.splitext(os.path.basename(pack_path))

@@ -7,8 +7,12 @@ import re
 
 def includeSTDlibs(filepath: str, relative_to_root: str, colorvariable: str):  
     """"
-    Injecte l'includes de SDTmain.glsl avant chaque main des shaders ciblés, avec un #define FSHSDT ou VSHSDT 
-    en fonction de la présence de la variable couleur dans le main (FSH vs VSH)."""
+    Injecte les includes de SDT et les #define correspondants avant chaque main() du fichier shader.
+    PRECONDITION : le fichier doit être un fichier texte lisible.
+    POSTCONDITION : le fichier est modifié avec l'injection de l'include et du #define correspondant,
+                    ou reste inchangé si déjà modifié.
+    
+    """
     with open(filepath, 'r', encoding='utf-8') as file:
         content = file.read()
         
@@ -63,9 +67,9 @@ def includeSTDlibs(filepath: str, relative_to_root: str, colorvariable: str):
 def inject_SDTfunctionsinmain(filepath: str, shader_root: str, colorvariable: str = None):
     """"
     Injecte les fonctions d'injections de SDT selon le type de fichier shader ciblé :
-    - si FSH et colorvariable présente dans le main, on apelle InjectFSHSDTinmain()
-    - si VSH, on apelle InjectVSHSDTinmain()
-    - sinon, on apelle InjectBothSDTinmains()
+    PRECONDITION : le fichier doit être un fichier texte lisible.
+    POSTCONDITION : le fichier est modifié avec l'injection de la fonction SDT correspondante, 
+                    ou reste inchangé si déjà modifié.
     """
     includeSTDlibs(filepath, shader_root, colorvariable)
     if ".fsh" in filepath.lower():
@@ -83,7 +87,10 @@ def inject_SDTfunctionsinmain(filepath: str, shader_root: str, colorvariable: st
 
 def injectModified(filepath: str):
     """
-    Injecte //#modified afin qu'il agisse comme garde-fou pour éviter qu'un même fichier soit modifié plusieurs fois.
+    Marque le fichier comme modifié en ajoutant un commentaire en tête.
+    PRECONDITION : le fichier doit être un fichier texte lisible.
+    POSTCONDITION : le fichier est modifié avec l'ajout du commentaire "//#modified" en tête,
+                    ou reste inchangé si déjà modifié.
     """
     with open(filepath, 'r', encoding='utf-8') as file:
         content = file.read()
@@ -98,6 +105,9 @@ def injectFSHSDTinmain(filepath: str, colorvariable: str) -> bool:
     """
     Injecte la fonction ApplyTextureSynthesis(colorvariable);
     juste après l'assignation de la texture principale en gérant les fichiers.
+    PRECONDITION : le fichier doit être un fichier texte lisible.
+    POSTCONDITION : le fichier est modifié avec l'injection de la fonction SDT du FSH 
+                    ou reste inchangé si déjà modifié.
     """
     isNotModified = injectModified(filepath)
     if isNotModified is False:
@@ -132,6 +142,10 @@ def injectFSHSDTinmain(filepath: str, colorvariable: str) -> bool:
 def injectVSHSDTinmain(filepath: str):
     """
     injecte la fonction PrepareTextureSynthesisVSH() dans le main d'un vsh
+    PRECONDITION : le fichier doit être un fichier texte lisible servant de shader vertex 
+                   avec une fonction main().
+    POSTCONDITION : le fichier est modifié avec l'injection de la fonction SDT du VSH, 
+                    ou reste inchangé si déjà modifié.
     """
     isNotModified = injectModified(filepath)
     if isNotModified is False:
@@ -163,6 +177,10 @@ def injectBothSDTinmains(filepath: str,colorvariable: str):
     """
     injecte les fonctions ApplyTextureSynthesis(inout vec4 color, in vec3 fragPos) et PrepareTextureSynthesisVSH() 
     dans les mains d'un shader contenant à la fois le fragment et le vertex
+    PRECONDITION : le fichier doit être un fichier texte lisible servant de shader avec deux fonction main().
+                    une pour le vertex et une pour le fragment, 
+                    et la variable couleur doit être présente dans le main du fragment.
+    POSTCONDITION : le fichier est modifié avec l'injection des fonctions SDT dans les mains correspondants,
     """
     isNotModified = injectModified(filepath)
     if isNotModified is False:
@@ -199,7 +217,12 @@ import re
 
 def inserer_applyFSH_dans_bloc_main(contenu_main: str, colorvariable: str) -> str | None:
     """Insère ApplyTextureSynthesis après CHAQUE assignation de texture de la
-    variable couleur (les branches #ifdef exclusives en contiennent souvent plusieurs)."""
+    variable couleur (les branches #ifdef exclusives en contiennent souvent plusieurs).
+    PRECONDITION : contenu_main doit être une chaîne de caractères représentant le contenu d'un bloc main d'un Fragment Shader.
+    POSTCONDITION : retourne le bloc main modifié avec ApplyTextureSynthesis() injecté après
+                    chaque assignation de texture de la variable couleur,
+                    ou None si aucune assignation n'a été trouvée.
+    """
     color_esc = re.escape(colorvariable)
     pattern = rf"(\b{color_esc}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture(?!Size\b)[a-zA-Z0-9_]*\b\s*\([^;]*?\))(.*?);"
 
@@ -221,6 +244,8 @@ def inserer_prepareVSH_dans_bloc_main(contenu_main: str) -> str:
     """
     Prend en entrée le contenu textuel d'un bloc main de vertex shader (déjà extrait sans ses accolades).
     Retourne le bloc main modifié avec PrepareTextureSynthesisVSH() injecté au tout début.
+    PRECONDITION : contenu_main doit être une chaîne de caractères représentant le contenu d'un bloc main d'un vertex shader.
+    POSTCONDITION : retourne le bloc main modifié avec PrepareTextureSynthesisVSH() injecté au tout début.
     """
     ligne_injection = "\nPrepareTextureSynthesisVSH();\n"
     
@@ -228,10 +253,8 @@ def inserer_prepareVSH_dans_bloc_main(contenu_main: str) -> str:
 
 def inject_DefineChecksForUniforms(found_uniforms):
     """
-    found_uniforms de la forme [[[declaration1, declaration2], fichierpath], ...]
-    Remplace chaque déclaration par son bloc de vérification #ifndef à son emplacement d'origine.
-    Une déclaration groupée (uniform float viewWidth, viewHeight;) reçoit un #define
-    par uniform SDT qu'elle contient, pour éviter les doubles déclarations.
+    Remplace chaque déclaration par son bloc de vérification #ifndef, à son emplacement d'origine.
+    PRECONDITION : found_uniforms doit être une liste de tuples contenant des déclarations d'uniforms et leurs chemins de fichiers respectifs.
     """
     SDT_UNIFORM_MACROS = {
         "gbufferModelViewInverse": "GBUFFERMODELVIEWINVERSE",
@@ -279,7 +302,11 @@ def inject_DefineChecksForUniforms(found_uniforms):
 def upgrade_glsl_version(filepath: str):
     """Si le fichier déclare un #version < 130, le remplace par
     '#version 330 compatibility' (requis par la lib SDT).
-    Renvoie True si le fichier a été modifié."""
+    Renvoie True si le fichier a été modifié.
+    PRECONDITION : le fichier doit être un fichier texte lisible.
+    POSTCONDITION : le fichier est modifié avec la version GLSL mise à jour,
+                    ou reste inchangé si déjà à jour.
+    """
     with open(filepath, 'r', encoding='utf-8') as f:
         content = f.read()
 
