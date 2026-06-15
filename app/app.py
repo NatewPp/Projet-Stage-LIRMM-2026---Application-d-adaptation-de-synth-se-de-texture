@@ -90,7 +90,7 @@ def mc_font(size, weight="normal"):
             break                         
     return ctk.CTkFont(family=fam, size=size, weight=weight) #on applique la nouvelle police à Ctk
 
-def tiled_bg(w, h, scale=4, dark=0.40):
+def tiled_bg(w, h, scale=4, dark=0.4):
     """Fond menu Minecraft avec image dirt periodique"""
     tex = Image.open(os.path.join(DEFAULT_REF, "dirt.png")).convert("RGB")
     tex = tex.resize((tex.width * scale, tex.height * scale), Image.NEAREST)
@@ -157,12 +157,12 @@ class App(ctk.CTk):
         #Option debug
         self.debug_var = ctk.BooleanVar(value=False)
         cb2 = tk.Checkbutton( #bouton pour activer ou désactiver le debug
-            self.canvas, text="DEBUG",
+            self.canvas, text="SHOW DEBUG",
             variable=self.debug_var,
             font=mc_font(12),                     
             indicatoron=False,                   
             fg="white", bg=MC["stone"],
-            selectcolor=MC["green"],   #Couleur lorsque activé
+            selectcolor=MC["green_hi"],   #Couleur lorsque activé
             activebackground=MC["stone_hi"], activeforeground="white",
             bd=3, relief="raised",                
             highlightthickness=0, cursor="hand2",
@@ -338,7 +338,6 @@ class App(ctk.CTk):
 
         self._say(f"Atlas    : {atlas}", append=False)
         self._say(f"Pack     : {pack}")
-        self._say(f"Textures : {textures}\n")
         self._set_running(True)
         self._set_status("Injection + Génération en cours…", "orange")
         self._set_status("Régénération en cours…", "orange")
@@ -363,10 +362,6 @@ class App(ctk.CTk):
             out = glsl + ".generated"
             res = engine.regenerate(atlas, blockdir, glsl, out)
             shutil.move(out, glsl)        # on applique direct : c'est notre copie
-
-            self._say(f"✅ Placés fiables  : {res['n_ok']}")
-            self._say(f"⚠️  À vérifier      : {res['n_verif']}")
-            self._say(f"🔧 Non placés      : {res['n_fail']}")
             self._set_status(f"Terminé ✔  Pack créé : Téléchargements/{name}", "lightgreen")
 
         except Exception as e:
