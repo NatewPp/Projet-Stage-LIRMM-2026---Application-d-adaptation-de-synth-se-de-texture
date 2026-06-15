@@ -118,7 +118,6 @@ def injectFSHSDTinmain(filepath: str, colorvariable: str) -> bool:
             print(f"[!] Impossible de trouver l'assignation de texture pour '{colorvariable}' dans le main de {filepath}")
             return False
         
-        # On reinjecte le main modifie a la place du main original
         content_modifie = content.replace(contenu_main_original, contenu_main_modifie, 1)
         
         with open(filepath, 'w', encoding='utf-8') as file:
@@ -162,7 +161,8 @@ def injectVSHSDTinmain(filepath: str):
 
 def injectBothSDTinmains(filepath: str,colorvariable: str):
     """
-    injecte les fonctions ApplyTextureSynthesis(inout vec4 color, in vec3 fragPos) et PrepareTextureSynthesisVSH() dans les mains d'un shader contenant a la fois le fragment et le vertex
+    injecte les fonctions ApplyTextureSynthesis(inout vec4 color, in vec3 fragPos) et PrepareTextureSynthesisVSH() 
+    dans les mains d'un shader contenant à la fois le fragment et le vertex
     """
     isNotModified = injectModified(filepath)
     if isNotModified is False:
@@ -231,7 +231,7 @@ def inject_DefineChecksForUniforms(found_uniforms):
     found_uniforms de la forme [[[declaration1, declaration2], fichierpath], ...]
     Remplace chaque déclaration par son bloc de vérification #ifndef à son emplacement d'origine.
     Une déclaration groupée (uniform float viewWidth, viewHeight;) reçoit un #define
-    par uniform SDT qu'elle contient, pour neutraliser chaque garde de SDTmain.glsl.
+    par uniform SDT qu'elle contient, pour éviter les doubles déclarations.
     """
     SDT_UNIFORM_MACROS = {
         "gbufferModelViewInverse": "GBUFFERMODELVIEWINVERSE",

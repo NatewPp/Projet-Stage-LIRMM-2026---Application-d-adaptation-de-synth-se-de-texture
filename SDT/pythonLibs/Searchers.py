@@ -105,16 +105,13 @@ def extraire_blocs_main(contenu_fichier):
     en gérant correctement l'imbrication des accolades {}.
     """
     blocs_main = []
-    # Trouve l'index de départ de chaque "void main()"
     for match in re.finditer(r"\bvoid\s+main\s*\(\s*\)", contenu_fichier):
         start_idx = match.end()
         
-        # On cherche la première accolade ouvrante après "void main()"
         open_bracket_idx = contenu_fichier.find("{", start_idx)
         if open_bracket_idx == -1:
             continue
             
-        # Compteur d'accolades pour trouver la fin réelle du main
         compteur = 1
         current_idx = open_bracket_idx + 1
         
@@ -126,7 +123,6 @@ def extraire_blocs_main(contenu_fichier):
                 compteur -= 1
             current_idx += 1
             
-        # On extrait ce qu'il y a strictement entre les accolades du main
         contenu_main = contenu_fichier[open_bracket_idx + 1 : current_idx - 1]
         blocs_main.append(contenu_main)
         
@@ -140,9 +136,7 @@ def obtenir_nom_variable_couleur_universel(chemin_fichier):
         with open(chemin_fichier, 'r', encoding='utf-8') as f:
             contenu = f.read()
             
-        # 1. On extrait proprement tous les corps de main()
         les_main = extraire_blocs_main(contenu)
-        # meme regex que dans obtenir_nom_variable_couleur mais appliquée à chaque main() trouvé
         pattern_texture = r"\b([a-zA-Z_][a-zA-Z0-9_]*)\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture(?!Size\b)[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b"
         
         for index, contenu_main in enumerate(les_main):
@@ -192,7 +186,6 @@ def searchforSDTUniforms(filepath: str):
             return found_uniforms
 
         else:
-            # la lib SDT (lib/sdt/) gère déjà ses propres gardes #ifndef : on ne la touche pas
             if os.path.basename(os.path.dirname(filepath)) == "sdt":
                 return []
             if filepath.lower().endswith(('.vsh', '.fsh', '.gsh', '.csh', '.glsl', '.inc')):
@@ -200,7 +193,6 @@ def searchforSDTUniforms(filepath: str):
                 with open(filepath, 'r', encoding='utf-8') as file:
                     content = file.read()
                 for name in SdtUniformNames:
-                    # une déclaration complète (jusqu'au ;) contenant ce nom d'uniform
                     pattern = rf"^[ \t]*uniform\s[^;]*\b{name}\b[^;]*;"
                     for m in re.finditer(pattern, content, re.M):
                         declaration = m.group(0).strip()
