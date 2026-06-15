@@ -123,8 +123,6 @@ def injectFSHSDTinmain(filepath: str, colorvariable: str) -> bool:
         
         with open(filepath, 'w', encoding='utf-8') as file:
             file.write(content_modifie)
-            
-        print(f"[Succès] Synthèse de texture injectée après '{colorvariable}' dans {filepath}")
         return True
 
     except Exception as e:
@@ -157,8 +155,6 @@ def injectVSHSDTinmain(filepath: str):
         content_modifie = content.replace(contenu_main_original, contenu_main_modifie, 1)
         with open(filepath, 'w', encoding='utf-8') as file:
             file.write(content_modifie)
-        
-        print(f"[Succès] PrepareTextureSynthesisVSH() injectée dans le main de {filepath}")
         return True
     except Exception as e:
         print(f"[X] Erreur lors de l'injection dans {filepath} : {e}")
@@ -193,7 +189,6 @@ def injectBothSDTinmains(filepath: str,colorvariable: str):
                     content = content.replace(main, contenu_main_modifie, 1)
         with open(filepath, 'w', encoding='utf-8') as file:
             file.write(content)
-        print(f"[Succès] Fonctions SDT injectées dans les mains de {filepath}")
         return True
     except Exception as e:
         print(f"[X] Erreur lors de l'injection dans {filepath} : {e}")
@@ -212,8 +207,8 @@ def inserer_applyFSH_dans_bloc_main(contenu_main: str, colorvariable: str) -> st
         return None
 
     def _injecter(m):
-        assignation = m.group(1)            # data0 = texture2D(...)
-        extra = m.group(2).strip()          # ex: * color  (opérations à déporter)
+        assignation = m.group(1)
+        extra = m.group(2).strip()
         seq = f"{assignation};\n    ApplyTextureSynthesis({colorvariable});"
         if extra:
             seq += f"\n    {colorvariable} = {colorvariable} {extra};"
@@ -221,11 +216,6 @@ def inserer_applyFSH_dans_bloc_main(contenu_main: str, colorvariable: str) -> st
 
     return re.sub(pattern, _injecter, contenu_main)
     
-   
-    if operations_extra:
-        nouvelle_sequence += f"\n    {colorvariable} = {colorvariable} {operations_extra};"
-        
-    return contenu_main.replace(ligne_originale, nouvelle_sequence, 1)
 
 def inserer_prepareVSH_dans_bloc_main(contenu_main: str) -> str:
     """
@@ -304,5 +294,4 @@ def upgrade_glsl_version(filepath: str):
 
     with open(filepath, 'w', encoding='utf-8') as f:
         f.write(content)
-    print(f"[+] #version upgradé -> 330 compatibility : {filepath}")
     return True

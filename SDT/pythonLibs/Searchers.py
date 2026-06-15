@@ -88,7 +88,7 @@ def findMainFunction(filepath: str, shader_root: str) -> bool:
         elif os.path.isfile(path_relative_to_rootBIS):
             include_path = path_relative_to_rootBIS
         else:
-            print(f"[Warning] Impossible de localiser le fichier inclus : {i}")
+            print(f"[!] Impossible de localiser le fichier inclus : {i}")
             continue
             
         result = findMainFunction(include_path, shader_root)
