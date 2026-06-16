@@ -267,6 +267,7 @@ def inject_DefineChecksForUniforms(found_uniforms):
         "normalMatrix": "NORMALMATRIX",
         "modelViewMatrix": "MODELVIEWMATRIX"
     }
+    
     for uniform_filepath in found_uniforms:
         filepath = uniform_filepath[1]
         uniforms_list = uniform_filepath[0]
@@ -280,19 +281,24 @@ def inject_DefineChecksForUniforms(found_uniforms):
         file_modified = False
 
         for declaration in uniforms_list:
-            # macros des uniforms SDT présents dans cette déclaration (1 ou plusieurs si groupée)
+            if declaration.strip().startswith("//") or declaration.strip().startswith("/*"):
+                continue
             macros = [macro for name, macro in SDT_UNIFORM_MACROS.items()
-                      if re.search(rf"\b{name}\b", declaration)]
+                      if re.search(rf"\b{name}\b", declaration)]       
             if not macros:
                 continue
+                
             defines = "\n".join(f"#define {macro}" for macro in macros)
-            injection = f"#ifndef {macros[0]}\n{declaration}\n{defines}\n#endif"
-
+            clean_declaration = declaration.strip()
+            injection = f"#ifndef {macros[0]}\n{clean_declaration}\n{defines}\n#endif"
             if injection in content:
                 continue
+                
             if declaration in content:
-                content = content.replace(declaration, injection)
-                file_modified = True
+                pattern = rf"(?<!//)\s*{re.escape(declaration)}"
+                if re.search(pattern, content):
+                    content = content.replace(declaration, injection)
+                    file_modified = True
 
         if file_modified:
             try:
