@@ -153,7 +153,6 @@ class App(ctk.CTk):
         self.pack_var = ctk.StringVar()
         self._row(150, "2. Dossier du shaderpack", self.pack_var, self._pick_pack)
 
-
         #Option debug
         self.debug_var = ctk.BooleanVar(value=False)
         cb2 = tk.Checkbutton( #bouton pour activer ou désactiver le debug
@@ -167,10 +166,29 @@ class App(ctk.CTk):
             bd=3, relief="raised",                
             highlightthickness=0, cursor="hand2",
             command=self._click)
+
+        #option si dossier de plusieurs shaderpacks ou si un seul shaderpack
+        self.manyfolders_var = ctk.BooleanVar(value=False)
+        cb3 = tk.Checkbutton( #bouton pour savoir si un ou plusieurs shaders
+            self.canvas, text="MULTI-SHADER",
+            variable=self.manyfolders_var,
+            font=mc_font(12),
+            indicatoron=False,
+            fg="white", bg=MC["stone"],
+            selectcolor=MC["green_hi"],   #Couleur lorsque activé
+            activebackground=MC["stone_hi"], activeforeground="white",
+            bd=3, relief="raised",
+            highlightthickness=0, cursor="hand2",
+            command=self._click)
+
         self.canvas.create_window(16, 262, window=cb2, anchor="nw",
                                 width=100, height=34, tags="ui") 
         cb2.bind("<Enter>", lambda e: cb2.config(bg=MC["stone_hi"]))
         cb2.bind("<Leave>", lambda e: cb2.config(bg=MC["stone"]))
+        self.canvas.create_window(132, 262, window=cb3, anchor="nw",
+                                width=130, height=34, tags="ui")
+        cb3.bind("<Enter>", lambda e: cb3.config(bg=MC["stone_hi"]))
+        cb3.bind("<Leave>", lambda e: cb3.config(bg=MC["stone"]))
 
         #Bouton Générer
         self.run_btn = tk.Button(
@@ -179,7 +197,7 @@ class App(ctk.CTk):
             fg="white", bg=MC["green"], activebackground=MC["green_hi"],
             activeforeground="white", bd=3, relief="raised",
             highlightthickness=0, cursor="hand2",
-            command=self._run)
+            command=self._wichtorun)
         self.canvas.create_window(16, 305, window=self.run_btn, anchor="nw",
                                   width=728, height=46,tags="ui")
         self.run_btn.bind("<Enter>", lambda e: self.run_btn.config(bg=MC["green_hi"]))
@@ -264,12 +282,12 @@ class App(ctk.CTk):
             self.log.see("end")
             self.log.configure(state="disabled")
         self.after(0, do) #execute le do dans le thread principal pour la sécurité
-
+    """
     def _set_status(self, text, color="gray70"):
-        """Modifie le message de statut pendant la génération pour une impréssion 
-        de progréssion dans le processus"""
+        Modifie le message de statut pendant la génération pour une impréssion 
+        de progréssion dans le processus
         self.after(0, lambda: self.status.configure(text=text, text_color=color))
-
+    """
     def _set_running(self, running):
         def do():
             self.run_btn.configure(state="disabled" if running else "normal")
@@ -290,14 +308,58 @@ class App(ctk.CTk):
             self.canvas.move("ui", dx, dy)
         self._ui_off = (off_x, off_y)
 
-    #Action principal
-    def _run(self):
+
+    def _wichtorun(self):
         atlas = self.atlas_var.get().strip()
-        pack = self.pack_var.get().strip()
+        self._say(f"Atlas    : {atlas}")
+        if self.manyfolders_var:
+            threading.Thread(target=self._multirun, daemon=True).start()
+        else:
+            threading.Thread(target=self._run, args=(self.pack_var.get(),), daemon=True).start()
+
+    
+
+    def _multirun(self):
+        contenu_brut = os.listdir(self.pack_var.get())
+        ListeShaders = [
+            f for f in contenu_brut 
+            if os.path.isdir(os.path.join(self.pack_var.get(), f))
+        ]
+        self.NbShadersInjectes = 0
+        self.NbShadersMax = len(ListeShaders)
+        log_lock = threading.Lock()
+
+        def worker_shader(shader_path, shader_name):
+            self._say(f"[Début] Traitement de : {shader_name}")
+
+            # 1. On exécute le traitement (votre fonction de calcul)
+            # /!\ ATTENTION : Ici, appelez directement la fonction de calcul (ex: self._work) 
+            # SANS créer de nouveau thread à l'intérieur de _run.
+            self._run(shader_path) 
+            
+            # 2. Une fois le travail fini, on verrouille pour mettre à jour les logs proprement
+            with log_lock:
+                self.NbShadersInjectes += 1
+                nb_restants = self.NbShadersMax - self.NbShadersInjectes
+                
+                self._say(f"[Fini] {shader_name} terminé !")
+                progress_percent = (self.NbShadersInjectes / self.NbShadersMax) * 100
+                self._say(f"Progression : {progress_percent}% (Restants : {nb_restants})")
+
+        for shader in ListeShaders:
+            shader_path = os.path.join(self.pack_var.get(), shader)
+            if os.path.isdir(shader_path):
+               t = threading.Thread(target=worker_shader, args=(shader_path, shader), daemon=True)
+               t.start()
+
+    #Action principal
+    def _run(self, pack):
+        atlas = self.atlas_var.get().strip()
+        pack = pack.strip()
         textures = DEFAULT_REF
 
         #Nettoyage des logs
-        self._clear_log()
+        #self._clear_log()
 
         self._click()
 
@@ -307,12 +369,14 @@ class App(ctk.CTk):
             Error_sound.play()
             self._error("Atlas manquant", "Choisis un fichier d'atlas.")
             return
+        """
         if not os.path.isdir(os.path.join(pack, "shaders")):
             Error_sound = pygame.mixer.Sound(os.path.join(HERE, "sound", "boom.wav"))
             Error_sound.play()
             self._error("Pas un shaderpack",
                         f"Pas de dossier shaders/ dans :\n{pack}")
             return
+        """
         #Doit être un .png et un vrai PNG ouvrable
         if not atlas.lower().endswith(".png"):
             Error_sound = pygame.mixer.Sound(os.path.join(HERE, "sound", "boom.wav"))
@@ -335,15 +399,13 @@ class App(ctk.CTk):
             messagebox.showerror("Pas un atlas",
             f"Dimensions {w}x{h} : ne ressemble pas à un atlas de blocs.")
             return
-
-        self._say(f"Atlas    : {atlas}", append=False)
-        self._say(f"Pack     : {pack}")
         self._set_running(True)
-        self._set_status("Injection + Génération en cours…", "orange")
-        self._set_status("Régénération en cours…", "orange")
+        self._work(atlas, pack, textures)
+        #self._set_status("Injection + Génération en cours…", "orange")
+        #self._set_status("Régénération en cours…", "orange")
 
         #Le calcul tourne dans un thread pour ne pas geler la fenêtre
-        threading.Thread(target=self._work, args=(atlas, pack, textures), daemon=True).start()
+        #threading.Thread(target=self._work, args=(atlas, pack, textures), daemon=True).start()
 
     def _work(self, atlas, pack, textures):
         tmp = None
@@ -351,7 +413,7 @@ class App(ctk.CTk):
             #Copie + injection SDT, directement dans Téléchargements
             name = os.path.basename(os.path.normpath(pack)) + "_SDT"
             out_pack = os.path.join(DOWNLOADS, name)
-            self._say("Injection du code SDT…")
+            self._say(f"Injection du code SDT… dans : {out_pack}")
             ISDT.inject_sdt(pack, dest=out_pack)
 
             #Régénération de la table UVHints à partir de l'atlas
@@ -362,12 +424,12 @@ class App(ctk.CTk):
             out = glsl + ".generated"
             res = engine.regenerate(atlas, blockdir, glsl, out)
             shutil.move(out, glsl)        # on applique direct : c'est notre copie
-            self._set_status(f"Terminé ✔  Pack créé : Téléchargements/{name}", "lightgreen")
+            #self._set_status(f"Terminé ✔  Pack créé : Téléchargements/{name}", "lightgreen")
 
         except Exception as e:
             self._say("\nERREUR : " + str(e))
             self._say(traceback.format_exc())
-            self._set_status("Erreur — voir le journal.", "red")
+            #self._set_status("Erreur — voir le journal.", "red")
         finally:
             if tmp:
                 shutil.rmtree(tmp, ignore_errors=True)
