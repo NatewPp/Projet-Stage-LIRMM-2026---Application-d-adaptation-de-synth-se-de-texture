@@ -1,0 +1,83 @@
+{
+  "version": 1,
+    "unusedThing": "
+    #include "/settings.glsl"
+    "
+,
+   	#if BORDERS_IN_DH == 1
+  "opaqueDrawBuffers": [
+    0,
+    1
+  ],
+  "translucentDrawBuffers": [
+    0,
+    1
+  ],
+    #else
+ "opaqueDrawBuffers": [
+    0
+  ],
+  "translucentDrawBuffers": [
+    0
+  ],
+    #endif
+  "blending": {
+    "1": "on"
+  },
+  "uniforms": [
+    "vxProj",
+    "vxProjInv",
+    "vxProjPrev",
+    "vxModelView",
+    "vxModelViewInv",
+    "vxModelViewPrev",
+    "vxRenderDistance",
+   "firstPersonCamera", 
+"nightVision", 
+#if NIGHT_VISION_MODE == 2
+	"temperature_smooth1", 
+	#endif
+	"viewWidth", 
+	"viewHeight", 
+"blindness", 
+"darknessFactor", 
+"renderStage", 
+"gbufferModelViewInverse", 
+	"shadowModelView", 
+"shadowProjection", 
+	#if DH_FLYING_FIX_CIRCLE == 11
+		"frametime", 
+	#endif
+	"previousCameraPosition", 
+	"is_on_ground", 
+	"speed_smooth1", 
+"cameraPosition", 
+	"heldBlockLightValue", 
+	"heldBlockLightValue2", 
+	"heldItemId", 
+	"heldItemId2", 
+	"eyePosition", 
+"isEyeInWater", 
+"eyeBrightnessSmooth",
+"eyeBrightness",
+"shadowLightPosition",
+"fogStart", "skyColor",
+"fogEnd", 
+"fogColor", 
+"rainStrength", 
+"sunAngle", "upPosition","wetness",
+	"frameTimeCounter", 
+"entityColor", 
+
+		"playerBodyVector", 
+		"relativeEyePosition"
+  ],
+   "samplers": {
+    "lightmap": "sampler2D", 
+	"shadowcolor0": "sampler2D",
+	"shadowtex0": "sampler2D",
+	"shadowtex1": "sampler2D"
+  },
+ 
+  "excludeLodsFromVanillaDepth": false
+}

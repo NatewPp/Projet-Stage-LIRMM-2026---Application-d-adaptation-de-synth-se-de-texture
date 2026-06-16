@@ -1,0 +1,277 @@
+profile.COPPER=§cCopper
+profile.WOOD=§8Wood
+profile.STONE=§7Stone
+profile.IRON=§3Iron
+profile.GOLD=§6Gold
+profile.DIAMOND=§bDiamond
+profile.NETHERITE=§5Netherite
+profile.SCREENSHOT=§c⌚§r §d§lScreenshot
+profile.comment=§c⌚§r §d§lScreenshot§r configures some options to values normally not accessible that may severely impact performance
+
+option.VERSION=§6§oRender§d§oPearl
+	option.VERSION.comment=By Luracasmus\n§9https://modrinth.com/shader/renderpearl
+	suffix.VERSION=2.8.0-beta.3
+
+screen.LIGHTING=§6◀§r Lighting §6▶
+	option.DIR_SL=§b⌚§r Direct Sky Light
+	option.DIR_BL=§b⌚§r Direct Block Light
+	option.IND_SL=§b⌚§r Indirect Sky Light
+	option.IND_BL=§b⌚§r Indirect Block Light
+	option.AMBIENT=§b⌚§r Ambient Light
+		value.AMBIENT.0=§cOff
+
+	option.SSS=§6⌚§r Subsurface Scattering
+		option.SSS.comment=Allows some light to shine through thin surfaces\n\n§6⚠§r This disables some shadow map sampling optimizations
+		value.SSS.0=§cOff
+
+	option.ambientOcclusionLevel=§b⌚§r Ambient Occlusion
+		option.ambientOcclusionLevel.comment=Darkens corners between blocks
+		value.ambientOcclusionLevel.0.0=§cOff
+		value.ambientOcclusionLevel.0.1=10%
+		value.ambientOcclusionLevel.0.2=20%
+		value.ambientOcclusionLevel.0.3=30%
+		value.ambientOcclusionLevel.0.4=40%
+		value.ambientOcclusionLevel.0.5=50%
+		value.ambientOcclusionLevel.0.6=60%
+		value.ambientOcclusionLevel.0.7=70%
+		value.ambientOcclusionLevel.0.8=80%
+		value.ambientOcclusionLevel.0.9=90%
+		value.ambientOcclusionLevel.1.0=100%
+
+	screen.SHADOW_MAP=§6◀§r Shadow Map §6▶
+		option.shadowMapResolution=§c⌚§r Shadow Map Resolution
+			suffix.shadowMapResolution=\ px
+		option.SM_DIST=§c⌚§r Shadow Distance
+			option.SM_DIST.comment=Half the side of the square within which shadows are rendered\nLower values make closer shadows sharper\n\n§6⚠§r It's recommended to set this lower than or equal to your §lRender Distance§r for optimal performance and quality
+			suffix.SM_DIST=\ chunks
+			value.SM_DIST.0=§cOff
+
+		option.SM_BLUR=§c⌚§r Blur
+			value.SM_BLUR.0=§cOff
+			value.SM_BLUR.1=Linear
+			value.SM_BLUR.2=Gaussian
+
+		option.SM_FADE_DIST=§b⌚§r Fade Distance
+		option.SM_DISTORTION=§c⌚§r Distortion
+			option.SM_DISTORTION.comment=Controls the trade-off between near and far shadow quality\nHigher values allocate more of the shadow map texels to geometry close to the center
+			suffix.SM_DISTORTION=\%
+
+		option.SM_ENTITY=§c⌚§r Entity Shadows
+		option.SM_PLR=§e⌚§r Player Shadows
+			option.SM_PLR.comment=§b🛈§r Always active when §l§6⌚§r §lEntity Shadows§r are enabled
+		option.SM_BLOCK_ENTITY=§e⌚§r Block Entity Shadows
+
+		option.DIR_SHADING=§b⌚§r Directional Ambient Occlusion
+			option.DIR_SHADING.comment=Enables directional shading similar to Vanilla applied to ambient occlusion
+			value.DIR_SHADING.0=§cOff
+
+	screen.LIGHT_LIST=§6◀§r Light List §6▶
+		option.LL_DIST=§c⌚§r Distance
+			option.LL_DIST.comment=Chebychev distance within which lights are added to the light list\n\n§6⚠§r Changing this sometimes requires modifying §l§c⌚§r§l Capacity§r and/or §l§6⌚§r§l LDS Ratio§r to avoid artifacts and maintain optimal performance - It is therefore recommended to use the Profile option instead
+			suffix.LL_DIST=\ blocks
+
+		option.LL_CAPACITY=§c⌚§r Capacity
+			option.LL_CAPACITY.comment=Controls the amount of lights §obefore culling§r that can be registered before artifacts occur\n\n§c⚠§r The maximum supported value depends on active GPU, graphics drivers and §l§6⌚§r§l 16/8-Bit Types§r status and support
+			value.LL_CAPACITY.6144=§c⚠§r 6144 lights
+			value.LL_CAPACITY.7168=§c⚠§r 7168 lights
+			value.LL_CAPACITY.8192=§c⚠§r 8192 lights
+			value.LL_CAPACITY.9216=§c⚠§r 9216 lights
+			value.LL_CAPACITY.10240=§c⚠§r 10240 lights
+			value.LL_CAPACITY.11264=§c⚠§r 11264 lights
+			value.LL_CAPACITY.12288=§c⚠§r 12288 lights
+			value.LL_CAPACITY.13312=§c⚠§r 13312 lights
+			value.LL_CAPACITY.14336=§c⚠§r 14336 lights
+			value.LL_CAPACITY.15360=§c⚠§r 15360 lights
+			value.LL_CAPACITY.16384=§c⚠§r 16384 lights
+			suffix.LL_CAPACITY=\ lights
+
+		option.MIN_LL_INTENSITY=§6⌚§r Min. Light Intensity
+
+		option.LL_FALLOFF_MARGIN=§b⌚§r Falloff Margin
+
+		option.LL_RATE=§6⌚§r Refresh Rate
+			option.LL_RATE.comment=Delay in frames between each time the light list is rebuilt\n\nHigher values improve performance but increase latency in light updates
+			prefix.LL_RATE=1/
+
+		option.LOD_FALLOFF=§c⌚§r LOD Falloff
+			option.LOD_FALLOFF.comment=Multiplier on reduction in quality over distance
+
+		option.LAVA_LOD_BIAS=§6⌚§r Lava LOD Bias
+			option.LAVA_LOD_BIAS.comment=Additional LOD bias added to lava to reduce it's otherwise often overwhelming amount of light sources
+			value.LAVA_LOD_BIAS.0.0=§cOff
+
+		option.LDS_RATIO=§6⌚§r LDS Ratio
+			option.LDS_RATIO.comment=The amount of Local Data Share memory allocated per tile (work group) as a ratio of §l§c⌚§r§l Capacity§r\n\nThis affects the maximum amount of lights that can be processed §oafter culling§r before artifacts occur
+
+		screen.FALLBACK_BLOCK=§6◀§r Fallback Block Light §6▶
+			screen.FALLBACK_BLOCK.comment=Fallback block light color for lights outside the range of the light list
+
+			option.BL_FALLBACK_R=§b⌚§c Red Intensity
+			option.BL_FALLBACK_G=§b⌚§a Green Intensity
+			option.BL_FALLBACK_B=§b⌚§9 Blue Intensity
+
+	screen.HAND_LIGHT=§6◀§r Hand Light §6▶
+		option.HAND_LIGHT=§e⌚§r Brightness
+			value.HAND_LIGHT.0=§cOff
+
+		option.MAX_HAND_LIGHT_TRACE_DIST=§c⌚§r Max. Ray Distance
+		option.HAND_LIGHT_TRACE_STEPS=§c⌚§r Ray Tracing Steps
+			value.HAND_LIGHT_TRACE_STEPS.0=§cOff
+
+		option.HAND_LIGHT_TRACE_HARDNESS=§e⌚§r Traced Shadow Hardness
+			value.HAND_LIGHT_TRACE_HARDNESS.0=§cOff
+
+	screen.CUSTOM_EMISSIVE_BLOCKS=§6◀§r Custom Emissive Blocks §6▶
+		option.EMISSIVE_REDSTONE_BLOCK=§e⌚§c Emissive Redstone Block
+		option.EMISSIVE_EMERALD_BLOCK=§e⌚§a Emissive Emerald Block
+		option.EMISSIVE_LAPIS_BLOCK=§e⌚§9 Emissive Lapis Block
+
+screen.POST=§6◀§r Post Processing §6▶
+	option.SATURATION=§b⌚§r Saturation
+		suffix.SATURATION=%
+
+	option.RED_MUL=§b⌚ §cRed
+		suffix.RED_MUL=%
+	option.GREEN_MUL=§b⌚ §aGreen
+		suffix.GREEN_MUL=%
+	option.BLUE_MUL=§b⌚ §9Blue
+		suffix.BLUE_MUL=%
+
+	option.TONEMAP=§b⌚§r Tonemap Operator
+		option.TONEMAP.comment=Determines the method used to transform colors into a range that the display can show
+
+		value.TONEMAP.0=Saturate
+		value.TONEMAP.1=Tony McMapface
+		value.TONEMAP.2=Uchimura
+		value.TONEMAP.3=ACES Fitted
+		value.TONEMAP.4=SBDT
+
+	option.SHARPNESS=§b⌚§r FFX CAS Sharpness
+		option.SHARPNESS.comment=Controlls the sharpness of RenderPearl's modified variant of FidelityFX Contrast Adaptive Sharpening 1.2
+
+	option.AUTO_EXP=§e⌚§r Automatic Exposure
+		value.AUTO_EXP.0=§cOff
+	option.AUTO_EXP_SPEED=§b⌚§r Interpolation Speed
+		option.AUTO_EXP_SPEED.comment=Controls the interpolation speed of §l§b⌚§r§l Automatic Exposure§r
+	option.AUTO_EXP_TARGET=§b⌚§r Target Brightness
+		option.AUTO_EXP_TARGET.comment=Target geometric average brightness of the screen before tonemapping.
+
+	screen.SMAA=§6◀§r SMAA §6▶
+		option.SMAA_THRESHOLD=§e⌚§r Contrast Threshold
+			option.SMAA_THRESHOLD.comment=The threshold used in color-based edge detection\nLower values cause more edges to be anti-aliased
+
+		option.SMAA_SEARCH=§e⌚§r Search Steps
+			option.SMAA_SEARCH.comment=The maximum amount of steps in vertical and horizontal pattern searches\nDistance searched in pixels is double this value
+
+		option.SMAA_SEARCH_DIAG=§e⌚§r Diagonal Search Steps
+			option.SMAA_SEARCH_DIAG.comment=The maximum amount of diagonal steps/pixels searched in pattern searches
+			value.SMAA_SEARCH_DIAG.0=§cOff
+
+		option.SMAA_CORNER=§e⌚§r Corner Rounding
+			value.SMAA_CORNER.0=§cOff
+
+screen.ATMOSPHERICS=§6◀§r Atmosphere §6▶
+	option.VL=§c⌚§r Volumetric Light
+		value.VL.0=§cOff
+	option.VL_SAMPLES=§c⌚§r VL Samples
+
+	option.sunPathRotation=§b⌚§r Sun Path Rotation
+		suffix.sunPathRotation=\ °
+
+	option.FOG=§b⌚§r Base Fog
+		value.FOG.0=§cOff
+
+	option.RAIN_FOG=§b⌚§r Rain Fog
+		value.RAIN_FOG.0=§cOff
+
+	option.WATER_FOG=§b⌚§r Water Fog
+		value.WATER_FOG.0=§cOff
+
+	option.SUN_BLOOM=§b⌚§r Sun Bloom
+		value.SUN_BLOOM.0=§cOff
+
+	option.SKY_BLOOM=§b⌚§r Sky Bloom
+		value.SKY_BLOOM.0=§cOff
+
+	option.CLOUD_FOG_END=§b⌚§r Cloud Fog End
+		suffix.CLOUD_FOG_END=\ chunks
+
+	screen.CEL_BODIES=§6◀§r Celestial Bodies §6▶
+		option.SUN_SIZE=§b⌚§r Sun Size
+		option.MOON_SIZE=§b⌚§r Moon Size
+		option.MOON_PHASE_DIFF=§b⌚§r Moon Phase Difference
+
+screen.SURFACE=§6◀§r Surface §6▶
+	option.WATER_OPACITY=§b⌚§r Water Opacity
+		suffix.WATER_OPACITY=%
+
+	option.WAVE_SPEED=§b⌚§r Wave Speed
+	option.WAVES=§b⌚§r Waves
+		value.WAVES.0=§fOff
+
+	option.SM=§e⌚§r RP Specular Map Roughness
+		option.SM.comment=Enables sampling PBR resource packs' specular maps for surface roughness\nWhen disabled, roughness values are auto-generated
+	option.SM_CH=§b⌚§r Channel
+		value.SM_CH.r=R
+		value.SM_CH.g=G
+		value.SM_CH.b=B
+		value.SM_CH.a=A
+	option.SM_TYPE=§b⌚§r Type
+		value.SM_TYPE.0=Linear Roughness
+		value.SM_TYPE.1=Perceptual Roughness
+		value.SM_TYPE.2=Perceptual Smoothness
+	option.NORMALS=§e⌚§r Normals
+		value.NORMALS.0=Auto-Generated
+		value.NORMALS.1=RP Normal Maps
+		value.NORMALS.2=Flat
+	option.EMISSION_BRIGHTNESS=§b⌚§r Emission Brightness
+
+screen.UTIL=§6◀§r Utility §6▶
+	option.LINE_WIDTH=§b⌚§r Line Width
+		option.LINE_WIDTH.comment=Determines the width of block selection outlines and fishing rod lines
+
+	option.COMPASS=§b⌚§r Compass
+	option.LIGHT_LEVELS=§b⌚§r Light Level Visualization
+
+screen.COMPAT=§6◀§r Compatibility §6▶
+	option.CONST_IMMUT=§e⌚§r Immutable Constants
+		option.CONST_IMMUT.comment=Marks all shader variables that can be immutable as constant, possibly enabling better optimizations\n\n§c⚠§r May be incompatible with some non-NVIDIA/Geforce graphics drivers
+		value.CONST_IMMUT.0=§cOff
+		value.CONST_IMMUT.1=§c⚠§r On (assume support based on device)
+		value.CONST_IMMUT.2=§c⚠§r On (always)
+
+	option.MINMAX_3=§e⌚§r Trinary Min./Max.
+		option.MINMAX_3.comment=Performs trinary minimum and maximum operations in singular function calls using the §oAMD_shader_trinary_minmax§r extension\n\n§c⚠§r May be incompatible with some graphics drivers if extension support is assumed
+		value.MINMAX_3.0=§cOff
+		value.MINMAX_3.1=On (check for support)
+		value.MINMAX_3.2=§c⚠§r On (assume support based on device)
+		value.MINMAX_3.3=§c⚠§r On (always)
+
+	option.MUL_32x16=§e⌚§r 32x16-Bit Multiplication
+		option.MUL_32x16.comment=Performs multiplication between 32-bit integers and integers in the 16-bit-representable range using special functions provided by the §oINTEL_shader_integer_functions2§r extension, which may be faster than regular 32-bit multiplication operators\n\n§c⚠§r May be incompatible with some graphics drivers if extension support is assumed
+		value.MUL_32x16.0=§cOff
+		value.MUL_32x16.1=On (check for support)
+		value.MUL_32x16.2=§c⚠§r On (assume support based on device)
+		value.MUL_32x16.3=§c⚠§r On (always)
+
+	option.SUBGROUP=§e⌚§r Subgroup Operations
+		option.SUBGROUP.comment=Enables operations and variables provided by the §oKHR_shader_subgroup§r extension, which allow fast sharing of data between shader invocations within a subgroup\nThis is required for light list-based lighting of translucent geometry\n\n§c⚠§r May be incompatible with some graphics drivers if extension support is assumed
+		value.SUBGROUP.0=§cOff
+		value.SUBGROUP.1=On (check for support)
+		value.SUBGROUP.2=§c⚠§r On (assume support based on device)
+		value.SUBGROUP.3=§c⚠§r On (always)
+
+	option.SIZED_16_8=§6⌚§r 16/8-Bit Types
+		option.SIZED_16_8.comment=Uses extension-provided half- or quarter-sized data types to reduce register, LDS and VRAM usage\nPerformance impact varies depending on hardware and drivers, as conversion between types has a cost, but operations with smaller types can be faster\n\n§c⚠§r May be incompatible with some graphics drivers if extension support is assumed - See options below
+
+	option.BUFFER_16_8=§e⌚ §6⚠§r 16/8-Bit Buffers
+		option.BUFFER_16_8.comment=Shrinks buffers, assuming complete support for all data types added by §l§6⌚§r§l 16/8-Bit Types§r\n\n§6⚠§r May cause issues if some extensions optionally enabled by §l§6⌚§r§l 16/8-Bit Types§r are disabled or unavailable
+
+	option.ASSUME_NV_GPU_SHADER5=§6⌚ §c⚠§r Assume §oNV_gpu_shader5§r support based on device
+		option.ASSUME_NV_GPU_SHADER5.comment=Assumes extension support based on device characteristics, even it's not advertised by Iris
+
+	option.ASSUME_AMD_GPU_SHADER_HALF_FLOAT=§6⌚ §c⚠§r Assume §oAMD_gpu_shader_half_float§r support based on device
+		option.ASSUME_AMD_GPU_SHADER_HALF_FLOAT.comment=Assumes extension support based on device characteristics, even it's not advertised by Iris
+
+	option.ASSUME_AMD_GPU_SHADER_INT16=§6⌚ §c⚠§r Assume §oAMD_gpu_shader_int16§r support based on device
+		option.ASSUME_AMD_GPU_SHADER_INT16.comment=Assumes extension support based on device characteristics, even it's not advertised by Iris

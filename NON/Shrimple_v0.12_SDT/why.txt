@@ -1,0 +1,1 @@
+begin1_a.csh: begin1_a.csh: 0(240) : error C1038: declaration of "cameraPosition" conflicts with previous declaration at 0(228)

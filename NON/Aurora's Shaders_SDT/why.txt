@@ -1,0 +1,20 @@
+composite.vsh: composite.vsh: 0(243) : error C1503: undefined variable "sunVec"
+0(243) : error C1503: undefined variable "upVec"
+0(247) : error C1503: undefined variable "viewWidth"
+0(247) : error C1503: undefined variable "viewHeight"
+0(248) : error C1503: undefined variable "sunVec"
+0(255) : error C1503: undefined variable "isEyeInWater"
+0(257) : error C1503: undefined variable "isEyeInWater"
+0(279) : error C1503: undefined variable "colortex0"
+0(279) : error C1503: undefined variable "texelCoord"
+0(280) : error C1503: undefined variable "depthtex0"
+0(280) : error C1503: undefined variable "texelCoord"
+0(281) : error C1503: undefined variable "depthtex1"
+0(281) : error C1503: undefined variable "texelCoord"
+0(282) : error C1503: undefined variable "texCoord"
+0(283) : error C1503: undefined variable "gbufferProjectionInverse"
+0(288) : error C1503: undefined variable "isEyeInWater"
+0(295) : error C1503: undefined variable "isEyeInWater"
+0(302) : error C5052: gl_FragData is not accessible in this profile
+0(302) : error C7533: global variable gl_FragData is deprecated after version 120
+0(306) : error C1013: function "main" is already defined at 0(278)

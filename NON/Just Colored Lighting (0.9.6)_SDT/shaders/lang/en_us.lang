@@ -1,0 +1,2015 @@
+## §a §2  §e §6  §c §4 §5   §r
+
+# --- Automatically added #define options ---
+option.ABSOLUTE_BIOME_RAIN_CONTROL=Absolute Biome Rain Control
+option.ACCENTUATE_TORCH_SMOOTHNESS=Accentuate Torch Smoothness
+option.ADDITIVE_CLOUD_ALPHA=Additive Cloud Alpha
+option.ADJUST_SATURATION=Adjust Saturation
+option.AE_CHECK_CORNERS=Ae Check Corners
+option.AE_CORNERS_STR=Ae Corners Str
+option.AE_LUMINANCE_B=Ae Luminance B
+option.AE_LUMINANCE_G=Ae Luminance G
+option.AE_LUMINANCE_R=Ae Luminance R
+option.AE_SAMPLE_WIDTH=Ae Sample Width
+option.AE_SPD=Ae Spd
+option.AIR_DENSITY=Air Density
+option.AIR_SPECULAR=Air Specular
+option.ALBEDO_TEXTURE_CALL_FOR_FLAG_CHECK=Albedo Texture Call For Flag Check
+option.ALBEDO_TEXTURE_CALL_PREFIX=Albedo Texture Call Prefix
+option.ALBEDO_TEXTURE_CALL_PREFIX_FAST=Albedo Texture Call Prefix Fast
+option.ALBEDO_TEXTURE_CALL_SUFFIX=Albedo Texture Call Suffix
+option.ALBEDO_TEXTURE_SAMPLER=Albedo Texture Sampler
+option.ALBEDO_TEXTURE_SET_UV_SUFFIX=Albedo Texture Set Uv Suffix
+option.ALGAE=Algae
+option.ALPHA_CUTOFF_CPF=Alpha Cutoff Cpf
+option.AMBIENT_LIGHT_FLAT=Ambient Light Flat
+option.AMBIENT_OCCLUSSION_TEXTURES=Ambient Occlussion Textures
+	option.AMBIENT_OCCLUSSION_TEXTURES.comment = How strongly texture AO shades crevices
+option.HAND_LIGHT_CAPTURE_BACKUP = Per Pixel Color Detection
+	option.HAND_LIGHT_CAPTURE_BACKUP.comment = Captures every pixel of the hand rendering to try to calculate the light color. Only works in first person. Will flicker
+	value.HAND_LIGHT_CAPTURE_BACKUP.0 = off
+	value.HAND_LIGHT_CAPTURE_BACKUP.1 = on - buggy
+screen.Automating_Held_Light_Color = Automating Held Light Color (WIP)
+option.AMBIENT_SKY_LIGHT=Ambient Sky Light
+option.AMBIENT_SKY_LIGHT_CLOUDS=Ambient Sky Light Clouds
+option.ANIMATE_NOISE_H2=Animate Noise H2
+option.APPLY_OPACITY_TYPE=Apply Opacity Type
+option.ASSUMED_DEPTH=Assumed Depth
+option.ASSUMED_DEPTH_DYNAMIC=Assumed Depth Dynamic
+option.AUTO_EXPOSURE=Auto Exposure
+option.AUTO_EXPOSURE_HIGH=Auto Exposure High
+option.AUTO_EXPOSURE_LOW=Auto Exposure Low
+option.AUTO_EXPOSURE_RANGE=Auto Exposure Range
+option.BACKGROUND_RESOLUTIION_DIVIDER=Background Resolutiion Divider
+option.BACK_LIT_GRASS=Back Lit Grass
+option.BASIC_REFLECTIONS_ONLY=Basic Reflections Only
+option.BG_LIT_AMBIENT_LIGHT=Bg Lit Ambient Light
+option.BG_LIT_FREQUENCY=Bg Lit Frequency
+option.BG_LIT_SKY_LIGHTING=Bg Lit Sky Lighting
+option.BIOME_WATER=Biome Water
+option.BLEND_PIXELS=Blend Pixels
+option.BLEND_PIXELS_SOFTNESS=Blend Pixels Softness
+option.BLOCK_ENTITY_SHADOWS=Block Entity Shadows
+option.BLOCK_LIGHT_BRIGHTNESS=Block Light Brightness
+option.BLOCK_LIGHT_BRIGHTNESS_IN_DAYLIGHT=Block Light Brightness In Daylight
+option.BLOOM_DEPTH_WIDE=Bloom Depth Wide
+option.BLOOM_FALLOFF=Bloom Falloff
+option.BLOOM_ONLY_BRIGHTS=Bloom Only Brights
+option.BLOOM_ONLY_BRIGHTS_POW=Bloom Only Brights Pow
+option.BLOOM_STRENGTH=Bloom Strength
+option.BLOOM_STRENGTH_WIDE=Bloom Strength Wide
+option.BLURRY_SHADOWS=Blurry Shadows
+option.BORDERS=Borders
+option.BORDERS_IN_DH=Borders In Dh
+option.BORDERS_SENSITIVITY=Borders Sensitivity
+option.BORDER_FOG=Border Fog
+option.BORDER_FOG_ALTITUDE=Border Fog Altitude
+option.BORDER_FOG_CLOUDS=Border Fog Clouds
+option.BORDER_FOG_START=Border Fog Start
+option.BORDER_OPACITY=Border Opacity
+option.BORDER_SAMPLES=Border Samples
+option.BOUNCE_LIGHT_M=Bounce Light M
+option.BOUNCE_MORE=Bounce More
+option.BRIGHTER_UNDERWATER=Brighter Underwater
+option.BRIGHTNESS=Brightness
+option.BRIGHTNESS_MULT=Brightness Mult
+option.BRIGHT_TIME=Bright Time
+option.BTIGHTNESS_CONTRAST=Btightness Contrast
+option.BTIGHTNESS_CONTRAST_CENTER=Btightness Contrast Center
+option.BUGGY_DH_SHADING=Buggy Dh Shading
+option.CACHE_CLOUD_DOWNSCALING=Cache Cloud Downscaling
+option.CAPTURE_CPF_POM_DEPTH=Capture Cpf Pom Depth
+option.CAUSTICS=Caustics
+option.CAUSTIC_STR=Caustic Str
+option.CAVE_DARKNESS_DEPTH=Cave Darkness Depth
+option.CAVE_DARKNESS_DEPTH.comment=How far below sea level the cave light leak fix is at 100%
+option.CAVE_LIGHT_LEAK_FIX=Cave Light Leak Fix
+option.CAVE_LIGHT_LEAK_FIX.comment = Turns Sunlight dark when minecraft says you have been underground for a while, or if the blocks aren't exposed to sky light, to fix that light could 'leak' in otherwise. 'per block' will darken under trees and possibly kill sunlight going into caves and under overhangs.
+	value.CAVE_LIGHT_LEAK_FIX.0 = off
+	value.CAVE_LIGHT_LEAK_FIX.1 = 1 -player underground & time
+	value.CAVE_LIGHT_LEAK_FIX.2 = 2 -per block sky exposure
+	
+	screen.Testing.comment = Don't expect any of this to work, this is stuff I am working on, or stuff for debugging
+	
+option.CAVE_LIGHT_LEAK_2_EXP=Cave Light Leak Fix 2 Aggression
+option.CAVE_LIGHT_LEAK_2_EXP.comment = This makes per-block light leak more or less aggressive. Higher will kill sunlight under trees and overhangs and in small buildings. Lower will need to be less exposed to the sky to darken sunlight
+	
+option.CAVE_LIGHT_LEAK_FIX_SKY=Cave Light Leak Fix (Sky & Fog)
+option.CAVE_LIGHT_LEAK_FIX_SKY.comment = Turns Sky & Fog black when minecraft says you have been underground for a while, to fix that light could  'leak' in otherwise
+	value.CAVE_LIGHT_LEAK_FIX_SKY.0 = off
+	value.CAVE_LIGHT_LEAK_FIX_SKY.1 = on
+option.CAVE_MOUTH_DUST=Cave Mouth Dust
+option.CDDDD=Cdddd
+option.CIRRUS_LAYERS=Cirrus Layers
+option.CLEAN_CLOUDS=Clean Clouds
+option.CLORD_CLEANLINESS=Clord Cleanliness
+option.CLOUDINESS_PATCHY_SIZE=Cloudiness Patchy Size
+option.CLOUDS=Clouds
+option.CLOUDS_FINE_BLOOM_STRENGTH=Clouds Fine Bloom Strength
+option.CLOUDS_O_FRACTAL_DEPTH=Clouds O Fractal Depth
+option.CLOUDS_SHADOW_STUFF=Clouds Shadow Stuff
+option.CLOUD_BLOOM_DEPTH_WIDE=Cloud Bloom Depth Wide
+option.CLOUD_BLOOM_FALLOFF=Cloud Bloom Falloff
+option.CLOUD_BLOOM_STRENGTH_WIDE=Cloud Bloom Strength Wide
+option.CLOUD_CRISPNESS=Cloud Crispness
+option.CLOUD_CRISP_BIAS=Cloud Crisp Bias
+option.CLOUD_FOG=Cloud Fog
+option.CLOUD_FRACTAL_DEPTH_MAX=Cloud Fractal Depth Max
+option.CLOUD_FRACTAL_DEPTH_MIN=Cloud Fractal Depth Min
+option.CLOUD_OPACITY=Cloud Opacity
+option.CLOUD_PATCHY_STR=Cloud Patchy Str
+option.CLOUD_PATCHY_STR_V=Cloud Patchy Str V
+option.CLOUD_PATCH_CUTOFF=Cloud Patch Cutoff
+option.CLOUD_PATCH_CUTOFF_V=Cloud Patch Cutoff V
+option.CLOUD_PATCH_USE=Cloud Patch Use
+option.CLOUD_SAMPLES_FOR_STYLE_1=Cloud Samples For Style 1
+option.CLOUD_SCALE=Cloud Scale
+option.CLOUD_SHADING=Cloud Shading
+option.CLOUD_SHADING_ON_SKYLIGHT=Cloud Shading On Skylight
+option.CLOUD_SHADOWS_ON_STUFF_STR=Cloud Shadows On Stuff Str
+option.CLOUD_SHADOW_BIAS=Cloud Shadow Bias
+option.CLOUD_SIZE=Cloud Size
+option.CLOUD_SIZE_CUTOFF=Cloud Size Cutoff
+option.CLOUD_SIZE_STR=Cloud Size Str
+option.CLOUD_SPECULAR=Cloud Specular
+option.CLOUD_SPEED=Cloud Speed
+option.CLOUD_STYLE=Cloud Style
+option.CLOUD_VOXEL_SIZE=Cloud Voxel Size
+option.COLORED_LIGHT_SPEC=Colored Light Spec
+option.COLORED_SHADOWS=Colored Shadows
+option.COLORED_SHADOWS_RANGE_CLOUDS=Colored Shadows Range Clouds
+option.COLOR_BITS=Color Bits
+option.COLOR_BITS_SKY=Color Bits Sky
+option.COLOR_MERGE_DIST_CPF=Color Merge Dist Cpf
+option.COLOR_SPACE=Color Space
+option.CONSTRAIN_TO_VANILLA_LIGHTMAP_DISTANCE=Constrain To Vanilla Lightmap Distance
+option.CONTRAST=Contrast
+option.COS_SCROLL=Cos Scroll
+option.CPF_ADDS_DEPTH_WRITE=Cpf Adds Depth Write
+option.CPF_NEAR_FAR_WORKAROUND=Cpf Near Far Workaround
+option.CPF_RELATIVE_SPACE=Cpf Relative Space
+option.CPF_SHADER_STYLE=Cpf Shader Style
+option.CRISP_BLOCK_EDGES_SHADOWS=Crisp Block Edges Shadows
+option.CRYSTAL_SSS=Crystal Sss
+option.CTMPOMFIX=Ctmpomfix
+option.CTMPOMFIX_INFO=Ctmpomfix Info
+option.CURVE_ASPECT=Curve Aspect
+option.CURVE_LENS=Curve Lens
+
+option.CUSTOM_TORCH_COLOR=Custom Torch Color
+option.DAILY_WEATHER=Daily Weather
+option.DARKEN_MISSING_REFRACTION_DATA_INVERTED=Darken Missing Refraction Data Inverted
+option.DARKEN_ONION_SKY_INDOORS=Darken Onion Sky Indoors
+option.DAY_LENGTH=Day Length
+option.DBLX_MULT=Dblx Mult
+option.DEBUG_55=Debug 55
+option.DEBUG_552=Debug 552
+option.DEBUG_CLOUDS=Debug Clouds
+option.DEBUG_CPF=Debug Cpf
+option.DEBUG_FIX_CIRCLE=Debug Fix Circle
+option.DEBUG_GEN_NORMAL_MAP=Debug Gen Normal Map
+option.DEBUG_MODE=Debug Mode
+option.DEBUG_SHADOWS=Debug Shadows
+option.DEBUG_TEX_EMISSIVE=Debug Tex Emissive
+option.DEBUG_VIEWS=Debug Views
+option.DEFAULT_FRACTAL_DEPTH=Default Fractal Depth
+option.DEFER_DEPTH_WRITE_CPF=Defer Depth Write Cpf
+option.DEFER_SHADING=Defer Shading
+option.DEFER_WATER=Defer Water
+option.DEFER_WATER2=Defer Water2
+option.DELICATE_TORCH_DEPTH=Delicate Torch Depth
+option.DEPTH_WRITE_CPF=Depth Write Cpf
+option.DHSTR2=Dhstr2
+option.DH_BORDERS_FADE=Dh Borders Fade
+option.DH_FADE=Dh Fade
+option.DH_FANCY_NOISE=Dh Fancy Noise
+option.DH_FLYING_FIX_CIRCLE=Dh Flying Fix Circle
+option.DH_FLYING_FIX_CIRCLE_ONLY_IN_AIR=Dh Flying Fix Circle Only In Air
+option.DH_FLYING_FIX_CIRCLE_SPEED=Dh Flying Fix Circle Speed
+option.DH_FOG_END=Dh Fog End
+option.DH_MODE=Dh Mode
+option.DH_NOISE_FRACTAL_STEPS=Dh Noise Fractal Steps
+option.DH_RAY_M=Dh Ray M
+option.DH_REG_CUTOFF=Dh Reg Cutoff
+option.DH_SHADOWS=Dh Shadows
+option.DH_SMOOTHED_VALUE_=Dh Smoothed Value 
+option.DH_TEXTURE=Dh Texture
+option.DH_TEXTURE_STR=Dh Texture Str
+option.DH_WETNESS=Dh Wetness
+option.DIFFFUSE_VX_BEHAVIOR=Difffuse Vx Behavior
+option.DIFFUSE_BOUNCE_LIGHT=Diffuse Bounce Light
+option.DIFFUSE_PTX_EXP_STEP=Diffuse Ptx Exp Step
+option.DIFFUSE_RAY_SMOOTHNESS=Diffuse Ray Smoothness
+option.DIFFUSE_THE_RAYS=Diffuse The Rays
+option.DIFFUSE_THE_RAYS_SPEC=Diffuse The Rays Spec
+option.DIRECTIONAL_LIGHTING=Directional Lighting
+option.DIRTY_WATER=Dirty Water
+option.DIRTY_WATER_B=Dirty Water B
+option.DIRTY_WATER_G=Dirty Water G
+option.DIRTY_WATER_R=Dirty Water R
+option.DIRT_POROSITY=Dirt Porosity
+option.DISABLE_DRAINAGE_WITHOUT_POM=Disable Drainage Without Pom
+option.DISABLE_SKY_RAY_TRACE=Disable Sky Ray Trace
+option.DITHER_TRANS=Dither Trans
+option.DONT_BLOW_OUT_WHITES=Dont Blow Out Whites
+option.DONT_VOXELIZE_CARPETS=Dont Voxelize Carpets
+option.DOWNSAMPLING=Downsampling
+option.DOWNSCALE_CLOUDS=Downscale Clouds
+option.DOWNSCALE_PTX=Downscale Ptx
+option.DO_BLURS=Do Blurs
+option.DSTR=Dstr
+option.DUAL_CELESTIAL_LIGHTING=Dual Celestial Lighting
+option.DUAL_DISTORT=Dual Distort
+option.DYNAMIC_BIOME_SKY=Dynamic Biome Sky
+option.DYNAMIC_BIOME_SKY_COLOR=Dynamic Biome Sky Color
+option.DYNAMIC_QUALITY_CPF=Dynamic Quality Cpf
+option.DYNAMIC_SKY_SS=Dynamic Sky Ss
+option.EARLY_SHADOW_CLOUDS=Early Shadow Clouds
+option.ELEVATION_LIGHTING=Elevation Lighting
+option.ENABLE_CTMPOMFIX_POM_SPACE=Ctmpomfix Pom Space
+option.ENTITY_SHADOWS=Entity Shadows
+option.ENTITY_TEX_FILTER_FIX=Entity Tex Filter Fix
+option.EPBR_EMMISIVENESS_IN_VOXELS_ENTITY=Epbr Emmisiveness In Voxels Entity
+option.EVENING_TIME_=Evening Time 
+option.EXPONENTIAL_FOG=Exponential Fog
+option.EXPONENTIAL_FOG_=Exponential Fog 
+option.EXPONENTIAL_SKY_FALL_OFF=Exponential Sky Fall Off
+option.EXPONENTIAL_TORCH_FALL_OFF=Exponential Torch Fall Off
+option.EXPOSURE_HIGH_PASS=Exposure High Pass
+option.EXPOSURE_HIGH_PASS_RANGE=Exposure High Pass Range
+option.EXPOSURE_PRE=Exposure Pre
+option.EXTEND_3D_SHADOWS_CPF=Extend 3D Shadows Cpf
+option.EXTRA_DARK_NIGHT=Extra Dark Night
+option.EXTRA_DARK_T_STORMS=Extra Dark T Storms
+option.EXTRA_VIBRANT_BL=Extra Vibrant Bl
+option.FADE_IN_POM_CPF=Fade In Pom Cpf
+option.FADE_LIGHT_UPDATES=Fade Light Updates
+option.FADE_LIGHT_UPDATES_AMOUNT=Fade Light Updates Amount
+option.FADE_PRE_GLASS_FOG=Fade Pre Glass Fog
+option.FADE_SHADOWS=Fade Shadows
+option.FADE_SS_SKY_EDGE=Fade Ss Sky Edge
+option.FAKE_SKY_REFLECTION=Fake Sky Reflection
+option.FALLBACK_CIRRUS_SHADOWS=Fallback Cirrus Shadows
+option.FANCY_WATER=Fancy Water
+option.FAR=Far
+option.FAR_CLOUDS=Far Clouds
+option.FAR_FIXES_CPF=Far Fixes Cpf
+option.FAST_PTX=Fast Ptx
+option.FAST_TEX_READS_CPF=Fast Tex Reads Cpf
+option.FILL_BG=Fill Bg
+option.FILTER_HERE=Filter Here
+option.FIRE_BRIGHT_B=Fire Bright B
+option.FIRE_BRIGHT_G=Fire Bright G
+option.FIRE_BRIGHT_R=Fire Bright R
+option.FIRE_DARK_B=Fire Dark B
+option.FIRE_DARK_G=Fire Dark G
+option.FIRE_DARK_R=Fire Dark R
+option.FIX_COLOR_SPACE=Fix Color Space
+option.FIX_SSS_LIGHT_LEAK=Fix Sss Light Leak
+option.FLASHLIGHT_BRIGHTNESS=Flashlight Brightness
+option.FLASHLIGHT_DISTANCE=Flashlight Distance
+option.FLASHLIGHT_FLICKER_SPEED=Flashlight Flicker Speed
+option.FLASHLIGHT_FLICKER_STR=Flashlight Flicker Str
+option.FLASHLIGHT_WIDTH=Flashlight Width
+option.FLASH_BANG_LIMIT=Flash Bang Limit
+option.FLASH_LIGHT=Flash Light
+option.FLICKERING_FIRE=Flickering Fire
+option.FLICKERING_TORCHES=Flickering Torches
+option.FLIP_SHADOW_SPIRAL_RANDOMLY=Flip Shadow Spiral Randomly
+option.FLIP_V_BUFFERS=Flip V Buffers
+option.FLOODFILL_LIGHTING=Floodfill Lighting
+option.FOG=Fog
+option.FOG_3D=Fog 3D
+option.FOG_AMBIENT_LIGHTING=Fog Ambient Lighting
+option.FOG_AMBIENT_LIGHTING_AMOUNT=Fog Ambient Lighting Amount
+option.FOG_AMBIENT_LIGHTING_DIST=Fog Ambient Lighting Dist
+option.FOG_AMBIENT_SPECULAR=Fog Ambient Specular
+option.FOG_BLUR=Fog Blur
+option.FOG_END=Fog End
+option.FOG_HIDES_DH_BORDERS=Fog Hides Dh Borders
+option.FOG_LAYERS=Fog Layers
+option.FOG_MAX=Fog Max
+option.FOG_START=Fog Start
+option.FORCE_CRISP_SHADOWS=Force Crisp Shadows
+option.FORWARD_RENDER=Forward Render
+option.FORWARD_RENDER_BG=Forward Render Bg
+option.FRACTAL_ROUGHNESS=Fractal Roughness
+option.FRACTAL_ROUGHNESS_O_CLOUDS=Fractal Roughness O Clouds
+option.FREEZE_TRANSITION_TIME=Freeze Transition Time
+option.FRESNEL_CURVE=Fresnel Curve
+option.FROG_OCHE_B=Frog Oche B
+option.FROG_OCHE_G=Frog Oche G
+option.FROG_OCHE_R=Frog Oche R
+option.FROG_PEARL_B=Frog Pearl B
+option.FROG_PEARL_G=Frog Pearl G
+option.FROG_PEARL_R=Frog Pearl R
+option.FROG_VER_B=Frog Ver B
+option.FROG_VER_G=Frog Ver G
+option.FROG_VER_R=Frog Ver R
+option.FULL_DARKNESS=Full Darkness
+option.FULL_RES_SKY_TRACE=Full Res Sky Trace
+option.GALAXY_BRIGHTNESS=Galaxy Brightness
+option.GALAXY_COLOR_SCALE=Galaxy Color Scale
+option.GALAXY_PATCHY_SCALE=Galaxy Patchy Scale
+option.GALAXY_SCALE=Galaxy Scale
+option.GALAXY_TIME_SCALE=Galaxy Time Scale
+option.GEM_GLASS=Gem Glass
+option.GEN_NORMAL_MAP=Gen Normal Map
+option.GLASS_DIST_BIAS=Glass Dist Bias
+option.GLASS_FLIP_BIAS=Glass Flip Bias
+option.GLASS_TINIT_STRENGTH=Glass Tinit Strength
+option.GLOWING_CONCRETE=Glowing Concrete
+option.GLOWING_DEEP_ALGAE=Glowing Deep Algae
+option.GLOWING_ROCKETS=Glowing Rockets
+option.GLOW_BERRIES_B=Glow Berries B
+option.GLOW_BERRIES_G=Glow Berries G
+option.GLOW_BERRIES_R=Glow Berries R
+option.GLOW_FRAME_B=Glow Frame B
+option.GLOW_FRAME_G=Glow Frame G
+option.GLOW_FRAME_R=Glow Frame R
+option.GODRAYS=Godrays
+option.GODRAY_DITHER=Godray Dither
+option.GODRAY_SAMPLES=Godray Samples
+option.GRASS_SHADOWS=Grass Shadows
+option.GR_STR=Gr Str
+option.GR_SUN_WIDTH=Gr Sun Width
+option.GR_VIEW_SMOOTH=Gr View Smooth
+option.G_NORM_MAP_STR=G Norm Map Str
+option.G_NORM_MAP_SUB_PIXEL_STR=G Norm Map Sub Pixel Str
+option.G_NORM_SP_RES=G Norm Sp Res
+option.HALF_RAYS=Half Rays
+option.HANDHELD_REDUCE_DIFFUSE_BY_REFLECTIVITY_=Handheld Reduce Diffuse By Reflectivity 
+option.HAND_AS_WATER=Hand As Water
+option.HAND_HELD_LIGHTING=Hand Held Lighting
+option.HAND_HELD_TORCH=Hand Held Lights
+	value.HAND_HELD_TORCH.0 = §cOff§r
+	value.HAND_HELD_TORCH.1 = §aOn§r
+option.HAND_HELD_TORCH_RANGE=Hand Held Lights Range
+option.HAND_TEX_FILTER_FIX=Hand Tex Filter Fix
+option.HARD_ALPHA=Hard Alpha
+option.HAZINESS=Haziness
+option.HELP_INFO=Help Info
+option.HOLLOW_CENTER=Hollow Center
+option.H_LAYERS=H Layers
+option.INCREASE_QUALITY_AT_ANGLES_CPF=Increase Quality At Angles Cpf
+option.INDEPENDENT_BRANCHES=Independent Branches
+option.INFINITE_DIFFUSE_PTX_RANGE=Infinite Diffuse Ptx Range
+option.INFINITE_OCEAN=Infinite Ocean
+option.INITIAL_POM_QUALITY_CPF=Initial Pom Quality Cpf
+option.INTEGRATED_PBR=Integrated Pbr
+option.INTEGRATED_SSS=Integrated Sss
+option.INTEGRATED_SSS_STR=Integrated Sss Str
+option.IS_AN_ENTITY=An Entity?
+option.IS_HAND=Hand?
+option.IS_PARTICLE=Particle?
+option.IS_THE_END=The End?
+option.IS_THE_NETHER=The Nether?
+option.IS_WATER_SHADER=Water Shader?
+option.IS_WEATHER=Weather?
+option.JANK_TRACING=Jank Tracing
+option.JET_STREAM=Jet Stream
+option.KILL_SWITCH=Kill Switch
+option.LAVA_BRIGHT_B=Lava Bright B
+option.LAVA_BRIGHT_G=Lava Bright G
+option.LAVA_BRIGHT_R=Lava Bright R
+option.LAVA_DARK_B=Lava Dark B
+option.LAVA_DARK_G=Lava Dark G
+option.LAVA_DARK_R=Lava Dark R
+option.LAVA_LEVEL=Lava Level
+option.LAVA_NOISE_ORGANIC=Lava Noise Organic
+option.LAVA_RESOLUTION=Lava Resolution
+option.LEFT_HANDED=Left Handed
+option.LESSEN_REFLECTIONS_BY_BOUNCE_NUMBER=Lessen Reflections By Bounce Number
+option.LIGHTNING_PROC=Lightning Proc
+option.LIGHTNING_SROBE_SPD_1=Lightning Srobe Spd 1
+option.LIGHTNING_SROBE_SPD_2=Lightning Srobe Spd 2
+option.LIGHTNING_SROBE_SPD_NONE=Lightning Srobe Spd None
+option.LIGHTNING_SROBE_STR_1=Lightning Srobe Str 1
+option.LIGHTNING_SROBE_STR_2=Lightning Srobe Str 2
+option.LIGHTNING_SROBE_STR_STEADY=Lightning Srobe Str Steady
+option.LIGHT_BLOCK_B=Light Block B
+option.LIGHT_BLOCK_G=Light Block G
+option.LIGHT_BLOCK_R=Light Block R
+option.LIGHT_COLOR_SATURATION=Light Color Saturation
+option.LIGHT_FADE_VXFL=Light Fade Vxfl
+option.LIGHT_FALLOFF=Light Falloff
+option.LIGHT_FALLOFF_RATE=Light Falloff Rate
+option.LIGHT_LEAK_ANGLE_LIMIT=Light Leak Angle Limit
+option.LIGHT_UPDATE_SPEED=Light Update Speed
+option.LIGHT_VIIBRANCE=Light Viibrance
+option.LIMIT_CLOUD_SHADING_BY_STEPSIZE=Limit Cloud Shading By Stepsize
+option.LIT_A=Lit A
+option.LIT_B=Lit B
+option.LIT_ENTIRE_SKY=Lit Entire Sky
+option.LIT_G=Lit G
+option.LIT_R=Lit R
+option.LONG_SUNSET_SHADOWS=Long Sunset Shadows
+option.LOW_QUALITY_CLOUDS=Low Quality Clouds
+option.LPV_BLOCKS_BY_LM=Lpv Blocks By Lm
+option.LPV_PARTICLES_BY_LM=Lpv Particles By Lm
+option.LabPBR_Textures=Labpbr Textures
+option.MANUAL_EXPOSURE_RANGE=Manual Exposure Range
+option.MAXIMUM_ALBEDO=Maximum Albedo
+option.METAL_AMBIENT=Metal Ambient
+option.METAL_AMBIENT_LIT=Metal Ambient Lit
+option.METAL_REFLECTIVE=Metal Reflective
+option.METAL_SMOOTHER=Metal Smoother
+option.MID_ATMOSPHERE_LAYERS=Mid Atmosphere Layers
+option.MINIMUM_BIOME_CLOUDS=Minimum Biome Clouds
+option.MINIMUM_BIOME_CLOUDS_HI=Minimum Biome Clouds Hi
+option.MINIMUM_LIGHT_LEVEL=Minimum Light Level
+option.MINIMUM_LIGHT_LEVEL.comment = turn this up to make caves brighter, it limits how dark everything can get
+option.MINIMUM_LIGHT_LEVEL_END=Minimum Light Level End
+option.MINIMUM_LIGHT_LEVEL_NETHER=Minimum Light Level Nether
+option.MOB_SHADOWS=Mob Shadows
+option.MOON_BRIGHTNESS=Moon Brightness
+option.MOON_COLOR_B=Moon Color B
+option.MOON_COLOR_G=Moon Color G
+option.MOON_COLOR_R=Moon Color R
+option.NAMETAG_OPACITY=Nametag Opacity
+option.NARROW_DIFFUSE_CONE_BY_SMOOTHNESS=Narrow Diffuse Cone By Smoothness
+option.NETHER_RED_AMBIENT_LIGHT=Nether Red Ambient Light
+option.NIGHT_SKY_SCALE=Night Sky Scale
+option.NOISE_AMOUNT_IN_RAYS=Noise Amount In Rays
+option.NOISE_FUNCTION_CPF=Noise Function Cpf
+option.NOISE_GRID_SIZE_2D=Noise Grid Size 2D
+option.NOISE_I1=Noise I1
+option.NOISE_STRENGTH_CPF=Noise Strength Cpf
+option.NOISE_TILING=Noise Tiling
+option.NON_DIRECTIONAL_AMBIENT_SKY_LIGHT=Non Directional Ambient Sky Light
+option.NOON_GODRAYS=Noon Godrays
+option.NORMALS_BIT_DEPTH=Normals Bit Depth
+option.NORMAL_TEXTURE_CALL_PREFIX=Normal Texture Call Prefix
+option.NORMAL_TEXTURE_CALL_SUFFIX=Normal Texture Call Suffix
+option.NORMAL_TEXTURE_SAMPLER=Normal Texture Sampler
+option.NO_DH_SHADOWS=No Dh Shadows
+option.NO_SNOW=No Snow
+option.N_BLANK_A=N Blank A
+option.N_BLANK_B=N Blank B
+option.N_BLANK_G=N Blank G
+option.N_BLANK_R=N Blank R
+option.No_PBR_Textures=No Pbr Textures
+option.OBJECT_SHADOWS_RANGE_CLOUDS=Object Shadows Range Clouds
+option.OCEAN_DEEP_STYLE=Ocean Deep Style
+option.OCEAN_DEPTH_LAYER_SIZE=Ocean Depth Layer Size
+option.OFFSCREEN_PTX_STEPS=Offscreen Ptx Steps
+option.OFF_SCREEN_BOUNCES=Off Screen Bounces
+option.OLD_SNOW=Old Snow
+option.ONION_HD=Onion Hd
+option.ONION_HEIGHT=Onion Height
+option.ONION_MIPS=Onion Mips
+option.ONION_NO_VIGNETTE=Onion No Vignette
+option.ONION_SKY_BEHIND=Onion Sky Behind
+option.ONION_SKY_FADE_SPEED=Onion Sky Fade Speed
+option.ONION_SKY_ONLY_IN_BLOCK_SKY=Onion Sky Only In Block Sky
+option.ONLY_DRAW_DH=Only Draw Dh
+option.ONLY_I2_SHADOW=Only I2 Shadow
+option.OVERRIDE_CAMPFIRE=Override Campfire
+option.OVERRIDE_FIRE=Override Fire
+option.OVERRIDE_LAVA=Override Lava
+option.OVERRIDE_TORCHES=Override Torches
+option.OZONE_LAYERS=Ozone Layers
+option.Only_Normal_Maps=Only Normal Maps
+option.PARTIAL_BLOCKS_OCCLUDE=Partial Blocks Occlude
+option.PARTIAL_FOG_BLENDING_METHOD=Partial Fog Blending Method
+option.PARTICLES_LPV=Particles Lpv
+option.PATCHY_BY_LAYER=Patchy By Layer
+option.PATHTRACE_PARTICLES=Pathtrace Particles
+option.PATHTRACE_WEATHER=Pathtrace Weather
+option.PATH_TRACING_RESOLUTION=Path Tracing Resolution
+option.PATH_TRACING_RESOLUTION_DIVIDER=Path Tracing Resolution Divider
+option.PBR=Pbr
+option.PBR_AO_CPF=Pbr Ao Cpf
+option.PBR_DRAINAGE=Pbr Drainage
+option.PBR_EMMISIVENESS_IN_VOXELS_TERRAIN=Pbr Emmisiveness In Voxels Terrain
+option.PBR_EMMISSIVE_STRENGTH=Pbr Emmissive Strength
+option.PBR_FOR_ENTITIES=Pbr For Entities
+option.PBR_LPV_EMISSION=Pbr Lpv Emission
+option.PBR_RAY_STEPS_SKY=Pbr Ray Steps Sky
+option.PBR_WETNESS_CPF=Pbr Wetness Cpf
+option.PBR_WETNESS_DARKENING=Pbr Wetness Darkening
+option.PEARL_WATER=Pearl Water
+option.PERFECT_ONION=Perfect Onion
+option.PIXEL_LOCKED_SHADOW_RES=Pixel Locked Shadow Res
+option.PLAYER_SHADOW=Player Shadow
+option.POM=Pom
+option.POM_DEPTH_CPF=Pom Depth Cpf
+option.POM_DEPTH_VARIABLE=Pom Depth Variable
+option.POM_DISTANCE_CPF=Pom Distance Cpf
+option.POM_DIST_VARIABLE=Pom Dist Variable
+option.POM_QUALITY_VARIABLE=Pom Quality Variable
+option.POM_SHADOWS_ACCURATE=Pom Shadows Accurate
+option.POM_SHADOW_DEPTH=Pom Shadow Depth
+option.POM_STYLE_CPF=Pom Style Cpf
+option.POOFY_LAYERS=Poofy Layers
+option.POST_DITHER_FOG=Post Dither Fog
+option.POST_DITHER_PTX=Post Dither Ptx
+option.POTATO_SHADOWS=Potato Shadows
+option.PRENUMBRA_INFO=Prenumbra Info
+option.PRENUMBRA_WIDTH=Prenumbra Width
+option.PRIORITIZE_SS_SKY=Prioritize Ss Sky
+option.PTX_BLOOM_DEPTH_WIDE=Ptx Bloom Depth Wide
+option.PTX_BLOOM_FALLOFF=Ptx Bloom Falloff
+option.PTX_BLOOM_STRENGTH_WIDE=Ptx Bloom Strength Wide
+option.PTX_CHECK_NORMALS=Ptx Check Normals
+option.PTX_CHECK_ONION_NORMALS=Ptx Check Onion Normals
+option.PTX_CHECK_PBR_AT_COLLISION=Ptx Check Pbr At Collision
+option.PTX_DIFFUSE_RANGE=Ptx Diffuse Range
+option.PTX_SINGLE_PIXEL=Ptx Single Pixel
+option.PTX_TORCH_DIFFUSE_RANGE_WORKAROUND=Ptx Torch Diffuse Range Workaround
+option.PUDDLE_DEPTH=Puddle Depth
+option.PULSING_AMBIENT_LIGHT=Pulsing Ambient Light
+option.PULSING_FOG=Pulsing Fog
+option.QUAD_TEXTURE_POSITION_COMPONENT=Quad Texture Position Component
+option.QUAD_TEXTURE_SIZE_COMPONENT=Quad Texture Size Component
+option.QUICK_CLOUDS=Quick Clouds
+option.RAINFALL_MOON_GLOWING_ALGAE=Rainfall Moon Glowing Algae
+option.RAIN_3D=Rain 3D
+option.RAIN_DOWN_SIDES=Rain Down Sides
+option.RAIN_DROPS=Rain Drops
+option.RAIN_OPACITY=Rain Opacity
+option.RAIN_RIPPLE_OPACITY=Rain Ripple Opacity
+option.RAIN_RIPPLE_SPD=Rain Ripple Spd
+option.RAIN_RUN_OFF=Rain Run Off
+option.RAY_ACCELERATION=Ray Acceleration
+option.RAY_BIAS=Ray Bias
+option.RAY_DIST=Ray Dist
+option.RAY_FULLY_CONVERGE=Ray Fully Converge
+option.RAY_NUM_H=Ray Num H
+option.RAY_NUM_W=Ray Num W
+option.RECESS_POM_IN_PTX=Recess Pom In Ptx
+option.REDUCE_DIFFUSE_BY_REFLECTIVITY_=Reduce Diffuse By Reflectivity 
+option.REDUCE_DIFFUSE_BY_REFLECTIVITY_METALS=Reduce Diffuse By Reflectivity Metals
+option.RED_STONE_B=Red Stone B
+option.RED_STONE_G=Red Stone G
+option.RED_STONE_R=Red Stone R
+option.REFINER_STEPS_RAY=Refiner Steps Ray
+option.REFINE_POM_CPF=Refine Pom Cpf
+option.REFLECTION_CUTOFF=Reflection Cutoff
+option.REFRACTIONS=Refractions
+option.REFRACTION_DISTANCE=Refraction Distance
+option.REFRACTION_STEPS=Refraction Steps
+option.REFRACTION_WARBLE_WHERE_NO_INFO=Refraction Warble Where No Info
+option.REFRACT_GLASS=Refract Glass
+option.REINHART=Reinhart
+option.RENDER_DISTANCE_CPF=Render Distance Cpf
+option.RESTORE_ARTIST_INTENTIONS=Restore Artist Intentions
+option.RIPPLES_OUTSIDE_PUDDLES=Ripples Outside Puddles
+option.RIPPLE_RESOLUTION=Ripple Resolution
+option.ROUGH_FRESNEL=Rough Fresnel
+option.ROUGH_FRESNEL_CURVE=Rough Fresnel Curve
+option.ROUGH_FRESNEL_EXPONENT=Rough Fresnel Exponent
+option.ROUGH_FRESNEL_EXPONENTIAL=Rough Fresnel Exponential
+option.SANDSTONE_POROSITY=Sandstone Porosity
+option.SAND_POROSITY=Sand Porosity
+option.SATURATION=Saturation
+option.SAVE_WRITES=Save Writes
+option.SCALE_MOVING_GALAXY=Scale Moving Galaxy
+option.SCREEN_TANGENT=Screen Tangent
+option.SEA_LEVEL=Sea Level
+option.SEA_LEVEL.comment=For 'Cave Light Leak Fix'
+option.SHADER_LAVA=Shader Lava
+option.SHADER_NOISE_FUNCTION=Shader Noise Function
+option.SHADE_ALGAE=Shade Algae
+option.SHADING_STEPS_CLOUDS=Shading Steps Clouds
+option.SHADING_STEPS_FOG=Shading Steps Fog
+option.SHADING_STEPS_OCEAN=Shading Steps Ocean
+option.SHADOWS=Shadows
+option.SHADOW_BIAS=Shadow Bias
+option.SHADOW_BIAS_PL=Shadow Bias (Pixel Locked)
+option.SHADOW_BIAS_PL.comment - Lower will have buggy artifacts, higher will have floating shadows - like space between things and thier shadows
+option.SHADOW_BRIGHTNESS=Shadow Brightness
+option.SHADOW_DEPTH_MULT=Shadow Depth Mult
+option.SHADOW_DISTORT_ENABLED=Shadow Distort Enabled
+option.SHADOW_DISTORT_FACTOR=Shadow Distort Factor
+option.SHADOW_EXTRA_SOFTNESS=Shadow Extra Softness
+option.SHADOW_FADE=Shadow Fade
+option.SHADOW_LENS_CURVATURE=Shadow Lens Curvature
+option.SHADOW_NOISE_STR=Shadow Noise Str
+option.SHADOW_NOISE_VARIATION=Shadow Noise Variation
+option.SHADOW_SAMPLES=Shadow Samples
+option.SHADOW_SOFTNESS_WEIGHT=Shadow Softness Weight
+option.SHADOW_SUB_PIXEL_SEED_RES=Shadow Sub Pixel Seed Res
+option.SHADOW_WEIGHT_EXPONENT=Shadow Weight Exponent
+option.SHOW_MOB_DAMAGE=Show Mob Damage
+option.SKY_AMBIENT_LIGHT=Sky Ambient Light
+
+option.SKY_LIGHT_BRIGHTNESS=Sky Light Brightness
+option.SKY_LIGHT_FALLOFF=Sky Light Falloff
+option.SKY_NOISE_H=Sky Noise H
+option.SKY_NOISE_H2=Sky Noise H2
+option.SKY_NOISE_W=Sky Noise W
+option.SKY_ONION_ORIENTATION=Sky Onion Orientation
+option.SKY_ONION_REFRESH_FADE_SPD=Sky Onion Refresh Fade Spd
+option.SKY_ONION_RIGHT_BORDER=Sky Onion Right Border
+option.SKY_ONION_TOP_BORDER=Sky Onion Top Border
+option.SKY_ONION_UPDATE_D=Sky Onion Update D
+option.SKY_ONION_UPDATE_SPEED=Sky Onion Update Speed
+option.SKY_RAY_ACCELERATION=Sky Ray Acceleration
+option.SKY_RAY_NUM_H=Sky Ray Num H
+option.SKY_RAY_NUM_W=Sky Ray Num W
+option.SKY_RAY_STEP_SIZE=Sky Ray Step Size
+option.SKY_REFLECTION=Sky Reflection
+option.SKY_STEPS=Sky Steps
+option.SKY_TAA=Sky Taa
+option.SKY_TINT_DIRECTION=Sky Tint Direction
+option.SLUSH_RANGE=Slush Range
+option.SMOOTHING_NOISE_CPF=Smoothing Noise Cpf
+option.SMOOTHNESS_EXPONENTIAL=Smoothness Exponential
+option.SMOOTH_DH_FADE_IN=Smooth Dh Fade In
+option.SMOOTH_DH_NORMALS=Smooth Dh Normals
+option.SMOOTH_ONION_BORDER=Smooth Onion Border
+option.SM_BIAS=Sm Bias
+option.SM_BIAS_N=Sm Bias N
+option.SNOW_3D=Snow 3D
+option.SNOW_COLOR_B=Snow Color B
+option.SNOW_COLOR_G=Snow Color G
+option.SNOW_COLOR_R=Snow Color R
+option.SNOW_DISTANCE=Snow Distance
+option.SNOW_DISTANCE_FADE=Snow Distance Fade
+option.SNOW_DROPS=Snow Drops
+option.SNOW_EVERYWHERE=Snow Everywhere
+option.SNOW_IN_HAND=Snow In Hand
+option.SNOW_ON_ENTITES=Snow On Entites
+option.SNOW_ON_FAR_CHUNKS=Snow On Far Chunks
+option.SNOW_ON_WALLS=Snow On Walls
+option.SNOW_SIZE_DIVIDER=Snow Size Divider
+option.SOUL_FIRE_BRIGHT_B=Soul Fire Bright B
+option.SOUL_FIRE_BRIGHT_G=Soul Fire Bright G
+option.SOUL_FIRE_BRIGHT_R=Soul Fire Bright R
+option.SOUL_FIRE_DARK_B=Soul Fire Dark B
+option.SOUL_FIRE_DARK_G=Soul Fire Dark G
+option.SOUL_FIRE_DARK_R=Soul Fire Dark R
+option.SOUL_LANTERN_B=Soul Lantern B
+option.SOUL_LANTERN_B_HIGH=Soul Lantern B High
+option.SOUL_LANTERN_G=Soul Lantern G
+option.SOUL_LANTERN_G_HIGH=Soul Lantern G High
+option.SOUL_LANTERN_R=Soul Lantern R
+option.SOUL_LANTERN_R_HIGH=Soul Lantern R High
+option.SPECULAR_BOUNCE_LIGHT=Specular Bounce Light
+option.SPECULAR_TEXTURE_SAMPLER=Specular Texture Sampler
+option.SPECULAR_VX_BEHAVIOR=Specular Vx Behavior
+option.SSS=Sss
+option.SSS_DECAY_CURVE=Sss Decay Curve
+option.SSS_DECAY_RATE=Sss Decay Rate
+option.SSS_DEEP=Sss Deep
+option.SSS_SCATTER_WIDTH=Sss Scatter Width
+option.SSS_SHALLOW=Sss Shallow
+option.SS_PARTIAL=Ss Partial
+option.SS_SHADOWS=Ss Shadows
+option.SS_SUN_SHADOWS_ASSUMED_DEPTH=Ss Sun Shadows Assumed Depth
+option.SS_SUN_SHADOWS_MAX_RANGE=Ss Sun Shadows Max Range
+option.SS_SUN_SHADOWS_RANGE=Ss Sun Shadows Range
+option.SS_SUN_SHADOW_STEPS=Ss Sun Shadow Steps
+option.STARS=Stars
+option.STAR_BRIGHTNESS=Star Brightness
+option.STAR_CRISPNESS=Star Crispness
+option.STAR_CUTOFF=Star Cutoff
+option.STAR_SCALE=Star Scale
+option.STAR_SIZE=Star Size
+option.STORM_STRENGTH=Storm Strength
+option.SUNHEAP=Sunheap
+option.SUNLIGHT_ELEVATION_TINT_HEIGHT=Sunlight Elevation Tint Height
+option.SUNRISE=Sunrise
+option.SUNRISE_COLORATION=Sunrise Coloration
+option.SUNRISE_TYPE=Sunrise Type
+option.SUNSET=Sunset
+option.SUNSET_FADE_B=Sunset Fade B
+option.SUNSET_FADE_G=Sunset Fade G
+option.SUNSET_FADE_R=Sunset Fade R
+option.SUN_BRIGHTNESS=Sun Brightness
+option.SUN_COLOR_B=Sun Color B
+option.SUN_COLOR_G=Sun Color G
+option.SUN_COLOR_R=Sun Color R
+option.SUN_DIRECT_WATER_PENETRATION=Sun Direct Water Penetration
+option.SUN_ELEVATION_TINT=Sun Elevation Tint
+option.SUN_GR_HAZE=Sun Gr Haze
+option.SUN_MELTS_SNOW=Sun Melts Snow
+option.SUN_MELTS_SNOW_AMOUNT=Sun Melts Snow Amount
+option.SUN_SPECULAR_INDOOR_FALLOFF_CPF=Sun Specular Indoor Falloff Cpf
+option.SUN_THROUGH_CLOUDS=Sun Through Clouds
+option.SUN_THROUGH_CLOUDS_WIDTH=Sun Through Clouds Width
+option.SUN_WIDTH=Sun Width
+option.SUPER_SMOOTH_DH=Super Smooth Dh
+option.S_BLANK_A=S Blank A
+option.S_BLANK_B=S Blank B
+option.S_BLANK_G=S Blank G
+option.S_BLANK_R=S Blank R
+option.TAA_BRIGHT_SPD=Taa Bright Spd
+option.TAA_BRIGHT_SPDS=Taa Bright Spds
+option.TAA_BRIGHT_SPDSA=Taa Bright Spdsa
+option.TAA_DARK_SPD=Taa Dark Spd
+option.TAA_DARK_SPDS=Taa Dark Spds
+option.TAA_DARK_SPDSA=Taa Dark Spdsa
+option.TAA_HISTORY=Taa History
+option.TAA_HISTORYS=Taa Historys
+option.TAA_ON=Taa On
+option.TAA_WIDTH=Taa Width
+
+screen.Debug_Lighting = Debug Lighting
+screen.Debug_Lighting.comment = You shouldn't change these directly, they are changed for some presets. changing them manually will probably look broken.
+option.TAA_WIDTHS=Taa Widths
+option.TEMPERATURE_DEEP_GLOWING_ALGAE=Temperature Deep Glowing Algae
+option.TEMPERATURE_MOON_GLOWING_ALGAE=Temperature Moon Glowing Algae
+option.TEXTURE_BLEND_SOFTNESS_CPF=Texture Blend Softness Cpf
+option.TEXTURE_CALL_GRADS=Texture Call Grads
+option.TEXTURE_CALL_PREFIX=Texture Call Prefix
+option.TEXTURE_CALL_SUFFIX=Texture Call Suffix
+option.TEXTURE_CALL_SUFFIX_FAST=Texture Call Suffix Fast
+option.TEXTURE_FILTERING_CPF=Texture Filtering Cpf
+option.TEXTURE_FILTERING_DISTANCE_CPF=Texture Filtering Distance Cpf
+option.TEXTURE_FILTER_FADE_CPF=Texture Filter Fade Cpf
+option.TEXTURE_FILTER_HAND=Texture Filter Hand
+option.TEXTURE_SIZE_AVAILABLE=Texture Size Available
+option.THAW_TRANSITION_TIME=Thaw Transition Time
+option.THE_ONION=The Onion
+option.THIS_IS_DISTANT_HORIZONS=This Is Distant Horizons
+option.TILEHG=Tilehg
+option.TILEWG=Tilewg
+option.TM_AMPLITUDE=Tm Amplitude
+option.TM_WHITE=Tm White
+option.TONEMAPPING=Tonemapping
+option.TONEMAPPING2_STRENGTH=Tonemapping2 Strength
+option.TONEMAPPING_BRIGHTNESS=Tonemapping Brightness
+option.TONEMAPPING_RANGE=Tonemapping Range
+option.TORCH_B=Torch B
+option.TORCH_BRIGHTNESS=Torch Brightness
+option.TORCH_DISTANCE=Torch Distance
+option.TORCH_DIV_BOUNCES=Torch Div Bounces
+option.TORCH_FALLOFF=Torch Falloff
+option.TORCH_FLICKERING=Torch Flickering
+option.TORCH_G=Torch G
+option.TORCH_HI_B=Torch Hi B
+option.TORCH_HI_G=Torch Hi G
+option.TORCH_HI_R=Torch Hi R
+option.TORCH_HORIZONTAL_OFFSET=Torch Horizontal Offset
+option.TORCH_LIGHT_3D=Torch Light 3D
+option.TORCH_LITE_STEPS=Torch Lite Steps
+option.TORCH_LOW_B=Torch Low B
+option.TORCH_LOW_G=Torch Low G
+option.TORCH_LOW_R=Torch Low R
+option.TORCH_MELTS_SNOW=Torch Melts Snow
+option.TORCH_POSITION_ON_SCREEN_X=Torch Position On Screen X
+option.TORCH_POSITION_ON_SCREEN_Y=Torch Position On Screen Y
+option.TORCH_R=Torch R
+option.TORCH_RAYS_X=Torch Rays X
+option.TORCH_RAYS_Y=Torch Rays Y
+option.TORCH_SHADOWS_ASSUMED_DEPTH=Torch Shadows Assumed Depth
+option.TORCH_V_OFFSET=Torch V Offset
+option.TORCH_WIDTH_X=Torch Width X
+option.TORCH_WIDTH_Y=Torch Width Y
+option.TORCH_Z_OFFSET=Torch Z Offset
+option.TRANSLUCENT_MODE=Translucent Mode
+option.UNDEFER_SHADING=Undefer Shading
+option.UPPER_ATMOSPHERE_CLOUD_LAYERS=Upper Atmosphere Cloud Layers
+option.UPPER_ATMOSPHERE_LAYERS=Upper Atmosphere Layers
+option.UPSCALE_ENTITIES=Upscale Entities
+option.UPSCALE_HAND_HELD=Upscale Hand Held
+option.UPSCALE_PARTICLES=Upscale Particles
+option.UPSCALE_RESOLUTION_CPF=Upscale Resolution Cpf
+option.UPSCALE_TERRAIN=Upscale Terrain
+option.USE_CACHED_CLOUDS=Cached Clouds
+option.USE_HARD_CODED_GLASS_COLORS=Hard Coded Glass Colors
+option.USE_MINECRAFT_CLOUD_COLORS=Minecraft Cloud Colors
+option.USE_MINECRAFT_FOG_COLORS=Minecraft Fog Colors
+option.USE_MINECRAFT_SKY_COLORS=Minecraft Sky Colors
+option.USE_MINECRAFT_TORCH_LIGHTING=Minecraft Torch Lighting
+option.VANILLA_AO_EXPONENT=Vanilla Ao Exponent
+option.VANILLA_CELESTIALS=Vanilla Celestials
+option.VANILLA_CLOUDS=Vanilla Clouds
+option.VANILLA_WATER_COLOR=Vanilla Water Color
+option.VANILLA_lIGHTING=Vanilla Lighting
+option.VARIABLE_HEIGHT_POOFY=Variable Height Poofy
+option.VERY_OLD_MC=Very Old Mc
+option.VIGNETTE_PTX=Vignette Ptx
+option.VISUALIZED_DATA=Visualized Data
+option.VOXELIZE_ENTITIES=Voxelize Entities
+option.VOXELIZE_GRASS=Voxelize Grass
+option.VOXEL_AREA=Voxel Area
+option.VOXEL_PHOTON_SIMULATION_QUALITY=Voxel Photon Simulation Quality
+option.VOXEL_POSITION_RECONSTRUCTION_METHOD=Voxel Position Reconstruction Method
+option.WATERFALLS=Waterfalls
+option.WATERFALL_SHINY=Waterfall Shiny
+option.WATERFALL_SPEED=Waterfall Speed
+option.WATERFALL_WHITENESS=Waterfall Whiteness
+option.WATER_ABSORB_B=Water Absorb B
+option.WATER_ABSORB_G=Water Absorb G
+option.WATER_ABSORB_R=Water Absorb R
+option.WATER_CAUSTIC_BRIGHTNESS=Water Caustic Brightness
+option.WATER_CAUSTIC_EXPONENT=Water Caustic Exponent
+option.WATER_CAUSTIC_PASSES=Water Caustic Passes
+option.WATER_COLOR_ABSORPTION_MULT=Water Color Absorption Mult
+option.WATER_F0=Water F0
+option.WATER_FOAM_B=Water Foam B
+option.WATER_FOAM_BRIGHTNESS=Water Foam Brightness
+option.WATER_FOAM_G=Water Foam G
+option.WATER_FOAM_R=Water Foam R
+option.WATER_FOG=Water Fog
+option.WATER_FOG_B=Water Fog B
+option.WATER_FOG_G=Water Fog G
+option.WATER_FOG_R=Water Fog R
+option.WATER_NO_COLOR=Water No Color
+option.WATER_SCALE=Water Scale
+option.WATER_SKIN_A2=Water Skin A2
+option.WATER_SKIN_B=Water Skin B
+option.WATER_SKIN_B2=Water Skin B2
+option.WATER_SKIN_G=Water Skin G
+option.WATER_SKIN_G2=Water Skin G2
+option.WATER_SKIN_R=Water Skin R
+option.WATER_SKIN_R2=Water Skin R2
+option.WATER_SMOOTHNESS=Water Smoothness
+option.WATER_SPEED=Water Speed
+option.WATER_STYLE=Water Style
+option.WATER_SUN_DEPTH=Water Sun Depth
+option.WATER_TRANSLUCENCY_ANGLE=Water Translucency Angle
+option.WATER_TRANSLUCENCY_DISTANCE=Water Translucency Distance
+option.WAVY_FOLIAGE=Wavy Foliage
+option.WAVY_PLANTS=Wavy Plants
+option.WEATHER_AS_TRANSLUCENT=Weather As Translucent
+option.WEATHER_BUFFFER=Weather Bufffer
+option.WEATHER_EFFECT=Weather Effect
+option.WEATHER_TIME=Weather Time
+option.WET_F0=Wet F0
+option.WHERE_TO_VOXELIZE=Where To Voxelize
+option.WHITE_WATER_SLANTS=White Water Slants
+option.WIDEN_FILTERED_THINGS=Widen Filtered Things
+option.WIDTH_MOVING_WATERG=Width Moving Waterg
+option.WIND_SPEED=Wind Speed
+option.WIND_SPOT_SIZE=Wind Spot Size
+option.WIND_STRENGTH=Wind Strength
+option.WISPS=Wisps
+option.WRITE_SP=Write Sp
+
+
+
+
+
+
+
+
+
+
+option.TEXTURE_FILTERING_CPF= Texture Upscaling / Filtering
+option.TEXTURE_FILTERING_CPF.comment = Filter Textures so they aren't pixelated when close up, performance may vary by mode, ALPHA ones are debug use or may not work well . 0 -none, 1 -bilinear, 2 -bilinear with adaptive contrast, 3-crisp v1. 4 -crisp/blended ALPHA, 5-crisp v2 (fast), 6-rounded crisp ALPHA, 7-round blend ALPHA
+	value.TEXTURE_FILTERING_CPF.0 = none
+	value.TEXTURE_FILTERING_CPF.1 = bilinear
+	value.TEXTURE_FILTERING_CPF.2 = bilinear (adaptive)
+	value.TEXTURE_FILTERING_CPF.3 = crisp-1
+	value.TEXTURE_FILTERING_CPF.4 = crisp/blended (ALPHA)
+	value.TEXTURE_FILTERING_CPF.5 = crisp-2 (fast)
+	value.TEXTURE_FILTERING_CPF.6 = rounded crisp (ALPHA)
+	value.TEXTURE_FILTERING_CPF.7 = rounded (ALPHA)
+	
+option.COLORED_SHADOWS = Colored Shadows
+	option.COLORED_SHADOWS.comment = Colored Shadows from colored glass, etc.
+		value.COLORED_SHADOWS.0 = no
+		value.COLORED_SHADOWS.1 = yes
+
+option.FADE_SHADOWS = Fade Shadows
+	option.FADE_SHADOWS.comment = Fade out shadows at a distance to hide the cut-off that's there for performance.
+		value.FADE_SHADOWS.0 = no
+		value.FADE_SHADOWS.1 = yes
+
+option.TEXTURE_FILTERING_DISTANCE_CPF= Upscaling Distance
+option.TEXTURE_FILTERING_DISTANCE_CPF.comment = How far out to use this effect . very low is fine for high res packs
+
+option.UPSCALE_RESOLUTION_CPF= Upscaling Multiplier
+option.UPSCALE_RESOLUTION_CPF.comment = Multplier for Upscaling and Texture filtering . 1 is infinite . these all cost the same, it's just visual preference
+
+option.TEXTURE_BLEND_SOFTNESS_CPF= Upscaling Softness
+option.TEXTURE_BLEND_SOFTNESS_CPF.comment = 1 is Softer Texture Blending . lOWER will sharpen Adaptive Contrast to maintain high contrast areas even more, but in doing so limits softer blending. Too low ruins crisp Upscalers.
+
+option.TEXTURE_FILTER_FADE_CPF= Upscaling Fade-in
+option.TEXTURE_FILTER_FADE_CPF.comment = fade in for texture filtering . may not work with every style
+
+option.FOG.comment = 0 -Off. 1 -On
+
+option.CUSTOM_TORCH_COLOR=Custom Torch Colors
+option.CUSTOM_TORCH_COLOR.comment = 0 -Vanilla. 1 -Custom: Use Torch_Hi RGB. 2 -Dynamic: Fade from Torch_hi_RGB to Torch_Lo_RGB
+
+option.SHADOWS.comment=0 -Off. 1 -On
+option.DIRECTIONAL_LIGHTING.comment = 0 -Off when not using Shadows, Vanilla style lighting Only. 1 -On (it's always on with Shadows On)
+
+
+
+option.DONT_BLOW_OUT_WHITES.comment = 0- Off. 1 -Limits the brightest things on screen a little. Will also make things less Saturated and Colorful, so you can also try turning down Sky_Light or Sun_Brightness.
+
+option.BACK_LIT_GRASS.comment = Let sunlight penetrate through grass to the back.
+
+option.NON_DIRECTIONAL_AMBIENT_SKY_LIGHT=Non-Directional Sky Light Amount
+option.NON_DIRECTIONAL_AMBIENT_SKY_LIGHT.comment= (PBR Only) More is Softer looking and brighter in Shadows. Lower is harder looking skylight with obvious 3D textures in shadow because of sky light coming from above.
+
+option.PBR=PBR Mode (Read)
+option.PBR.comment = Toggling this On from the default preset is buggy. It is Automatically toggled On in the 'Fancy' presets, as they utilize PBR Textures. §aIt is recommended to start from the 'Fancy' preset if you want to use PBR Textures.§r
+
+option.METAL_SMOOTHER=Metal Smoother
+option.METAL_SMOOTHER.comment=This makes metals smoother for crisper reflections
+
+option.SUNSET= Sunset Type
+option.SUNSET.comment = 0 -Instant flip. 1 -Fade to black. 2 -Colored Fade.
+
+
+option.CUSTOM_SUN_COLOR= Sun & Moon Colors
+	option.CUSTOM_SUN_COLOR.comment = Choose a sun color type. Custom works better when not using Lightmap Sky Color
+		value.CUSTOM_SUN_COLOR.0 = LightMap
+		value.CUSTOM_SUN_COLOR.1 = Custom
+
+option.SKY_COLOR_ALTERNATE= Sky Light Color 
+	option.SKY_COLOR_ALTERNATE.comment=Choose to use 'Lightmap' sky color or Actual Sky color as the light from the sky. If you use Actual it will look very blue unless you use a custom sun color that is more red and less blue & green, and maybe increase sun brightness. 
+		value.SKY_COLOR_ALTERNATE.0 = LightMap
+		value.SKY_COLOR_ALTERNATE.1 = Sky Color
+		value.SKY_COLOR_ALTERNATE.2 = Sky & Fog Colors
+
+screen.Fog_tints_Light = Fog Tints Light
+	screen.Fog_tints_Light.comment = Fog can tint light for biome specific feeling
+
+option.SHADOWS=Shadow Style
+option.SHADOWS.comment = Samples may affect fps. 0 -None: 0 Samples. 1 -Basic: 1 Sample. 2 -blurry edges: 4 Samples. 3 -Crisp: 4 Samples. 4 -Soft Edged Bilinear: 8 Samples.  5 -Blocky Prenumbra (Choose Samples in 8's). 6 -Smooth Prenumbra (Choose Samples). 7 -Smooth Prenumbra buggy v2: (Choose Samples in 8's)
+
+option.BORDER_SAMPLES.comment = More samples is a thicker border but might cost fps.
+
+option.PRENUMBRA_INFO=Prenumbra Info (hover mouse)
+option.PRENUMBRA_INFO.comment = For Shadow Styles 5+, these extra Options May Apply. 
+
+option.SSS=Soft Lighting
+option.SSS.comment= 0 -Off. 1 -Just on Plants and Sub Surface Scattering. 2 -On Everything.
+	value.SSS.0 = Off
+	value.SSS.1 = PBR
+	value.SSS.2 = Everything
+
+ option.TORCH_HORIZONTAL_OFFSET.comment=higher is a more dramatic stereo offset of light position from the center of the screen. Lower will be more centered and less Obvious. Lower is good for 3rd Person, with Z offset turned up.
+ option.TORCH_LIGHT_3D = 3D Torch Light
+ option.TORCH_LIGHT_3D.comment=0 -Flat hand held light based only on distance. 1 -Dramatic, use 3d data. 2 -Accurate & Adjustable, use 3D data
+ 	value.TORCH_LIGHT_3D.0 = Flat
+	value.TORCH_LIGHT_3D.1 = Dramatic
+	value.TORCH_LIGHT_3D.2 = Accurate
+	
+ option.TORCH_V_OFFSET=Torch Verticle Offset
+ option.TORCH_V_OFFSET.comment = down from center in world block units
+ option.HAND_HELD_TORCH.comment = This is for a Screenspace based Lighting, not the Voxel Based from the 'Colored Lighting' menu. 0-Off. 1-On
+option.TORCH_Z_OFFSET.comment = Changing this will move the torch light source Away from the camera, to work with 3rd person.
+
+option.GRASS_SHADOWS=Grass casts Shadows
+	value.GRASS_SHADOWS.0 = no
+	value.GRASS_SHADOWS.1 = yes
+	
+option.SHADOW_FADE = Shadow Fade Amount
+	option.SHADOW_FADE.comment = How much of the render distance to use fading out shadows
+
+option.WIDEN_FILTERED_THINGS.comment= this might make swords look better with some Upscaling Options
+option.ENTITY_TEX_FILTER_FIX.comment = fixes holes in dropped items and handheld things being upscaled
+option.UPSCALE_HAND_HELD.comment= This is kind of buggy 
+
+option.DH_SHADOWS=DH Shadows (Experimental, low res)
+option.DH_SHADOWS.comment = EXPERIMENTAL!. Will hit fps. Disables shadow distortion, so needs High Shadow map Resolution.
+option.BORDERS_IN_DH.comment = Draw Cartoon Borders in Distant Horizons chunks. May cost fps
+option.EXPONENTIAL_FOG_.comment= 0 -Off. 1 -Recommended (Off, but On with Distant Horizons). 2 -On
+
+option.LONG_SUNSET_SHADOWS=Long DH Sunsest Shadows 
+option.LONG_SUNSET_SHADOWS.comment = Extends Shadowmap depth for longer shadows and less light leaking at sunrise and sunset. isn't perfect. May cost significant fps
+
+option.BORDERS_SENSITIVITY= Borders Sensitivity
+option.BORDERS_SENSITIVITY.comment = Lower is more outlines, Higher needs higher distance between things before drawing outlines.
+
+option.BORDER_SAMPLES=Border Samples / thickness
+
+option.DH_FLYING_FIX_CIRCLE = Fix circle when flying
+option.DH_FLYING_FIX_CIRCLE_SPEED =Fix Circle Speed
+option.DH_FLYING_FIX_CIRCLE_ONLY_IN_AIR = Fix circle only when Flying
+option.DH_FLYING_FIX_CIRCLE.comment = Fix the circular hole in the world if flying very fast and upir cpu can't keep up.
+option.DH_FLYING_FIX_CIRCLE_SPEED.comment = Speed you have to travel to have no circle at all. Too low might produce artifacts from dh and regular both rendering in the same space. use debug to tune to your fps, it isn't perfect on one range for all fps ranges.
+option.DH_FLYING_FIX_CIRCLE_ONLY_IN_AIR.comment = Only fix the circle when in the air like flying to minimize graphical weirdness.
+
+option.FIX_COLOR_SPACE.comment = Use Linear color for shading, this shader isn't really made for this.
+
+option.DEBUG_FIX_CIRCLE.comment Shows the flying fix. Black means you are going too slow to start the circle shrinking, Red means you are at the top speed,-DOESN'T WORK IN MENU,-UNPAUSE. You want the circle gone when flying fast, so set lower speed if not gone when red.
+
+option.FORCE_CRISP_SHADOWS.comment = Make any shadow option be crisp, to use its sampling for crisp shadows. Can look really bad, but maybe you'll find a way to use it well.
+option.FORCE_CRISP_SHADOWS=Force Crisp Shadows (not recommended)
+
+option.SHADOW_DISTORT_ENABLED.comment= Don't use this on very low shadow distance. Makes close shadows more HD and far shadows less HD by distorting the shadow map, to make close shadows better, but distorts far shadows.
+option.SHADOW_DISTORT_ENABLED=Shadow Map Distortion
+
+option.SHADOW_BIAS.comment = If you get little dots on the ground with shadows, turn this up.  Too high will make shadows floaty and disconnected.
+
+option.CLOUDS.comment = 0 -Vanilla. 1 -Fancy v1. 2 -Fancy v2
+
+option.shadowDistance = Shadow Render Distance
+option.shadowDistance.comment = FPS cost! Render distance of shadows. If putting very low, disable 'Shadow Map Distortion' or shadows will look broken.
+
+
+
+
+
+
+
+option.TEXTURE_FILTERING_CPF= Texture Upscaling / Filtering
+option.TEXTURE_FILTERING_CPF.comment = Filter Textures so they aren't pixelated when close up, performance may vary by mode, ALPHA ones are debug use or may not work well . 0 -none, 1 -bilinear, 2 -bilinear with adaptive contrast, 3-crisp v1. 4 -crisp/blended ALPHA, 5-crisp v2 (fast), 6-rounded crisp ALPHA, 7-round blend ALPHA
+
+option.TEXTURE_FILTERING_DISTANCE_CPF= Upscaling Distance
+option.TEXTURE_FILTERING_DISTANCE_CPF.comment = How far out to use this effect . very low is fine for high res packs
+
+option.UPSCALE_RESOLUTION_CPF= Upscaling Multiplier
+option.UPSCALE_RESOLUTION_CPF.comment = Multplier for Upscaling and Texture filtering . 1 is infinite . these all cost the same, it's just visual preference
+
+option.TEXTURE_BLEND_SOFTNESS_CPF= Upscaling Softness
+option.TEXTURE_BLEND_SOFTNESS_CPF.comment = 1 is Softer Texture Blending . lOWER will sharpen Adaptive Contrast to maintain high contrast areas even more, but in doing so limits softer blending. Too low ruins crisp Upscalers.
+
+option.TEXTURE_FILTER_FADE_CPF= Upscaling Fade-in
+option.TEXTURE_FILTER_FADE_CPF.comment = fade in for texture filtering . may not work with every style
+
+option.FOG.comment = 0 -Off. 1 -On
+
+option.CUSTOM_TORCH_COLOR=Custom Torch Colors
+option.CUSTOM_TORCH_COLOR.comment = 0 -Vanilla. 1 -Custom: Use Torch_Hi RGB. 2 -Dynamic: Fade from Torch_hi_RGB to Torch_Lo_RGB
+
+option.SHADOWS.comment=0 -Off. 1 -On
+option.DIRECTIONAL_LIGHTING.comment = 'no' -Off when not using Shadows, Vanilla style lighting Only. 'yes' -On (it's always on with Shadows On)
+
+option.COLORED_SHADOWS.comment= 0: Stained glass will cast ordinary shadows. 1: Stained glass will cast colored shadows. 2: Stained glass will not cast any shadows. 
+
+option.DONT_BLOW_OUT_WHITES = Tonemapping Mode
+option.DONT_BLOW_OUT_WHITES.comment = 0- Off. 1 -Limits the brightest things on screen a little. Will also make things less Saturated and Colorful, so you can also try turning down Sky_Light or Sun_Brightness. 2 -Adjustable strength that will darken image
+
+option.BACK_LIT_GRASS.comment = Let sunlight penetrate through grass to the back.
+
+option.NON_DIRECTIONAL_AMBIENT_SKY_LIGHT=Non-Directional Sky Light Amount
+option.NON_DIRECTIONAL_AMBIENT_SKY_LIGHT.comment= (PBR Only) More is Softer looking and brighter in Shadows. Lower is harder looking skylight with obvious 3D textures in shadow because of sky light coming from above.
+
+option.PBR=PBR Mode (READ)
+
+option.METAL_SMOOTHER=Metal Smoother
+option.METAL_SMOOTHER.comment=This makes metals smoother for crisper reflections
+
+option.SUNSET= Sunset Type
+option.SUNSET.comment = 0 -Instant flip. 1 -Fade to black. 2 -Colored Fade.
+
+
+
+option.SHADOWS=Shadow Style
+option.SHADOWS.comment = Samples may affect fps. 0 -None: 0 Samples. 1 -Basic: 1 Sample,  §a may require upping 'Shadow Bias' below §r. 2 -blurry edges: 4 Samples. 3 -Crisp: 4 Samples. 4 -Soft Edged Bilinear: 8 Samples.  5 -Blocky Prenumbra (Choose Samples in 8's). 6 -Smooth Prenumbra (Choose Samples). 7 -Smooth Prenumbra buggy v2: (Choose Samples in 8's)
+
+option.BORDER_SAMPLES.comment = More samples is a thicker border but might cost fps.
+
+option.PRENUMBRA_INFO=Prenumbra Info (hover mouse)
+option.PRENUMBRA_INFO.comment = For Shadow Styles 5+, these extra Options May Apply. 
+
+option.SSS=Soft Lighting
+option.SSS.comment= 0 -Off. 1 -Just on Plants and Sub Surface Scattering. 2 -On Everything.
+
+
+ option.TORCH_HORIZONTAL_OFFSET.comment=higher is a more dramatic stereo offset of light position from the center of the screen. Lower will be more centered and less Obvious. Lower is good for 3rd Person, with Z offset turned up.
+ option.TORCH_LIGHT_3D = 3D Torch Light
+
+
+ option.TORCH_V_OFFSET=Torch Verticle Offset
+ option.TORCH_V_OFFSET.comment = down from center in world block units
+
+option.TORCH_Z_OFFSET.comment = Changing this will move the torch light source Away from the camera, to work with 3rd person.
+
+option.GRASS_SHADOWS=Grass casts Shadows
+
+option.WIDEN_FILTERED_THINGS.comment= this might make swords look better with some Upscaling Options
+option.ENTITY_TEX_FILTER_FIX.comment = fixes holes in dropped items and handheld things being upscaled
+option.UPSCALE_HAND_HELD.comment= This is kind of buggy 
+
+option.DH_SHADOWS=DH Shadows (Experimental, low res)
+option.DH_SHADOWS.comment = EXPERIMENTAL!. Will hit fps. Disables shadow distortion, so needs High Shadow map Resolution.
+option.BORDERS_IN_DH.comment = Draw Cartoon Borders in Distant Horizons chunks. May cost fps
+option.EXPONENTIAL_FOG_.comment= 0 -Off. 1 -Recommended (Off, but On with Distant Horizons). 2 -On
+
+option.LONG_SUNSET_SHADOWS=Long DH Sunsest Shadows 
+option.LONG_SUNSET_SHADOWS.comment = Extends Shadowmap depth for longer shadows and less light leaking at sunrise and sunset. isn't perfect. May cost significant fps
+
+option.BORDERS_SENSITIVITY= Borders Sensitivity
+option.BORDERS_SENSITIVITY.comment = Lower is more outlines, Higher needs higher distance between things before drawing outlines.
+
+option.BORDER_SAMPLES=Border Samples / thickness
+
+option.DH_FLYING_FIX_CIRCLE = Fix circle when flying
+option.DH_FLYING_FIX_CIRCLE_SPEED =Fix Circle Speed
+option.DH_FLYING_FIX_CIRCLE_ONLY_IN_AIR = Fix circle only when Flying
+option.DH_FLYING_FIX_CIRCLE.comment = Fix the circular hole in the world if flying very fast and upir cpu can't keep up.
+option.DH_FLYING_FIX_CIRCLE_SPEED.comment = Speed you have to travel to have no circle at all. Too low might produce artifacts from dh and regular both rendering in the same space. use debug to tune to your fps, it isn't perfect on one range for all fps ranges.
+option.DH_FLYING_FIX_CIRCLE_ONLY_IN_AIR.comment = Only fix the circle when in the air like flying to minimize graphical weirdness.
+
+option.FIX_COLOR_SPACE.comment = Use Linear color for shading, this shader isn't really made for this.
+
+option.DEBUG_FIX_CIRCLE.comment Shows the flying fix. Black means you are going too slow to start the circle shrinking, Red means you are at the top speed,-DOESN'T WORK IN MENU,-UNPAUSE. You want the circle gone when flying fast, so set lower speed if not gone when red.
+
+option.FORCE_CRISP_SHADOWS.comment = Make any shadow option be crisp, to use its sampling for crisp shadows. Can look really bad, but maybe you'll find a way to use it well.
+option.FORCE_CRISP_SHADOWS=Force Crisp Shadows (not recommended)
+
+option.SHADOW_DISTORT_ENABLED.comment= Don't use this on very low shadow distance. Makes close shadows more HD and far shadows less HD by distorting the shadow map, to make close shadows better, but distorts far shadows.
+option.SHADOW_DISTORT_ENABLED=Shadow Map Distortion
+
+option.SHADOW_BIAS.comment = If you get little dots on the ground with shadows, turn this up.  Too high will make shadows floaty and disconnected.
+
+option.CLOUDS.comment = 0 -Vanilla. 1 -Fancy v1. 2 -Fancy v2
+
+option.shadowDistance = Shadow Render Distance
+option.shadowDistance.comment = FPS cost! Render distance of shadows. If putting very low, disable 'Shadow Map Distortion' or shadows will look broken.
+
+option.FLOODFILL_LIGHTING= Colored Lighting Quality
+	value.FLOODFILL_LIGHTING.0=Off
+	value.FLOODFILL_LIGHTING.1=Basic
+	value.FLOODFILL_LIGHTING.2=Directional-1
+	value.FLOODFILL_LIGHTING.3=Dramatic (WIP)
+	value.FLOODFILL_LIGHTING.4=Directional-2 (WIP)
+	value.FLOODFILL_LIGHTING.5=Blocky
+	value.FLOODFILL_LIGHTING.7=Fancy (WIP)
+
+screen.Fancy_Lighting = Fancy Lighting & Materials
+
+
+option.CRYSTAL_SSS = Crystal Refraction
+	option.CRYSTAL_SSS.comment = Light coming through the back of things like crystals that have SubSurface Scattering. Requires 'Fancy Lighting & Materials'
+		value.CRYSTAL_SSS.0=no
+		value.CRYSTAL_SSS.1=yes
+
+option.COLORED_LIGHT_SPEC = Fancy Lighting & Materials 
+	option.COLORED_LIGHT_SPEC.comment = Use PBR (Physically based Rendering) materials & special techniques to have better Lighting & Materials from all light sources, not just the Sun & Moon. Requires the 'Fancy' preset, or for the 'Colored Lighting Quality' to be set to 'Fancy' and 'PBR Mode' set to 'Lab_Pbr_Textures'
+		value.COLORED_LIGHT_SPEC.0 = no
+		value.COLORED_LIGHT_SPEC.1 = yes
+
+profile.Fancy_Fast = Fancy (fast)
+
+option.FLICKERING_TORCHES=Flickering Override
+option.FLICKERING_TORCHES.comment = Colored Light hue is detected automatically, so it should just work with all blocks, including modded. But some animated textures flicker. Use these options to Override Flickering
+value.FLICKERING_TORCHES.0=Use Texture
+value.FLICKERING_TORCHES.1=RGB Overrides (still)
+value.FLICKERING_TORCHES.2=Animated RGB Overrides
+value.FLICKERING_TORCHES.3=Animated Lava Only
+
+option.LIGHT_FALLOFF=Light Falloff
+option.LIGHT_FALLOFF.comment =0 -Vanilla (is very saturated on edges to maintain vanilla range). 1 -Custom (will not affect mob spawning, only looks)
+value.LIGHT_FALLOFF.1=Vanilla
+value.LIGHT_FALLOFF.2=Custom
+
+option.VOXELIZE_GRASS = Grass Occlussion
+option.VOXELIZE_GRASS.comment = Whether or not grass is voxelized. This will affect if it blocks light
+value.VOXELIZE_GRASS.0 = no
+value.VOXELIZE_GRASS.1 = yes
+
+option.VANILLA_lIGHTING = Vanilla Lighting
+option.VANILLA_lIGHTING.comment = Use Iris's 'Old Lighting' when directional lighting & shadows are both Off.
+value.VANILLA_lIGHTING.0 = no
+value.VANILLA_lIGHTING.1 = yes
+
+option.DIRECTIONAL_LIGHTING = Directional Lighting
+value.DIRECTIONAL_LIGHTING.0 = no
+value.DIRECTIONAL_LIGHTING.1 = yes
+
+option.TONEMAPPING_BRIGHTNESS = ToneMapping 1 Brightness
+option.TONEMAPPING_BRIGHTNESS.comment = how bright things can be before tonemapping makes them less bright.
+option.TONEMAPPING_RANGE = ToneMapping 1 Squish
+option.TONEMAPPING_RANGE.comment = how much to divide light values over the 'Tonemapping Brightness'. .1 is 10% or 10x the range so that .1 means an extra 1.0 brightness will be squished into the .1 from .9 to 1.0 making values of 1.9 not blow out
+
+option.LIGHT_FALLOFF_RATE=Light Falloff Rate
+option.LIGHT_FALLOFF_RATE.comment = Works when using Custom Light Falloff. Higher goes further. Maybe you have a HUGE build and would like smooth shading. Does not change spawns, just looks.  §eChanging this will probably affect the quality of the colored lighting for 'fancy' pbr and 'directional' settings §r
+
+
+option.BLOCK_LIGHT_BRIGHTNESS=Block Light Brightness
+option.BLOCK_LIGHT_BRIGHTNESS.comment = Block Light Brightness. Higher will also be more vibrant
+
+option.EXTRA_VIBRANT_BL=Extra Vibrant
+option.EXTRA_VIBRANT_BL.comment = Extra Vibrant Colored Light. DOesn't work with Custom Light Falloff
+ 
+screen.Borders_and_Effects = Color & Effects
+screen.Borders_and_Effects.comment = Color adjustments, status effects, god rays, cartoon borders, etc
+
+option.BLOCK_LIGHT_BRIGHTNESS_IN_DAYLIGHT= Daytime Brightness of Block Lights
+option.BLOCK_LIGHT_BRIGHTNESS_IN_DAYLIGHT.comment = Kind of like a fake autoexposure, setting this Low keeps torches from being too bright in sunlight.
+
+screen.Color_Overrides = Color Overrides
+screen.Color_Overrides.comment = Use Customizable Color Overrides for certain things.
+
+option.VOXEL_PHOTON_SIMULATION_QUALITY= Quality
+option.VOXEL_PHOTON_SIMULATION_QUALITY.comment = Change the quality, may change fps. 'Leaky Vanilla' is old & missing things like hand held light via voxels. 
+value.VOXEL_PHOTON_SIMULATION_QUALITY.1=Leaky Vanilla
+value.VOXEL_PHOTON_SIMULATION_QUALITY.2=Glass Tints Light
+
+option.SAVE_WRITES= Save Bandwidth (READ)
+option.SAVE_WRITES.comment = Check if values need to be updated before writing them to 3d texture. This may add or subtract fps, depending on your device.
+value.SAVE_WRITES.0=Just Write
+value.SAVE_WRITES.1=Check first
+
+option.USE_HARD_CODED_GLASS_COLORS= Override Colors 
+option.USE_HARD_CODED_GLASS_COLORS.comment = Use Adjustable Hard-Coded Colors where available, instead of Automatic Color Detection. For resource packs where colored glass colors don't automatically detect right, use 'Hard Coded'
+value.USE_HARD_CODED_GLASS_COLORS.0=use Textures
+value.USE_HARD_CODED_GLASS_COLORS.1=use Overrides
+
+screen.Other = Other (& Nether)
+screen.Fog_and_DH = Nature & Atmosphere
+screen.Fog_and_DH.comment = Settings for Nature & Atmosphere. Fog, Clouds, Water, etc.
+screen.Pbr_Options = Pbr Options
+screen.Texture_Upscaling = Texture Upscaling
+screen.Hand_Held_Torch = Hand Held Lights (Screenspace)
+screen.Textures.comment = Upscaling, PBR support, POM (3D Textures) & more. Change grass lighting here in pbr options
+screen.Lighting.comment = Lighting, Colored Light Overrides & adjustments, custom Sun Color, brightness controls, Global Illumination, etc.
+	
+	screen.Hand_Held_Torch.comment =  There is also Voxel based hand-held lighting in the 'Colored Lighting' menu
+screen.Sky_Ambient_Light = Sky Ambient Light
+screen.Sun_and_Moon = Sun & Moon
+screen.Brightness_Darkness = Brightness & Darkness
+
+option.DONT_VOXELIZE_CARPETS=Carpets / Slabs
+option.DONT_VOXELIZE_CARPETS.comment = Don't voxelize them or they will block light
+value.DONT_VOXELIZE_CARPETS.0 = Block Light
+value.DONT_VOXELIZE_CARPETS.1 = Don't Block Light
+
+option.MOB_SHADOWS=Mob Shadows (from block light)
+option.MOB_SHADOWS.comment = whether or not mobs and dropped items & players block block light. These are very blocky shadows. Currently only works when 'Partial Blocks Occlude' is On
+value.MOB_SHADOWS.0 = No
+value.MOB_SHADOWS.1 = Yes
+
+option.VOXELIZE_ENTITIES= Moving Lights
+option.VOXELIZE_ENTITIES.comment = Light from mobs, dropped items, & things held by player
+value.VOXELIZE_ENTITIES.0 = No
+value.VOXELIZE_ENTITIES.1 = Yes
+
+option.LIGHT_UPDATE_SPEED= Light Update Speed
+option.LIGHT_UPDATE_SPEED.comment = in blocks per frame, probably costs fps.
+
+
+option.FADE_LIGHT_UPDATES= Fade Light Updates
+option.FADE_LIGHT_UPDATES.comment = Reduces 'Pulsing' effect that changing & moving lights have. Reduces flickering from Particle Light sources.
+value.FADE_LIGHT_UPDATES.0 = No
+value.FADE_LIGHT_UPDATES.1 = Yes
+
+
+option.FADE_LIGHT_UPDATES_AMOUNT= Fade Light Update Amount
+option.FADE_LIGHT_UPDATES_AMOUNT.comment = Reduces 'Pulsing' effect that changing & moving lights have. Reduces flickering from Particle Light sources.
+
+
+option.LPV_PARTICLES_BY_LM= Particle Detection
+option.LPV_PARTICLES_BY_LM.comment = Detect Glowing Particles using Vanilla Block Light Data
+value.LPV_PARTICLES_BY_LM.0 = no
+value.LPV_PARTICLES_BY_LM.1 = yes
+
+option.PBR_LPV_EMISSION= PBR Texture Detection
+option.PBR_LPV_EMISSION.comment = Try to detect glowing things by pbr texture. 
+ value.PBR_LPV_EMISSION.0 = no
+ value.PBR_LPV_EMISSION.1 = yes
+ 
+ 
+option.LPV_BLOCKS_BY_LM = Detection via Lightmap
+option.LPV_BLOCKS_BY_LM.comment = This makes spider eyes glow, but will be buggy if you are on fire or bonk your head against a light.
+ value.LPV_BLOCKS_BY_LM.0 = no
+ value.LPV_BLOCKS_BY_LM.1 = yes
+ 
+ option.FLICKERING_FIRE = Fire Flickering
+option.FLICKERING_FIRE.comment = For Fire: Use Texture or use these torch/campfire overrides
+ value.FLICKERING_FIRE.0 = use these overrides
+ value.FLICKERING_FIRE.1 = use texture
+ 
+
+
+option.LIGHT_VIIBRANCE= Light Vibrance
+option.LIGHT_VIIBRANCE.comment = Makes sure that things glow brightly. Higher is brighter, more saturated light colors. Lower might make torches less buggy when Particle lights are on, but other things like crying obsidian won't glow anymore
+
+option.GLOWING_CONCRETE= Glowing Concrete
+option.GLOWING_CONCRETE.comment = Makes Concrete & Concrete Powder into Colored Lights! You can use these like neon sighns or whatever you want!
+ value.GLOWING_CONCRETE.0 = no
+ value.GLOWING_CONCRETE.1 = yes
+
+option.PARTICLES_LPV= Particle Lights (Buggy)
+option.PARTICLES_LPV.comment = For mods like: Hexcasting & Light Wand. 'Colored Lighting/Lighting Updates/Fade Light Update Amount' can be turned up to fix flickering. This wouldn't be buggy if iris had a 'Particle id system'. Torches can get very buggy, basically anything that makes particles.
+ value.PARTICLES_LPV.0 = no
+ value.PARTICLES_LPV.1 = yes
+ 
+ option.GLOWING_ROCKETS= Glowing Rockets
+option.GLOWING_ROCKETS.comment = Makes Rockets Glow.
+ value.GLOWING_ROCKETS.0 = no
+ value.GLOWING_ROCKETS.1 = yes
+
+option.LPV_PARTICLES_BY_LM= Particle Lights detection by lightmap
+option.LPV_PARTICLES_BY_LM.comment = Makes glowing particles glow even without pbr textures, but can be buggy around torches. If you want this to not be buggy tell Iris to add a 'particle id system' . Hexcasting needs this. Light wand needs this.
+
+ option.ADJUST_SATURATION= Adjust Saturation
+option.ADJUST_SATURATION.comment = whether or not to adjust Color Saturation (how colorful colored lights are)
+ value.ADJUST_SATURATION.0 = no
+ value.ADJUST_SATURATION.1 = yes
+
+ option.LIGHT_COLOR_SATURATION= Saturation
+option.LIGHT_COLOR_SATURATION.comment = how colorful colored lights are. 0.0 will be just white lights. 1.0 will be very colorful
+
+screen.Brightness_and_Color_Adjustments    =  Brightness and Color Adjustments
+screen.Brightness_and_Color_Adjustments.comment = adjust how bright & colorful lights are
+screen.Light_Range  = Light Range
+screen.Light_Detection   = Light Detection
+screen.Moving_Lights = Moving Lights (Voxel Based)
+screen.Lighting_Updates   = Lighting Updates
+
+screen.Light_Range.comment = adjust light range
+screen.Light_Detection.comment   = how to detect lights, like whether to make pbr textures light up things around them
+screen.Moving_Lights.comment = options for Moving Lights like mobs, dropped torches, held items, particles, rockets, fireballs, and other dynamic lights
+screen.Lighting_Updates.comment   = Lighting Update speed and fade options
+
+screen.Colored_Lighting =  §aColored Lighting§r
+screen.Colored_Lighting.comment = Options related to the Colored Lighting system. Most Lighting options are in here. Adjust almost everything about it.
+
+option.PBR_EMMISIVENESS_IN_VOXELS_TERRAIN = PBR Brightness for Blocks
+option.PBR_EMMISIVENESS_IN_VOXELS_TERRAIN.omment = how brightly pbr emmisive textures glow as colored light sources. For placed blocks.
+
+option.EPBR_EMMISIVENESS_IN_VOXELS_ENTITY = PBR Brightness for Mobs
+option.EPBR_EMMISIVENESS_IN_VOXELS_ENTITY.omment = how brightly pbr emmisive textures glow as colored light sources. For Mobs and entities.
+ 
+option.TONEMAPPING2_STRENGTH = Tonemapping 2 Strength
+option.TONEMAPPING2_STRENGTH.comment = Strength of Tonemapping option 2. more is darker.
+
+screen.Name_Tags = Name Tags
+   
+ option.UN_SHADED_NAMETAGS = Un-Shaded Nametags
+option.UN_SHADED_NAMETAGS.comment = When on, name tags will not be shaded, but fully bright
+value.UN_SHADED_NAMETAGS.0 = no
+value.UN_SHADED_NAMETAGS.1 = yes
+
+option.SEE_NAMETAGS_BETTER_THROUGH_WALLS = See Better Through Walls
+option.SEE_NAMETAGS_BETTER_THROUGH_WALLS.comment = When on, name tag names will be adjustably more opacity through walls
+value.SEE_NAMETAGS_BETTER_THROUGH_WALLS.0 = no
+value.SEE_NAMETAGS_BETTER_THROUGH_WALLS.1 = yes
+
+option.NAMETAGS_OPACITY_THROUGH_WALLS = Opacity through Walls
+option.NAMETAGS_OPACITY_THROUGH_WALLS.comment = Name tag opacity when seen through walls when ' See Better Through Walls' is 'On'
+
+
+option.NAMETAG_OPACITY = Background Opacity
+option.NAMETAG_OPACITY.comment = How visible Nametag Backgrouds are. 
+
+option.PARTIAL_BLOCKS_OCCLUDE = Partial Blocks Occlude
+option.PARTIAL_BLOCKS_OCCLUDE.comment = When on, things like switches, grass, etc will partially block lighht
+value.PARTIAL_BLOCKS_OCCLUDE.0 = no
+value.PARTIAL_BLOCKS_OCCLUDE.1 = yes
+
+
+option.METAL_AMBIENT_LIT = Metal Ambient Light 
+	option.METAL_AMBIENT_LIT.comment = Whether or not to brighten & soften Metal lighting to avoid blacks when not using Global Illumination.
+		value.METAL_AMBIENT_LIT.0 = no
+		value.METAL_AMBIENT_LIT.1 = yes
+
+option.METAL_AMBIENT = Metal Ambient Light Amount
+	option.METAL_AMBIENT.comment = Ambient Lighting on metals when not using Global Illumination. This makes metals less dark in areas not directly lit by Light Sources.
+
+
+option.DIFFFUSE_VX_BEHAVIOR = Diffuse Behavior
+	option.DIFFFUSE_VX_BEHAVIOR.comment = Choose between different Lighting for Non-reflective materials. In 'Fancy' Colored Lighting Quality
+		value.DIFFFUSE_VX_BEHAVIOR.1 = 1 -rough
+		value.DIFFFUSE_VX_BEHAVIOR.2 = 2 -dramatics
+
+option.SPECULAR_VX_BEHAVIOR = Specular Behavior
+	option.SPECULAR_VX_BEHAVIOR.comment = Choose between different Lighting for Reflective materials. In 'Fancy' Colored Lighting Quality
+		value.SPECULAR_VX_BEHAVIOR.1 = 1 -drama-dir
+		value.SPECULAR_VX_BEHAVIOR.2 = 2 -rough
+		value.SPECULAR_VX_BEHAVIOR.3 = 3 -dramatics
+		
+
+option.NETHER_RED_AMBIENT_LIGHT = Red Ambient Light
+	option.NETHER_RED_AMBIENT_LIGHT.comment = An Elevation based Red Ambient Light that is brighter near the bottom of the nether.Can be set to pulse or be steady.
+		value.NETHER_RED_AMBIENT_LIGHT.0 = off
+		value.NETHER_RED_AMBIENT_LIGHT.1 = on
+		
+option.PULSING_FOG = Pulsing Fog
+	option.PULSING_FOG.comment = Fog that changes visible distance over time.
+		value.PULSING_FOG.0 = off
+		value.PULSING_FOG.1 = on
+
+option.PULSING_AMBIENT_LIGHT = Pulsing Red Ambient Light
+	option.PULSING_AMBIENT_LIGHT.comment = Pulsing effect for the Elevation based Red Ambient Light that is brighter near the bottom of the nether.
+		value.PULSING_AMBIENT_LIGHT.0 = off
+		value.PULSING_AMBIENT_LIGHT.1 = on
+		
+option.MINIMUM_LIGHT_LEVEL_NETHER = Minimum Light Level (Nether)
+	option.MINIMUM_LIGHT_LEVEL_NETHER.comment = How dark darkness is. 0.0 is full black, 1.0 is full brightness.
+
+option.LAVA_LEVEL = Lava Level
+	option.LAVA_LEVEL.comment = For the pulsing effects in the Nether
+    
+	
+option.sunPathRotation = Sun Angle
+	option.sunPathRotation.comment = The angle of the Sun's path in the sky. 0.0 is straight up. If you change this close to 0.0 you might have to adjust the bias or you may get shadow acne (little dark dots on stuff) or floaty shadows. 0.0 will probably flicker in some situations.
+	
+screen.Culling = Shadow Culling (for fps)
+	screen.Culling.comment = Disable certain shadows, or thier rendering distance to save fps
+		option.BLOCK_ENTITY_SHADOWS = Block Entity Shadows
+			option.BLOCK_ENTITY_SHADOWS.comment = Draw shadows for animated blocks, like chests.
+				value.BLOCK_ENTITY_SHADOWS.0 = no
+				value.BLOCK_ENTITY_SHADOWS.1 = yes
+		option.PLAYER_SHADOW = Player Shadow
+			option.PLAYER_SHADOW.comment = Still draw the player shadow when disabling entity shadows.
+				value.PLAYER_SHADOW.0 = no
+				value.PLAYER_SHADOW.1 = yes
+		option.ENTITY_SHADOWS = Entity (Mob) Shadows
+			option.ENTITY_SHADOWS.comment = Whether or not to render entity Shadows. You can re-enable parts of this below
+				value.ENTITY_SHADOWS.0 = no
+				value.ENTITY_SHADOWS.1 = yes
+		option.entityShadowDistanceMul = Entity (Mobs) Shadow Range (DOESN'T SEEM TO WORK)
+			option.entityShadowDistanceMul.comment = Im percent of total shadow distance. 0.1 is 10%, 1.0 is 100%	
+	
+	option.PIXEL_LOCKED_SHADOW_RES = §aPixel-Locked Shadows (Resolution)§r
+		option.PIXEL_LOCKED_SHADOW_RES.comment = Choose a resolution of pixel-locked shadows. Match your resource pack. Vanilla is 16. §aOff is at the High End§r
+		value.PIXEL_LOCKED_SHADOW_RES.0 = off, and don't use this bias
+		value.PIXEL_LOCKED_SHADOW_RES.5555 = off, but use this bias method
+	
+option.SHADOW_BIAS = Shadow Bias
+	option.SHADOW_BIAS.comment = the close distance that shadows ignore things at. This gets rid of dark spots on the ground when higher, but will make plants and things look like they are floating. Adjust when changing shadows to your liking, low bias can make soft shadows have jagged edges too.
+
+option.NORMAL_BIAS = Normal-Bias
+	option.NORMAL_BIAS.comment = A bias based on the direction of the block's face. can be better than regular bias but can also look not great when too high. 
+	
+option.SHADOW_DISTORT_ENABLED = Shadow Distortion
+	option.SHADOW_DISTORT_ENABLED.comment = better shadows up close at the cost of worse ones far away. Usually recommended on, unless using very low shadow distance
+		value.SHADOW_DISTORT_ENABLED.0 = off
+		value.SHADOW_DISTORT_ENABLED.1 = on
+	
+option.SHADOW_DISTORT_FACTOR = Shadow Distortion Factor
+	option.SHADOW_DISTORT_FACTOR.comment = How strongly to distort the shadow map
+	
+option.shadowMapResolution = Shadow Map Resolution
+	option.shadowMapResolution.comment = crisper, less pixelated shadows at higher resolutions. Very strong fps cost
+	
+    	
+	
+option.UPSCALE_TERRAIN = Upscale Terrain
+	option.UPSCALE_TERRAIN.comment = 0 -No, 1 -yes
+
+option.UPSCALE_HAND_HELD = Upscale Hand-held Stuff
+	option.UPSCALE_HAND_HELD.comment = 0 -No, 1 -yes
+
+option.UPSCALE_PARTICLES = Upscale Particles
+	option.UPSCALE_PARTICLES.comment = 0 -No, 1 -yes
+
+option.UPSCALE_ENTITIES = Upscale Mobs
+	option.UPSCALE_ENTITIES.comment = 0 -No, 1 -yes
+
+option.ENTITY_TEX_FILTER_FIX = Entity Texture Filtering Fix
+	option.ENTITY_TEX_FILTER_FIX.comment = 0 -No, 1 -mode 1, 2 -mode 2
+
+option.HAND_TEX_FILTER_FIX = Hand Texture Filtering Fix
+	option.HAND_TEX_FILTER_FIX.comment = 0 -No, 1 -mode 1, 2 -mode 2
+
+option.WIDEN_FILTERED_THINGS = Widen Filtered Things
+	option.WIDEN_FILTERED_THINGS.comment = 0 -No, 1 -yes. This can make low res & vanilla textures look less jagged & broken with texture filtering on them
+	
+    <empty> <empty>     <empty> <empty> 
+
+option.SHADOW_SAMPLES = Shadow Samples
+	option.SHADOW_SAMPLES.comment = MOre can give better looking soft shadows, but will probably cost more fps
+option.PRENUMBRA_WIDTH = Prenumbra Width
+	option.PRENUMBRA_WIDTH.comment = How wide soft shadows can be. They are softer for things that are further away. Very soft can look great, but when somethng close is on the edge of a far shadow, it cam look a little buggy
+option.SHADOW_SOFTNESS_WEIGHT = Shadow Softness Weight
+	option.SHADOW_SOFTNESS_WEIGHT.comment = Hoe strongly the samples are favored in the middle and less regarded as it's wider
+option.SHADOW_WEIGHT_EXPONENT = Shadow Weight Exponent
+	option.SHADOW_WEIGHT_EXPONENT.comment = an exponential curve applied to 'Shadow Softness Weight'
+option.SHADOW_NOISE_STR = Shadow Noise Strength
+	option.SHADOW_NOISE_STR.comment = Strength of randomness in shadows
+option.SHADOW_NOISE_VARIATION = Shadow Noise Variation
+	option.SHADOW_NOISE_VARIATION.comment = Variation in strength of Shadow Noise
+option.FLIP_SHADOW_SPIRAL_RANDOMLY = Flip Shadow Spiral Randomly
+	option.FLIP_SHADOW_SPIRAL_RANDOMLY.comment = can break up spiral pattern that may be apparent on low sample counts
+option.SHADOW_SUB_PIXEL_SEED_RES = Shadow sub-pixel seed resolution
+	option.SHADOW_SUB_PIXEL_SEED_RES.comment = sub-pixel seed resolution for shadow noise
+option.SHADOW_EXTRA_SOFTNESS = Shadow Extra Softness
+	option.SHADOW_EXTRA_SOFTNESS.comment = Extra Softness applied to all shadows, even close ones
+	
+	
+   
+option.FOG = Fog
+	option.FOG.comment = fog adds a sense of depth & atmosphere
+		value.FOG.0 = off
+		value.FOG.1 = on
+option.EXPONENTIAL_FOG_ = Exponential Fog
+	option.EXPONENTIAL_FOG_.comment = Fog that builds up over a distance in a non-linear fashion. you might like it better
+		value.EXPONENTIAL_FOG_.0 = off
+		value.EXPONENTIAL_FOG_.1 = on
+option.FOG_START = Fog Start
+	option.FOG_START.comment = How close to start fog, out of render distance
+option.FOG_END = Fog end
+	option.FOG_END.comment = How far away has the full fog amount
+option.FOG_MAX = Fog Thickness
+	option.FOG_MAX.comment = How thick the fog is
+option.BORDER_FOG_START = Border Fog Start
+	option.BORDER_FOG_START.comment = where border fog starts
+option.CLOUD_FOG = Cloud fog
+	option.CLOUD_FOG.comment = Fog fades out clouds.
+		value.CLOUD_FOG.0 = off
+		value.CLOUD_FOG.1 = on
+		
+
+
+
+//VERSION 0.3.4
+option.VOXELIZE_PLAYER= Held Items & Player (Voxelized) 
+	option.VOXELIZE_PLAYER.comment = Let Handheld items & the player glow in the Colored Lighting via voxelizing them. §aThis is necesary for automatic modded light color detection§r. §aThis is necesary for glowing modded accessories.§r
+		value.VOXELIZE_PLAYER.0 = no
+		value.VOXELIZE_PLAYER.1 = yes
+	
+option.RANGE_FOR_DISABLING_PLAYER_HELD_LIGHTS= Range for tellling Players Apart
+	option.RANGE_FOR_DISABLING_PLAYER_HELD_LIGHTS.comment = Unfortunately this is the Only way to tell You apart from other Players, if you want one to glow and the other not to.
+
+screen.Mobs = Mobs Shading
+screen.Mobs.comment = Mobs have directional lighting in Vanilla, try to match or adjust that. 
+	option.ENTITY_LIGHTING_DIRECTIONALITY= Directionality
+		option.ENTITY_LIGHTING_DIRECTIONALITY.comment = Mobs have directional lighting in Vanilla, try to match or adjust that. How much the light is directional vs the same in every direction. Higher is darker shadows
+	option.ENTITY_LIGHTING_ANGLE_X= Lighting Angle X
+		option.ENTITY_LIGHTING_ANGLE_X.comment = Mobs have directional lighting in Vanilla, try to match or adjust that.
+	option.ENTITY_LIGHTING_ANGLE_Y= Lighting Angle Y
+		option.ENTITY_LIGHTING_ANGLE_Y.comment = Mobs have directional lighting in Vanilla, try to match or adjust that.
+	option.ENTITY_LIGHTING_ANGLE_Z= Lighting Angle Z
+		option.ENTITY_LIGHTING_ANGLE_Z.comment = Mobs have directional lighting in Vanilla, try to match or adjust that.
+		
+  screen.Voxy_Shading = Voxy Shading
+  screen.Voxy_Shading.comment = Voxy has directional lighting in Vanilla, try to match or adjust that. 
+	option.VOXY_LIGHTING_DIRECTIONALITY= Directionality
+		option.VOXY_LIGHTING_DIRECTIONALITY.comment = Mobs have directional lighting in Vanilla, try to match or adjust that. How much the light is directional vs the same in every direction. Higher is darker shadows
+	option.VOXY_LIGHTING_ANGLE_X= Lighting Angle X
+		option.VOXY_LIGHTING_ANGLE_X.comment = Mobs have directional lighting in Vanilla, try to match or adjust that.
+	option.VOXY_LIGHTING_ANGLE_Y= Lighting Angle Y
+		option.VOXY_LIGHTING_ANGLE_Y.comment = Mobs have directional lighting in Vanilla, try to match or adjust that.
+	option.VOXY_LIGHTING_ANGLE_Z= Lighting Angle Z
+	
+option.OTHER_PLAYER_LIGHTS= Other Players' Lights
+	option.OTHER_PLAYER_LIGHTS.comment = Do you want other players to give off light if they are holding a torch or glowing?
+		value.OTHER_PLAYER_LIGHTS.0 = no
+		value.OTHER_PLAYER_LIGHTS.1 = yes
+
+
+
+//v0.3.5	
+	
+	option.TRANSLECENT_LIGHTS= Translucent Lights
+		option.TRANSLECENT_LIGHTS.comment = For Mods like 'Abyssal Decor'. Turning this off might save like half an FPS
+			value.TRANSLECENT_LIGHTS.0 = no
+			value.TRANSLECENT_LIGHTS.1 = yes
+	
+	 
+	
+	option.SMART_COLOR_SATURATION= Smart Saturation  
+		option.SMART_COLOR_SATURATION.comment = Fixes where some blocks glow white. Makes blocks more colorful if the texture is mostly white. Some mods need this to have the blocks be colorful lights. Adjustable boost.
+			value.SMART_COLOR_SATURATION.0 = no
+			value.SMART_COLOR_SATURATION.1 = yes
+	option.SMART_COLOR_SATURATION_BOOST=Smart Saturation Boost  
+	option.SMART_COLOR_SATURATION_BOOST.comment = Fixes where some blocks glow white. Makes blocks more colorful if the texture is mostly white. How strongly to do that. 
+	
+	
+	
+//v0.3.6 -POM
+
+ option.POM_DEPTH_CPF = POM Depth
+option.POM_DEPTH_CPF.comment = Depth of POM (3D Textures, or Parralax Occlusion Mapping). Standard is 0.25, most resource packs are designed for 0.25., setting higher may look broken. If higher breaks shadows, let me know.
+
+ option.POM = POM  (3D Textures)
+option.POM.comment = POM is Parallax Occlussion Mapping, a 3D Textures Technique. Options are in 'Better 3D Textures / POM. 0 -Off. 1 -On
+value.POM.0 = §cOff§r
+value.POM.1 = §aOn§r
+
+screen.POM=POM (3D Textures)
+screen.POM.comment=Options for POM ( Parralax Occlussion Mapping, or 3D Textures )
+
+ option.CTMPOMFIX_VERSION = CTM/POM-FIX Version
+option.CTMPOMFIX_VERSION.comment = Applies my CTM/POM-FIXes to make better, seamless 3D Textures work, utilizing CTM & POM at the same time via like 11 different tiling techniques & Buffering Texture edges. Resource Packs have to be compatible to benefit. Info is on my Discord.
+ option.INITIAL_POM_QUALITY_CPF = Initial POM Quality
+option.INITIAL_POM_QUALITY_CPF.comment = Tracing Steps for POM. Too Low will look jank on things like grass with high detail, because it will miss blades. Refinement further increases quality, as long as this isn't too low and misses things. This is EXPONENTIALLY INCREASED by the 'Refinement Steps' Setting . Recommend 20+ but you don't need much more . 20 Initial with 5 Refine is like 1,000 Quality for the cost of 25
+ option.REFINE_POM_CPF = Refinement Steps
+option.REFINE_POM_CPF.comment = POM Refinement Steps . EXPONENTIAL QUALITY INCREASE FOR ALMOST FREE . 1 is ~4x quality at the cost of 1 quality . an extra 2x for every additional step . not great on very low quality for sharp stuff like grass, atleast 20 Initial Quality recommended . on some shaders low values may flicker
+ option.POM_DISTANCE_CPF = POM Distance
+option.POM_DISTANCE_CPF.comment = The distance to do POM from the camera, like only do it up close.
+ option.FADE_IN_POM_CPF = Fade in POM
+option.FADE_IN_POM_CPF.comment = Fade in POM by this much of the POM distance (in tenths). 
+ option.POM_STYLE_CPF = POM Style
+option.POM_STYLE_CPF.comment = 0 - sharp voxel cubes. 1 - tesselate by Texture Upscaling Resolution. 2 - smooth polygons 
+value.POM_STYLE_CPF.0 = 0 - sharp voxel cubes
+value.POM_STYLE_CPF.1 = 1 - tesselate  
+value.POM_STYLE_CPF.2 =  2 - smooth polygons 
+ option.EXTEND_3D_SHADOWS_CPF = Extend 3D Shadows
+option.EXTEND_3D_SHADOWS_CPF.comment = Depth writing for 3D Shadows, ao, 'Ray Traced Sun Shadows', etc in Textures out of POM range . 0 - off . 1 and 2 look the same, but either may be faster on your machine. I need to test if this still works, this is just from the CTMPOMFIX Port.
+ option.CAPTURE_CPF_POM_DEPTH = Capture POM Depth (debug)
+option.CAPTURE_CPF_POM_DEPTH.comment = don't change this
+ option.CTMPOMFIX_INFO = CTMPOMFIX Info
+option.CTMPOMFIX_INFO.comment = CTMPOMFIX overhauls 3D textures (POM) with special features, including fixing seams on 3D Connected Textures in resource packs formatted for it. in many cases it vastly improves quality/performance . Turn on POM, in OPtifine: turn off Video Settings/Quality/Better Grass
+ option.CTMPOMFIX_Advanced_Options = CTMPOMFIX Advanced Options
+option.CTMPOMFIX_Advanced_Options.comment = Advanced POM Options
+
+ option.NOISE_STRENGTH_CPF = Noise Strength
+option.NOISE_STRENGTH_CPF.comment = Strength of NOise Applied to POM
+ option.FAR_FIXES_CPF = Far Fixes CPF
+option.FAR_FIXES_CPF.comment = CTMPOMFIX OPTION: . just leave this on. hides buggy 3D overlays out of pom range and fixes UVs for textures using ctmpomfix mode 11 (some mods). also potentially improves performance in some cases
+ option.FAST_TEX_READS_CPF = Fast Tex Reads
+option.FAST_TEX_READS_CPF.comment = Suppossed to be faster, but isn't for me.
+ option.DEPTH_WRITE_CPF = Depth Writing (READ)
+option.DEPTH_WRITE_CPF.comment = Slow, this eats FPS.  §cIt is necesary for CTMPOMFIX v2 Features (CTM 3D Material Transitions between Blocks)§r. §e It is necesary for 3D Grass Shader §r . Turning off might break stuff
+ option.SMOOTHING_NOISE_CPF = Smoothing Noise CPF
+option.SMOOTHING_NOISE_CPF.comment =You can apply Noise to gently Smooth POM, it blurs it but reduces visible layers, especially at angles. Can also help de-flicker Pom Refinement if it's flickering, or cause it to flicker, or make 3D overlays to have seams.  0 - disable noise 1 - use noise . 2 - blur distance  3 - blur close to smooth
+ option.UPSCALE_RESOLUTION_CPF = Upscale Resolution
+option.UPSCALE_RESOLUTION_CPF.comment =Multplier for Upscaling and Texture filtering . 1 is infinite . these all cost the same, it's just visual preference
+ option.NOISE_FUNCTION_CPF = Noise Function cpf
+option.NOISE_FUNCTION_CPF.comment =Some shaders inject noise functions into POM, it helps hide layers but can blur . generally it's good . 0 - use a Shader Supplied noise function, if any . 1-x use other functions . 1+ may introduce some banding in pom until I find better alt noise functions
+ option.DYNAMIC_QUALITY_CPF = Dynamic Quality
+option.DYNAMIC_QUALITY_CPF.comment =lower pom quality at a distance . might improve performance . might make it worse . requires fade_in
+
+ option.INCREASE_QUALITY_AT_ANGLES_CPF = Increase Quality at Angles
+option.INCREASE_QUALITY_AT_ANGLES_CPF.comment = Increase the quality of POM at grazing angles . lower is better quality, but 0 is Off . this also limits the distance rays can go inside of blocks
+ option.NOISE_STRENGTH_CPF = Noise Strength
+option.NOISE_STRENGTH_CPF.comment =Some shaders inject noise functions into POM, it helps hide layers but can blur . Adjust its strength . This can improve or worsen POM appearance . This may create or solve flickering
+ option.COLOR_MERGE_DIST_CPF = Color Merge Distance cpf
+option.COLOR_MERGE_DIST_CPF.comment =Texture Filtering will use this value to blend or link colors that are this close to each other . Effect will vary per filter . just leave it or it will probably break texture filtering
+ option.ALPHA_CUTOFF_CPF = Alpha Cutoff
+option.ALPHA_CUTOFF_CPF.comment =Things more opaque than this will be solid in Texture Filtering . Thickens Grass at lower numbers
+	
+	screen.Textures = Textures
+	
+	
+	option.WATER_FOG_DISTANCE= Under Water Fog Distance
+	option.WATER_FOG_DISTANCE.comment = HOw far you can see under water
+
+screen.Status_Effects = Status Effects
+	option.NIGHT_VISION_MODE = Night Vision Mode
+	option.NIGHT_VISION_MODE.comment = Choose how Night Vision Should work
+		value.NIGHT_VISION_MODE.0 = Full Brightness
+		value.NIGHT_VISION_MODE.1 = Gamma
+		value.NIGHT_VISION_MODE.2 = Thermal
+	
+screen.Cave_Light_Leak = Cave Light Leak
+screen.Dimensions_and_Other = Dimensions & Mods & Other
+screen.Dimensions_and_Other.comment = Dimensions: End & Nether menus. Mods: Voxy, Distant Horizons, & other supported mods. Other: misc options
+ 
+
+option.LAVA_NOISE_ORGANIC= Organic Lava Noise
+	option.LAVA_NOISE_ORGANIC.comment = A more organic pattern in Lava instead of circular areas of brightness
+		value.LAVA_NOISE_ORGANIC.0 = off
+		value.LAVA_NOISE_ORGANIC.1 = on
+		
+option.EXTEND_LAVA_PATTERN= Extend Lava Pattern
+	option.EXTEND_LAVA_PATTERN.comment = Do the Lava pattern further away, not just in the Colored Lighting Range. Might cost a few fps, I can't tell
+		value.EXTEND_LAVA_PATTERN.0 = off
+		value.EXTEND_LAVA_PATTERN.1 = on
+
+option.ADJUST_GAMMA= Adjust Gamma
+	option.ADJUST_GAMMA.comment = Adjust gamma.
+		value.ADJUST_GAMMA.0 = no
+		value.ADJUST_GAMMA.1 = yes
+	
+option.GAMMA_DISPLAY= Gamma Adjustment
+	option.GAMMA_DISPLAY.comment = The gamma value to use when 'Adjust Gamma' is On.
+ 
+option.SHADOW_BIAS_IN_DISTANCE= Shadow Bias (Distant)
+	option.SHADOW_BIAS_IN_DISTANCE.comment = Bias for things in the distance, that accounts for shadowmap distortion. This gets rid of buggy shadow acne on things that are further away, but too high may make shadows look disconnected.
+	
+
+
+option.AO_EFFECTS_BLOCKLIGHT= AO affects Blocklight
+	option.AO_EFFECTS_BLOCKLIGHT.comment = Ambient Occlussion prevents light from hitting areas. It affects skylight, and with this option can affect blocklight or not affect it.
+	When PBR is off, AO imply affects the color not the lighting, like in vanilla.
+		value.AO_EFFECTS_BLOCKLIGHT.0 = no
+		value.AO_EFFECTS_BLOCKLIGHT.1 = yes
+	option.SEA_LEVEL= Sea Level
+	option.SEA_LEVEL.comment =  Used for certain effects like:. Fog by Height, Fog Affects Light, Cave Light Leak Fix
+	
+	option.SKY_HEIGHT= Sky Height
+	option.SKY_HEIGHT.comment =  Used for certain effects like:. Fog by Height, Fog Affects Light. At Sky Height, there is no affect from Fog, at Sea Level there is a full affect
+
+	option.FOG_AFFECTS_LIGHT= Fog Affects Sun Light
+		option.FOG_AFFECTS_LIGHT.comment = When On, biome fog tints sunlight
+			value.FOG_AFFECTS_LIGHT.0 = Off
+			value.FOG_AFFECTS_LIGHT.1 = On
+		
+	option.FOG_BY_HEIGHT= Fog by Height
+		option.FOG_BY_HEIGHT.comment = Fog in the sky is dependent on elevation
+			value.FOG_BY_HEIGHT.0 = Off
+			value.FOG_BY_HEIGHT.1 = On
+	 
+	 option.FOG_AFFECTS_LIGHT_STR= Fog Affects Sun Light (Strength)
+		option.FOG_AFFECTS_LIGHT_STR.comment = How strongly Fog tints Sunlight
+	
+	 option.FOG_IN_SKYLIGHT_STR= Fog Affects Sky Light (Strength)
+		option.FOG_IN_SKYLIGHT_STR.comment = How strongly Fog tints Sky Light at Sea Level
+	
+value.GODRAYS.0 = Off
+value.GODRAYS.1 = On
+
+value.SHOW_MOB_DAMAGE.0 = Off
+value.SHOW_MOB_DAMAGE.1 = On
+
+screen.Held_Lights = Held Lights
+	screen.Held_Lights.comment = Held light Options. This can be Voxel based or Sreenspace
+option.AUTO_HAND_HELD_COLOR_DETECTION= HandHeld Lights Color Mode
+	option.AUTO_HAND_HELD_COLOR_DETECTION.comment = Which method to use, each has drawbacks and benefits, I am still working on this. 0-hard coded and/or Voxel based. 1-brightest one light. 2-brightest RGB values detected. 3-add lights, RGB sorted by brightest channel. 4-add lights, RGB sorted by brightest RGB. §a'Held Items & Player (Voxelized)' is necesary for the auto-detection modes (greater than 0) to work 
+		value.AUTO_HAND_HELD_COLOR_DETECTION.0 = 0 -hard coded and/or voxel based
+		value.AUTO_HAND_HELD_COLOR_DETECTION.1 = 1 -brightest 1 
+		value.AUTO_HAND_HELD_COLOR_DETECTION.2 = 2 -brightest RGB  
+		value.AUTO_HAND_HELD_COLOR_DETECTION.3 = 3 -add lights, sort a
+		value.AUTO_HAND_HELD_COLOR_DETECTION.4 = 4 -add lights, sort b
+        value.AUTO_HAND_HELD_COLOR_DETECTION.6 = 6 -use override list
+
+  
+option.HELD_TORCH_FALLOFF= Held Light Falloff
+	option.HELD_TORCH_FALLOFF.comment = how quickly light fades over distance, from held lights.
+option.HELD_TORCH_BRIGHTNESS=Held Light Brightness
+	option.HELD_TORCH_BRIGHTNESS.comment = how bright held lights are
+
+
+screen.Color_Adjustments = Color Adjustments
+	screen.Color_Adjustments.comment = Make adjustments to color, contrast. saturation and brightness
+	
+	option.USE_MANUAL_FINAL_ADJUSTMENTS= Use Manual Color Adjustments
+		option.USE_MANUAL_FINAL_ADJUSTMENTS.comment = Use these options
+			value.USE_MANUAL_FINAL_ADJUSTMENTS.0 = §cno§r
+			value.USE_MANUAL_FINAL_ADJUSTMENTS.1 = §ayes§r
+	option.BTIGHTNESS_CONTRAST_CENTER= Brightness Contrast Center
+		option.BTIGHTNESS_CONTRAST_CENTER.comment = The pivot point around which to boost the contrast of brightness
+	option.BTIGHTNESS_CONTRAST= Brightness Contrast
+		option.BTIGHTNESS_CONTRAST.comment = Boost Contrast of brightness, without the saturation boost COntrast boost usually adds
+	option.SATURATION= Saturation
+		option.SATURATION.comment = How Colorful things are. 0 is black and white, 1.0 is standard, higher is more colorful
+	option.CONTRAST=Contrast
+		option.CONTRAST.comment = contrast
+	option.BRIGHTNESS=Brightness
+	option.BRIGHTNESS.comment = brightness 
+	
+		value.ADJUST_GAMMA.0 = §cno§r
+			value.ADJUST_GAMMA.1 = §ayes§r
+	 
+	
+	option.HELD_LIGHT_PBR= Held Light PBR
+	option.HELD_LIGHT_PBR.comment = Showcase PBR Materials by calculating light interactions with material roughness/smoothness, subsurface scattering, shininess, metal etc. §aRequires 'fancy' preset§r
+		value.HELD_LIGHT_PBR.0 = no
+		value.HELD_LIGHT_PBR.1 = yes
+	 
+	
+	option.USE_PBR_TO_GET_RIGHT_FACE= Use PBR to Get Right Face (untested)
+		option.USE_PBR_TO_GET_RIGHT_FACE.comment = Run some extra calculations to try to ensure that the right face is used with Automatic Colored Light detection. Like to make sure a red lamp with a white base is red instead of white. this option is untested
+			value.USE_PBR_TO_GET_RIGHT_FACE.0 = no
+			value.USE_PBR_TO_GET_RIGHT_FACE.1 = yes
+	
+
+
+	option.VANILLA_EMMISIVE_THRSHHOLD=VANILLA_EMMISIVE_THRSHHOLD
+	option.VANILLA_EMMISIVE_THRSHHOLD.comment = lIGHTNAP VALUE NEEDED TO MAKE VANILLA, NON-PBR, PIXELS EMMISIVE
+
+       
+
+    option.USE_EXTENDED_OVERRIDE_LIST= Use Extended Override Lists
+	option.USE_EXTENDED_OVERRIDE_LIST.comment = This is optional in case your fps are really low and it makes any difference. This checks the master lists in the 'block.properties' and 'item.properties' files to fix blocks that don't auto-detect the right color
+        value.USE_EXTENDED_OVERRIDE_LIST.0 = no
+		value.USE_EXTENDED_OVERRIDE_LIST.1 = yes
+
+   value.BORDERS.0 = off
+	value.BORDERS.1 = on
+	
+	   value.BORDERS_IN_DH.0 = off
+	value.BORDERS_IN_DH.1 = on
+
+option.SOLAR_GI= Global Illumination (READ)
+	option.SOLAR_GI.comment = Global Illumination is the effect of light bouncing around that usually is the most expensive thing. Pt packs are trying to do. Options:. 1) free -from floor only . 2) free -from all surfaces. 3) slow - dedicated scattering. §athis is mostly tested on the 'Fancy' preset §r
+        value.SOLAR_GI.0 =  §coff §r
+		value.SOLAR_GI.1 = 1) free - only floors
+		value.SOLAR_GI.2 =  §a2) free - all surfaces §r
+	
+	screen.GI_Advanced =GI Advanced
+		screen.GI_Advanced.comment = more GI Options that can make things look bad if set wrong. §aFix flickering here§r
+	screen.GI_Adjustments=GI Adjustments
+		screen.GI_Adjustments.comment= more GI Options
+	
+option.VANILLA_AO_TORCH=Vanilla AO General
+	option.VANILLA_AO_TORCH.comment = How much vanilla AO affects all lighting that isn't sun light or sky light. Reduce to make corners less black
+option.VANILLA_AO_SKY=	Vanilla AO Sky
+	 	option.VANILLA_AO_SKY.comment = How much vanilla AO affects sky light. Reduce to make corners less black
+	 
+	option.SOLAR_GI_DOT= Solar GI Shading
+		option.SOLAR_GI_DOT.comment = Use Shading to determine how brightly a surface reflects sun light. off will be very intense. Only affects '1) free' option, it's on by default of the others but can be adjusted
+			value.SOLAR_GI_DOT.0 = off 
+			value.SOLAR_GI_DOT.1 = on
+	
+	option.DIRECTIONAL_SOLAR_GI= GI Capture Directionality Amount
+		option.DIRECTIONAL_SOLAR_GI.comment = How much bounce light is affected by the shading on a surface vs just being in sunshine. 1.00 is more accurate, 0.0 is more intense.
+		
+option.FIX_FLIICKERING_GI=Fix Flickering GI 1 (fade)
+	option.FIX_FLIICKERING_GI.comment = GI can flicker very badly under trees and in places with fine shadow detail, especially if 'flickering fix 2 -samples' is set low. This option fixes that by fading the update speed of all colored lighting & GI when outside. §eBut it makes changes to lighting less responsive§r
+		value.FIX_FLIICKERING_GI.0 = §eoff §r
+		value.FIX_FLIICKERING_GI.1 = §aon§r
+	
+option.SOLAR_GI_SHADOWMAP_SAMPLES=Fix Flickering GI 2 (samples)
+	option.SOLAR_GI_SHADOWMAP_SAMPLES.comment = GI can flicker very badly under trees and in places with fine shadow detail, (especially if not using 'flickering fix 1 -fade'). This option fixes that by sampling the shadowmap in more spots, There's a very small chance this might affect fps on very low end machines.
+	value.SOLAR_GI_SHADOWMAP_SAMPLES.16 = §a16§r
+	value.SOLAR_GI_SHADOWMAP_SAMPLES.1 = §c1§r
+		
+	screen.GI = Global Illumination (WIP)
+	
+	
+	
+	
+	option.TRACELESS_PT= Traceless PT (READ)
+	option.TRACELESS_PT.comment = Don't use this, it's just wasting fps and doesn't look like anything good yet
+	
+	
+	option.REBALANCE_LIGHTING_FOR_GI= Rebalance Lighting for GI
+	option.REBALANCE_LIGHTING_FOR_GI.comment = reduces the overall brightness to make the GI not make everything look brighter. 1) brighten areas out of GI range. 2) also lower overall brightness
+		value.REBALANCE_LIGHTING_FOR_GI.0 = no 
+			value.REBALANCE_LIGHTING_FOR_GI.1 = only brighten far
+			value.REBALANCE_LIGHTING_FOR_GI.2 = yes
+	
+	 
+	
+	
+	option.GI_INTENSITY=GI Intensity
+	option.GI_INTENSITY.comment = Adjust the strength of Global Illumination, which is light bouncing off of things.
+	
+	option.ADJUST_GI_INTENSITY= Adjust GI
+	option.ADJUST_GI_INTENSITY.comment = Run code to adjust GI intensity and adjust if glancing Sun light angles produce less bounce light or it's more of an 'On or Off' situation. might have small spf impact on low end devices
+		value.ADJUST_GI_INTENSITY.0 =  §cno §r
+			value.ADJUST_GI_INTENSITY.1 =  §ayes §r
+			
+			
+		
+	
+	option.GI_FADE= GI Temporal Fade
+	option.GI_FADE.comment = Fade in changes to the GI to a higher or lower degree. Higher may help reduce flickering in GI from high detail shadows like from leaves. §eThis affects all outdoors lighting, and too high will limit light range and responsiveness.§r 
+	
+	
+
+	
+	
+option.END_SKY_TEXTURED = End Sky Textured
+	option.END_SKY_TEXTURED.comment whether or not to run the gbuffers_skyTextured program in the end. Maybe some mods use it. Will create staticy looking sky if they don't
+		value.END_SKY_TEXTURED.0 = §cOff§r
+		value.END_SKY_TEXTURED.1 = §aOn§r
+
+profile.comment= §a'Just Colored Lighting'§r profile is just that, the rest have shadows. §aNormal§r has shadows.  §aFancy§r has Godrays, Soft Shadows, and PBR BlockLight. §aCartoon§r is Fancy with Cartoon borders. §aPotato Shadows§r runs Shadows at a distance of 20, without distortion, fades them out, and runs bilinear filtering on a 512 pixel shadowmap.
+ 
+profile.Just_Colored_Lighting= §a Just Colored Lighting §r
+ 
+## §a §2  §e §6  §c §4 §5   §r
+//#define VOXEL_AREA 128 //[32 48 64 96 128 160 192 224 256 512]
+option.VOXEL_AREA= Colored Lighting Range
+option.VOXEL_AREA.comment= How far around you to do Colored Lighting. §eThis will need VRAM & cost fps§r. This is also limited by the render distance (LODs don't help)
+value.VOXEL_AREA.32 =  §a 32 §r
+value.VOXEL_AREA.48 = §a 48 §r
+value.VOXEL_AREA.64 = §a 64 §r
+value.VOXEL_AREA.96 = §a 96 §r
+value.VOXEL_AREA.128 = §a 128 §r
+value.VOXEL_AREA.160 = §e 160 §r
+value.VOXEL_AREA.192 = §e 192 §r
+value.VOXEL_AREA.224 = §e 224 §r
+value.VOXEL_AREA.256 = §c 256 §r
+value.VOXEL_AREA.512 = §c 512 slow §r
+value.VOXEL_AREA.1024 = §c 1024 VERY SLOW buggy §r
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+	
+	option.PITCH_BLACK_CAVES= Darker Caves
+	option.PITCH_BLACK_CAVES.comment = Allow caves to acyually be fully dark
+	
+	
+	option.AAA=
+	option.AAA.comment = 
+	
+	option.AAA=
+	option.AAA.comment = 
+		value.AAA.0 = §cOff§r
+		value.AAA.1 = §aOn§r
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+screen.INFO_CLICK=Info (hover mouse)
+screen.INFO_CLICK.comment=Hover the mouse on things for tooltips!. There are no shadows on 'Just Colored Lighting' but there are on the other profiles.  §a'Fancy' profile is recommended for pbr textures, Manually toggling 'Textures/pbr mode' is buggy right now§r. Shader (c) timetravelbeard 2025-2026, please report bugs on discord linked on patreon.com/timetravelbeard. You can support development via patreon or youtube 
+
+screen.Mod_Support = Mod Support
+screen.Mod_Support.comment = Stuff & Info for Mod Support
+
+screen.Distant_Horizons = Distant Horizons
+screen.Distant_Horizons.comment = Distant Horizons options
+
+screen.Voxy = Voxy
+screen.Voxy.comment = Voxy is supported Automatically, but on versions older than 0.2.10 you will need to toggle an option here to fix black LODs on the default preset.
+
+option.WORK_GROUP_SIZE = Work Group Size
+option.WORK_GROUP_SIZE.comment = changing this might make the shader's colored lighting run faster. It varies per device
+
+
+screen.Glowing_Blocks = Glowing Blocks (hover mouse)
+screen.Glowing_Blocks.comment = Tell me about blocks or items that don't glow right, or glow the wrong color, and I'll add them to work right. You can test out fixing them yourself by adding them to the 'item.properties' & 'block.properties. files (near the bottom), but tell me so I can add them in the next update!
+
+option.FORCE_VOXY_BUILT_IN_SHADERS = Force Voxy Built-in Shaders
+option.FORCE_VOXY_BUILT_IN_SHADERS.comment = §aThis is for the default preset on Voxy older than version 0.2.10, if voxy chunks look black§r. This option crashes the custom shaders, to force the built in Voxy shaders to run. This is a workaround to Voxy not loading the lightmap texture sampler right which makes terrain black. This shouldn't be needed in version 0.2.10 or later of Voxy
+value.FORCE_VOXY_BUILT_IN_SHADERS.0 = no 
+value.FORCE_VOXY_BUILT_IN_SHADERS.1 = yes, but not nether 
+value.FORCE_VOXY_BUILT_IN_SHADERS.2 = always 
+
+
+
+
+screen.Macro_Detail = Macro Roughness (WIP)
+    screen.Macro_Detail.comment = Hyper Detailed HD Textures per material type to enhance PBR roughness. §aPlease give me feedback! These are only test textures§r
+
+       option.USE_MACRO_TEXTURES= Macro Roughness
+	option.USE_MACRO_TEXTURES.comment = Hyper Detailed Textures where there is PBR Roughness. 0 -Off. 1 -Single texture. 2 -Multiple (Resource Pack Required)
+        value.USE_MACRO_TEXTURES.0 = §cOff§r
+        value.USE_MACRO_TEXTURES.1 = Single
+        value.USE_MACRO_TEXTURES.2 = §aMultiple (Resource Pack Required)§r
+
+option.MACRO_SMOOTHNESS_STRENGTH= Macro Smoothness Variation
+	option.MACRO_SMOOTHNESS_STRENGTH.comment = Strength of micro variations to smoothness
+
+option.MACRO_TILING_SCALE= Tiling Scale
+	option.MACRO_TILING_SCALE.comment = The scale for how often the textures tile
+
+option.MACRO_RENDER_DISTANCE= Macro Render Distance
+	option.MACRO_RENDER_DISTANCE.comment = The distance at which the Macro Roughness starts to be visible. It fades in as you get closer to reduce noise & preserve the artistic vision of the normal resource pack you are using
+
+option.MACRO_NORMALS_STRENGTH= Macro Roughness Strength
+	option.MACRO_NORMALS_STRENGTH.comment = How strongly the materials' macro roughness texture is applied when up close
+option.MACRO_TILING_SCALE_MOBS= Mobs Tiling Scaling
+	option.MACRO_TILING_SCALE_MOBS.comment = The scale for how often the textures tile on Mobs
+
+option.MOB_WORLD_SCALING= Correct Ratio
+	option.MOB_WORLD_SCALING.comment = This fixes the ratio on mobs to un-stretch the textures in the case of very long rectangles
+    value.MOB_WORLD_SCALING.0 = §cOff§r
+        value.MOB_WORLD_SCALING.1 = §aOn§r
+
+option.PRESERVE_NORMALSVS_MACRO= Preserve Normals
+	option.PRESERVE_NORMALSVS_MACRO.comment = When On the original texture's normals are used as a surface that the macro detail is extruded from. When Off, you will lose round baked normals like Patrix uses but have softer appearance
+ value.PRESERVE_NORMALSVS_MACRO.0 = §cOff§r
+        value.PRESERVE_NORMALSVS_MACRO.1 = §aOn§r
+
+
+
+option.REDSTONE_DUST_GLOWS= RedStone Dust Glows (READ)
+	option.REDSTONE_DUST_GLOWS.comment = Activated redstone dust will glow. §eThis also blocks light from going through it§r
+ value.REDSTONE_DUST_GLOWS.0 = §cOff§r
+        value.REDSTONE_DUST_GLOWS.1 = §aOn§r
+		
+		
+		
+
+option.BLOCK_LIGHTS_CATCH_HELD_LIGHT= BLock Lights catch Held Light
+	option.BLOCK_LIGHTS_CATCH_HELD_LIGHT.comment = When Off, Light sources will not be illuminated by hand held lights
+		value.BLOCK_LIGHTS_CATCH_HELD_LIGHT.0 = §cOff§r
+        value.BLOCK_LIGHTS_CATCH_HELD_LIGHT.1 = §aOn§r
+		
+		
+		
+
+option.PER_BLOCK_EMMISSIVE= Per Block Emmissive
+	option.PER_BLOCK_EMMISSIVE.comment = Overrides PBR texture to make entire block bright for light sources, instead of per-pixel self-illumination.
+		value.PER_BLOCK_EMMISSIVE.0 = §cOff§r
+        value.PER_BLOCK_EMMISSIVE.1 = §aOn§r
+
+
+
+
+//2026-5
+
+screen.Copper_Torches = Copper Lights
+option.COPPER_LANTERNS= Copper Lanterns
+	option.COPPER_LANTERNS.comment = Choose how to determine thier light color. 0 -auto texture detection. 1 -copper totch color. 2 -fade from torch to copper torch. 
+		value.COPPER_LANTERNS.0 = auto texture detection
+        value.COPPER_LANTERNS.1 = copper torch
+        value.COPPER_LANTERNS.2 = orange to green
+
+
+option.COPPER_BULBS= Copper Bulbs
+	option.COPPER_BULBS.comment = Choose how to determine thier light color. 0 -auto texture detection. 1 -copper totch color. 2 -fade from torch to copper torch. 3 -warm light
+	    value.COPPER_BULBS.0 = auto texture detection
+        value.COPPER_BULBS.1 = copper torch
+        value.COPPER_BULBS.2 = orange to green
+        value.COPPER_BULBS.3 = warm light
+
+
+screen.Create_Color_Wheel = Create & ColorWheel
+
+option.COLORWHEEL_OIT= OIT (Order Independent Transpaancy)
+	option.COLORWHEEL_OIT.comment = Probably costs some fps, makes glass layers render right behind each other for Create contraptions.
+		value.COLORWHEEL_OIT.0 = §cOff§r
+        value.COLORWHEEL_OIT.1 = §aOn§r
+
+
+//blanks: - 
+
+
+option.PER_BLOCK_EMMISSIVE= Per Block Emmissive
+	option.PER_BLOCK_EMMISSIVE.comment = Overrides PBR texture to make entire block bright for light sources, instead of per-pixel self-illumination.
+		value.PER_BLOCK_EMMISSIVE.0 = §cOff§r
+        value.PER_BLOCK_EMMISSIVE.1 = §aOn§r
+		
+		
+option.PER_BLOCK_EMMISSIVE= Per Block Emmissive
+	option.PER_BLOCK_EMMISSIVE.comment = Overrides PBR texture to make entire block bright for light sources, instead of per-pixel self-illumination.
+		value.PER_BLOCK_EMMISSIVE.0 = §cOff§r
+        value.PER_BLOCK_EMMISSIVE.1 = §aOn§r
+		
+		
+option.PER_BLOCK_EMMISSIVE= Per Block Emmissive
+	option.PER_BLOCK_EMMISSIVE.comment = Overrides PBR texture to make entire block bright for light sources, instead of per-pixel self-illumination.
+		value.PER_BLOCK_EMMISSIVE.0 = §cOff§r
+        value.PER_BLOCK_EMMISSIVE.1 = §aOn§r
