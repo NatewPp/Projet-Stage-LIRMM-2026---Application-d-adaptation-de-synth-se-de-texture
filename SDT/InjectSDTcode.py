@@ -1,8 +1,8 @@
 import sys
 import os
 
-from pythonLibs.Searchers import find_gbuffers_terrain, findMainFunction,searchforSDTUniforms
-from pythonLibs.Injectors import inject_SDTfunctionsinmain, inject_DefineChecksForUniforms, upgrade_glsl_version
+from pythonLibs.Searchers import find_gbuffers_terrain, findMainFunction,searchforSDTUniforms,special450variables,GetVersion
+from pythonLibs.Injectors import inject_SDTfunctionsinmain, inject_DefineChecksForUniforms, upgrade_glsl_version,inject_in450_defines
 from pythonLibs.placeSDT import copySdtToShaders, copy_folder_with_overwrite
 
 def inject_sdt(pack_path, dest=None):
@@ -17,8 +17,13 @@ def inject_sdt(pack_path, dest=None):
         dest = os.path.join(dir_path, base_name[0] + "_SDT" + base_name[1])
 
     copy_folder_with_overwrite(pack_path, dest)
+    version = GetVersion(dest)
+    print(version)
     shaders = find_gbuffers_terrain(dest)
-    copySdtToShaders(dest)
+    if version >= 450:
+        copySdtToShaders(dest,True)
+    else:
+        copySdtToShaders(dest)
     for shader_path, shader_root, relative_to_root in shaders:
         upgrade_glsl_version(shader_path) 
         shader = findMainFunction(shader_path, shader_root)
@@ -27,6 +32,8 @@ def inject_sdt(pack_path, dest=None):
         elif len(shader) == 3:
             inject_SDTfunctionsinmain(shader[0], shader[1], shader[2])
     inject_DefineChecksForUniforms(searchforSDTUniforms(dest))
+    if version is not None and version >= 450:
+        inject_in450_defines(special450variables(dest))
     return dest
 
 

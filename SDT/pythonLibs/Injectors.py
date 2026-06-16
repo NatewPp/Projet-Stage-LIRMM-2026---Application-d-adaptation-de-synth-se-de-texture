@@ -264,6 +264,8 @@ def inject_DefineChecksForUniforms(found_uniforms):
         "cameraPosition": "CAMERAPOSITION",
         "tex": "TEX",
         "atlasSize": "ATLASSIZE",
+        "normalMatrix": "NORMALMATRIX",
+        "modelViewMatrix": "MODELVIEWMATRIX"
     }
     for uniform_filepath in found_uniforms:
         filepath = uniform_filepath[1]
@@ -322,3 +324,48 @@ def upgrade_glsl_version(filepath: str):
     with open(filepath, 'w', encoding='utf-8') as f:
         f.write(content)
     return True
+
+def inject_in450_defines(found_ins):
+    """"
+    Comme pour le inject_DefineChecksForUniforms, mais pour les #define spécifiques à GLSL 450.
+    PRECONDITION : found_ins doit être une liste de tuples contenant des déclarations d'uniforms et leurs chemins de fichiers respectifs.
+    POSTCONDITION : les fichiers sont modifiés avec l'injection des #define spécifiques à GLSL 450,
+                    ou restent inchangés si déjà présents.
+    """
+    SDT450_MACROS = {
+        "vaPosition" : "VAPOSITION",
+        "vaNormal" : "VANORMAL",
+        "vaUV0" : "VAUV0"
+    }
+    for ins_filepath in found_ins:
+        filepath = ins_filepath[1]
+        ins_list = ins_filepath[0]
+        try:
+            with open(filepath, 'r', encoding='utf-8') as file:
+                content = file.read()
+        except Exception as e:
+            print(f"Erreur de lecture sur {filepath} : {e}")
+            continue
+
+        file_modified = False
+
+        for declaration in ins_list:
+            macros = [macro for macro in SDT450_MACROS.items() if re.search(rf"\b{macro}\b", declaration)]
+            if not macros:
+                continue
+            defines = "\n".join(f"#define {macro}" for macro in macros)
+            injection = f"#ifndef {macros[0]}\n{declaration}\n#endif"
+
+            if injection in content:
+                continue
+            if declaration in content:
+                content = content.replace(declaration, injection)
+                file_modified = True
+        if file_modified:
+            try:
+                with open(filepath, 'w', encoding='utf-8') as file_write:
+                    file_write.write(content)
+            except Exception as e:
+                print(f"Erreur d'écriture sur {filepath} : {e}")
+
+           

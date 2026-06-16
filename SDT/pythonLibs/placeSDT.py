@@ -10,7 +10,7 @@ def copy_folder_with_overwrite(src: str, dst: str):
         shutil.rmtree(dst)  # Remove the destination folder if it exists
     shutil.copytree(src, dst)  # Copy the source folder to the destination
 
-def copySdtToShaders(filepath: str):
+def copySdtToShaders(filepath: str,is450=False):
     """
     Copie le dossier 'sdt' dans le sous-dossier 'lib/sdt' du shaderpack.
     Utilise 'shader_root' pour garantir la bonne destination.
@@ -18,7 +18,10 @@ def copySdtToShaders(filepath: str):
     POSTCONDITION : le dossier 'sdt' est copié dans 'filepath/lib/sdt', écrasant l'ancien s'il existe.
     """
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    source_path = os.path.join(script_dir, "sdt")
+    if is450:
+        source_path = os.path.join(script_dir, "SDT450")
+    else:
+        source_path = os.path.join(script_dir, "sdt")
     
     dest_path = filepath + "/shaders/lib/sdt"
     

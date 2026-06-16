@@ -187,10 +187,11 @@ def searchforSDTUniforms(filepath: str):
         "cameraPosition",
         "tex",
         "atlasSize",
+        "normalMatrix",
+        "modelViewMatrix"
     ]
 
     found_uniforms = []
-
     try:
         if os.path.isdir(filepath):
             items = os.listdir(filepath)
@@ -226,3 +227,75 @@ def searchforSDTUniforms(filepath: str):
     except Exception as e:
         print(f"Error reading file: {e}")
         return []
+    
+def special450variables(filepath: str):
+    """"
+    recherche les déclarations de variables in propre a la version 450
+    PRECONDITION : le fichier doit être un fichier texte lisible.
+    POSTCONDITION : retourne une liste de la forme :
+
+    """
+
+    inName = [
+        "vaPosition",
+        "vaNormal",
+        "vaUV0"
+    ]
+
+    found_in_declarations = []
+    try:
+        if os.path.isdir(filepath):
+            items = os.listdir(filepath)
+            for item in items:
+                item_path = os.path.join(filepath, item)
+                found_in_declarations_rec = special450variables(item_path)
+                if found_in_declarations_rec:
+                        found_in_declarations.extend(found_in_declarations_rec)
+            return found_in_declarations
+        else:
+            if filepath.lower().endswith(('.vsh', '.fsh', '.gsh', '.csh', '.glsl', '.inc')):
+                file_in_declarations = []
+                with open(filepath, 'r', encoding='utf-8') as file:
+                    content = file.read()
+                for name in inName:
+                    pattern = rf"^[ \t]*in\s[^;]*\b{name}\b[^;]*;"
+                    for m in re.finditer(pattern, content, re.M):
+                        declaration = m.group(0).strip()
+                        if declaration not in file_in_declarations:
+                            file_in_declarations.append(declaration)
+                if len(file_in_declarations) > 0:
+                    return [[file_in_declarations, filepath]]
+                else:
+                    return []
+            else:
+                return []
+    except Exception as e:
+        print(f"Error reading file: {e}")
+        return []
+
+def GetVersion (filepath: str):
+    """
+    Recherche la version du shader de terrain en fonction du #version déclaré
+    PRECONDITION : le fichier doit être un fichier texte lisible ou un dossier contenant des fichiers texte lisibles.
+    POSTCONDITION : retourne un entier correspondant à la version GLSL trouvée dans le fichier, ou None si aucune version n'est trouvée ou en cas d'erreur.
+    """
+    try:
+        if os.path.isdir(filepath):
+            items = os.listdir(filepath)
+            for item in items:
+                item_path = os.path.join(filepath, item)
+                version_rec = GetVersion(item_path)
+                if version_rec is not None:
+                    return version_rec
+            return None
+        else:
+            version_number = None
+            with open(filepath, 'r', encoding='utf-8') as file:
+                content = file.read()
+            version_match = re.search(r'^\s*#version\s+(\d+)', content, re.M)
+            if version_match:
+                version_number = int(version_match.group(1))
+            return version_number
+    except Exception as e:
+        print(f"Error reading file: {e}")
+        return None
