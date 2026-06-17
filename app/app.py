@@ -382,7 +382,7 @@ class App(ctk.CTk):
     def _wichtorun(self):
         atlas = self.atlas_var.get().strip()
         self._say(f"Atlas    : {atlas}")
-        if self.manyfolders_var:
+        if self.manyfolders_var.get():
             threading.Thread(target=self._multirun, daemon=True).start()
         else:
             threading.Thread(target=self._run, args=(self.pack_var.get(),), daemon=True).start()
@@ -493,8 +493,13 @@ class App(ctk.CTk):
             blockdir, tmp = engine.resolve_textures(textures)
             out = glsl + ".generated"
             res = engine.regenerate(atlas, blockdir, glsl, out)
-            shutil.move(out, glsl)        # on applique direct : c'est notre copie
-            #self._set_status(f"Terminé ✔  Pack créé : Téléchargements/{name}", "lightgreen")
+            
+            shutil.move(out, glsl)       
+
+            # Rezippage du pack traité
+            zip_path = shutil.make_archive(out_pack, "zip", out_pack)
+            shutil.rmtree(out_pack, ignore_errors=True)
+            self._say(f"Pack zippé : {zip_path}")
 
         except Exception as e:
             self._say("\nERREUR : " + str(e))
