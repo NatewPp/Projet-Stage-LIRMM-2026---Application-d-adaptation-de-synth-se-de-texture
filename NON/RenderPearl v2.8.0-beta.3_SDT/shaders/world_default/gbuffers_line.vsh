@@ -2,7 +2,10 @@
 
 uniform int packedView;
 uniform vec3 chunkOffset;
+#ifndef MODELVIEWMATRIX
 uniform mat4 modelViewMatrix, projectionMatrix;
+#define MODELVIEWMATRIX
+#endif
 
 in vec3 vaNormal, vaPosition;
 in vec4 vaColor;

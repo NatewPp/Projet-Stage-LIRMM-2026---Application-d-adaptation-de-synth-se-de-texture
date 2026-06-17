@@ -1,3 +1,4 @@
+//#modified
 /*
 --------------------------------------------------------------------------------
 
@@ -236,6 +237,8 @@ const float lod_bias = log2(taau_render_scale);
 #define VSHSDT
 #include "/lib/sdt/SDTmain.glsl"
 void main() {
+PrepareTextureSynthesisVSH();
+
 #if defined TAA && defined TAAU
     vec2 coord = gl_FragCoord.xy * view_pixel_size * rcp(taau_render_scale);
     if (clamp01(coord) != coord) {

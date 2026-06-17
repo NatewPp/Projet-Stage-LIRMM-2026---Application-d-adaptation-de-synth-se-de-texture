@@ -1,3 +1,4 @@
+//#modified
 /*
 ====================================================================================================
 
@@ -324,6 +325,8 @@ void getWetness(inout float wetnessOut, inout vec3 normalOut, inout vec2 materia
 #define VSHSDT
 #include "/lib/sdt/SDTmain.glsl"
 void main() {
+PrepareTextureSynthesisVSH();
+
     if (OutsideDownscaleViewport()) discard;
     vec3 normalOut  = normal;
     vec2 lmap   = coord[1];

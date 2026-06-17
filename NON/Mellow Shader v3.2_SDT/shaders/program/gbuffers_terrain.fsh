@@ -1,5 +1,5 @@
-//#modified
 #version 330 compatibility
+//#modified
 #define GBUFFERS_TERRAIN
 
 #include "/lib/all_the_libs.glsl"

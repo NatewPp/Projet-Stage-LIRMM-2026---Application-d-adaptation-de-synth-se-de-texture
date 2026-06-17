@@ -1,10 +1,19 @@
 #if !defined CORE_VERTEX_TRANSFORM
 #define CORE_VERTEX_TRANSFORM
 
+#ifndef CAMERAPOSITION
 uniform vec3 cameraPosition;
+#define CAMERAPOSITION
+#endif
 uniform mat4 gbufferModelView;
+#ifndef GBUFFERMODELVIEWINVERSE
 uniform mat4 gbufferModelViewInverse;
+#define GBUFFERMODELVIEWINVERSE
+#endif
+#ifndef GBUFFERPROJECTIONINVERSE
 uniform mat4 gbufferProjectionInverse;
+#define GBUFFERPROJECTIONINVERSE
+#endif
 
 #include "vertex_transform_simple.glsl"
 

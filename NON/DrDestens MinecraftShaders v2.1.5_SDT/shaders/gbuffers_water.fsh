@@ -16,7 +16,10 @@ uniform float frameTimeCounter;
 
 #include "/core/water.glsl"
 
+#ifndef CAMERAPOSITION
 uniform vec3 cameraPosition;
+#define CAMERAPOSITION
+#endif
 
 uniform float far;
 

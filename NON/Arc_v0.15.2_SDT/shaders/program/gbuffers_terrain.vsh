@@ -1,4 +1,3 @@
-//#modified
 #version 330 compatibility
 //#modified
 #define RENDER_VERTEX
@@ -86,8 +85,6 @@ uniform int worldTime;
 #define VSHSDT
 #include "/lib/sdt/SDTmain.glsl"
 void main() {
-PrepareTextureSynthesisVSH();
-
 PrepareTextureSynthesisVSH();
 
     texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;

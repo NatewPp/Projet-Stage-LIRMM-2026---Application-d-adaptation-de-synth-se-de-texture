@@ -14,7 +14,10 @@
 vec2 coord = gl_FragCoord.xy * screenSizeInverse * MC_RENDER_QUALITY;
 
 #ifdef TAA
+#ifndef CAMERAPOSITION
 uniform vec3 cameraPosition;
+#define CAMERAPOSITION
+#endif
 uniform vec3 previousCameraPosition;
 #endif
 

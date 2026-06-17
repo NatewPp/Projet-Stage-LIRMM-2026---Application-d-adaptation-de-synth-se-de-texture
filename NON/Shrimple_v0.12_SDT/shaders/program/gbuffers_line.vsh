@@ -15,7 +15,10 @@ out VertexData {
     vec3 localPos;
 } vOut;
 
+#ifndef MODELVIEWMATRIX
 uniform mat4 modelViewMatrix;
+#define MODELVIEWMATRIX
+#endif
 uniform mat4 projectionMatrix;
 
 #ifndef GBUFFERMODELVIEWINVERSE

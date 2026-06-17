@@ -1,3 +1,4 @@
+//#modified
 #include "/settings.glsl"
 
 #if THIS_IS_DISTANT_HORIZONS != 1 && USE_PHYSICS_MOD_OCEAM == 1 
@@ -174,6 +175,8 @@ void deconstruct_and_localize_uvs()//CTMPOMFIX
 #define VSHSDT
 #include "/lib/sdt/SDTmain.glsl"
 void main() {
+PrepareTextureSynthesisVSH();
+
 	ipbr_id=0.;
 	
 	//if TEXTURE_FILTERING_CPF > 0

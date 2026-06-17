@@ -1,4 +1,5 @@
 #version 330 compatibility
+//#modified
 uniform int worldTime;
 
 #include "/lib/settings.glsl"
@@ -17,7 +18,10 @@ uniform int worldTime;
 #ifdef POM_ENABLED
 #ifdef POM_SMOOTH
     uniform vec2  atlasSizeInverse;
-    uniform ivec2 atlasSize;
+    #ifndef ATLASSIZE
+uniform ivec2 atlasSize;
+#define ATLASSIZE
+#endif
 #endif
 #endif
 
@@ -52,6 +56,8 @@ layout(location = 3) out vec4 FragOut3;
 #define VSHSDT
 #include "/lib/sdt/SDTmain.glsl"
 void main() {
+PrepareTextureSynthesisVSH();
+
 	vec3 lightmap = vec3(lmcoord, glcolor.a);
 	vec3 normal   = tbn[2];
 	vec4 color    = getAlbedo(coord);

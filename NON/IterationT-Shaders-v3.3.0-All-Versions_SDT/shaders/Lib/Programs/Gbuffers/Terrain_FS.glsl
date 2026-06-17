@@ -237,6 +237,7 @@ void main(){
 		#else
 
 			vec4 albedoTex = textureGrad(tex, texCoord, duv1, duv2);
+    ApplyTextureSynthesis(albedoTex);
 
 			#if MC_VERSION >= 11605 && !defined IS_IRIS
 				float alphaRef = renderStage == MC_RENDER_STAGE_TERRAIN_SOLID ? 0.004 : 0.1;

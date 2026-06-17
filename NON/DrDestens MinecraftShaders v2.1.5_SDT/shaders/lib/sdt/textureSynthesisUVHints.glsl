@@ -115,7 +115,7 @@ const vec2 normalBlockOffsets[NUM_NORMAL_BLOCKS] = vec2[NUM_NORMAL_BLOCKS](
     vec2(1328.0, 784.0), //jungle_leaves
     vec2(1328.0, 832.0), //jungle_log
     vec2(1328.0, 928.0), //jungle_planks
-    vec2(1376.0, 512.0), //lava_still  // <verif: bestmatch(d=13059)>
+    vec2(1376.0, 496.0), //lava_still  // <verif: bestmatch(d=7185)>
     vec2(1376.0, 544.0), //leaf_litter
     vec2(1376.0, 928.0), //light_blue_concrete
     vec2(1376.0, 976.0), //light_blue_concrete_powder
@@ -133,7 +133,7 @@ const vec2 normalBlockOffsets[NUM_NORMAL_BLOCKS] = vec2[NUM_NORMAL_BLOCKS](
     vec2(1472.0, 976.0), //magenta_concrete_powder
     vec2(1520.0, 208.0), //magenta_terracotta
     vec2(1520.0, 256.0), //magenta_wool
-    vec2(1520.0, 304.0), //magma  // <verif: bestmatch(d=4767)>
+    vec2(1520.0, 304.0), //magma  // <verif: bestmatch(d=6399)>
     vec2(1520.0, 448.0), //mangrove_leaves
     vec2(1520.0, 496.0), //mangrove_log
     vec2(1520.0, 592.0), //mangrove_planks
@@ -173,7 +173,7 @@ const vec2 normalBlockOffsets[NUM_NORMAL_BLOCKS] = vec2[NUM_NORMAL_BLOCKS](
     vec2(1808.0, 544.0), //podzol_side
     vec2(1808.0, 592.0), //podzol_top
     vec2(1904.0, 64.0), //powder_snow
-    vec2(1904.0, 208.0), //prismarine  // <verif: bestmatch(d=1376)>
+    vec2(1904.0, 208.0), //prismarine  // <verif: bestmatch(d=4781)>
     vec2(1904.0, 304.0), //pumpkin_side
     vec2(1904.0, 544.0), //purple_concrete
     vec2(1904.0, 592.0), //purple_concrete_powder
@@ -255,7 +255,7 @@ const vec2 normalBlockOffsets[NUM_NORMAL_BLOCKS] = vec2[NUM_NORMAL_BLOCKS](
     vec2(976.0, 0.0), //sandstonecut_red_sandstone1 // !! NON REPLACE - texture custom shaderpack (synthetic)
     vec2(976.0, 64.0), //sandstonecut_sandstone1 // !! NON REPLACE - texture custom shaderpack (synthetic)
     vec2(976.0, 112.0), //sandstonered_sandstone // !! NON REPLACE - texture custom shaderpack (synthetic)
-    vec2(976.0, 128.0) //sandstonesandstone // !! NON REPLACE - texture custom shaderpack (synthetic)
+    vec2(976.0, 128.0)  //sandstonesandstone // !! NON REPLACE - texture custom shaderpack (synthetic)
 );
 
 const vec2 bricks4BlockOffsets[NUM_4BRICKS_BLOCKS] = vec2[NUM_4BRICKS_BLOCKS](
@@ -269,7 +269,7 @@ const vec2 bricks4BlockOffsets[NUM_4BRICKS_BLOCKS] = vec2[NUM_4BRICKS_BLOCKS](
     vec2(1952.0, 928.0), //red_nether_bricks
     vec2(400.0, 1040.0), //resin_bricks
     vec2(1600.0, 1136.0), //stripped_bamboo_block
-    vec2(880.0, 1184.0)  //sugar_cane
+    vec2(880.0, 1184.0)   //sugar_cane
 );
 
 const vec2 bricks2BlockOffsets[NUM_2BRICKS_BLOCKS] = vec2[NUM_2BRICKS_BLOCKS](
@@ -289,7 +289,7 @@ const vec2 bricks2BlockOffsets[NUM_2BRICKS_BLOCKS] = vec2[NUM_2BRICKS_BLOCKS](
     vec2(544.0, 80.0), //bookshelf0 // !! NON REPLACE - texture custom shaderpack (synthetic)
     vec2(544.0, 96.0), //bookshelf1 // !! NON REPLACE - texture custom shaderpack (synthetic)
     vec2(544.0, 112.0), //bookshelf2 // !! NON REPLACE - texture custom shaderpack (synthetic)
-    vec2(544.0, 128.0) //bookshelf3 // !! NON REPLACE - texture custom shaderpack (synthetic)
+    vec2(544.0, 128.0)  //bookshelf3 // !! NON REPLACE - texture custom shaderpack (synthetic)
 );
 
 const vec2 borderLessRotateBlockOffsets[BLR_BLOCKS] = vec2[BLR_BLOCKS](
@@ -336,7 +336,7 @@ const vec2 borderLessRotateBlockOffsets[BLR_BLOCKS] = vec2[BLR_BLOCKS](
     vec2(1600.0, 1280.0), //weathered_copper_bulb_lit_powered
     vec2(1648.0, 1280.0), //weathered_copper_bulb_powered
     vec2(1840.0, 1280.0), //weathered_copper_grate
-    vec2(1936.0, 1280.0)  //weathered_copper_trapdoor
+    vec2(1936.0, 1280.0)   //weathered_copper_trapdoor
 );
 
 const vec2 borderLessBlockOffsets[BORDER_LESS_BLOCKS] = vec2[BORDER_LESS_BLOCKS](
@@ -363,7 +363,7 @@ const vec2 borderLessBlockOffsets[BORDER_LESS_BLOCKS] = vec2[BORDER_LESS_BLOCKS]
     vec2(1760.0, 112.0), //pearlescent_froglight_top
     vec2(2000.0, 784.0), //redstone_ore
     vec2(544.0, 1280.0), //verdant_froglight_side
-    vec2(592.0, 1280.0)  //verdant_froglight_top
+    vec2(592.0, 1280.0)   //verdant_froglight_top
 );
 
 const vec2 rotateBlockOffsets[ROTATE_BLOCKS] = vec2[ROTATE_BLOCKS](
@@ -474,7 +474,7 @@ const vec2 rotateBlockOffsets[ROTATE_BLOCKS] = vec2[ROTATE_BLOCKS](
     vec2(400.0, 1280.0), //vault_top_ejecting
     vec2(448.0, 1280.0), //vault_top_ejecting_ominous
     vec2(496.0, 1280.0), //vault_top_ominous
-    vec2(1120.0, 1280.0)  //warped_stem_top
+    vec2(1120.0, 1280.0)   //warped_stem_top
 );
 
 vec2 minUVNormal(int blockIndex) {
