@@ -320,12 +320,11 @@ def inject_DefineChecksForUniforms(found_uniforms):
             injection = f"#ifndef {macros[0]}\n{clean_declaration}\n{defines}\n#endif"
             if injection in content:
                 continue
-                
-            if declaration in content:
-                pattern = rf"(?<!//)\s*{re.escape(declaration)}"
-                if re.search(pattern, content):
-                    content = content.replace(declaration, injection)
-                    file_modified = True
+            pattern = rf"(?m)^([ \t]*){re.escape(declaration)}"
+            new_content, n = re.subn(pattern, lambda m: m.group(1) + injection, content)
+            if n:
+                content = new_content
+                file_modified = True
 
         if file_modified:
             try:
@@ -383,16 +382,28 @@ def inject_in450_defines(found_ins):
         file_modified = False
 
         for declaration in ins_list:
-            macros = [macro for macro in SDT450_MACROS.items() if re.search(rf"\b{macro}\b", declaration)]
+            if declaration.strip().startswith("//") or declaration.strip().startswith("/*"):
+                continue
+            # On itère name, macro : .items() renvoie des tuples (nom, MACRO).
+            # On détecte par NOM (ex. vaPosition), mais la garde utilise la MACRO (VAPOSITION).
+            macros = [macro for name, macro in SDT450_MACROS.items()
+                      if re.search(rf"\b{name}\b", declaration)]
             if not macros:
                 continue
+            # Le #define {macro} DOIT figurer dans la garde, sinon SDTmain.glsl
+            # (qui teste #ifndef MACRO) redéclarera la variable -> doublon.
             defines = "\n".join(f"#define {macro}" for macro in macros)
-            injection = f"#ifndef {macros[0]}\n{declaration}\n#endif"
+            clean_declaration = declaration.strip()
+            injection = f"#ifndef {macros[0]}\n{clean_declaration}\n{defines}\n#endif"
 
             if injection in content:
                 continue
-            if declaration in content:
-                content = content.replace(declaration, injection)
+            # Remplacement ANCRÉ EN DÉBUT DE LIGNE : ne touche que les vraies
+            # déclarations, jamais une occurrence nichée dans un commentaire « // in ... ; ».
+            pattern = rf"(?m)^([ \t]*){re.escape(declaration)}"
+            new_content, n = re.subn(pattern, lambda m: m.group(1) + injection, content)
+            if n:
+                content = new_content
                 file_modified = True
         if file_modified:
             try:
