@@ -1,4 +1,5 @@
 #version 330 compatibility
+//#modified
 #define RENDER_FRAG
 #define RENDER_GBUFFER
 #define RENDER_TERRAIN
@@ -117,6 +118,8 @@ layout(location = 0) out uvec4 outColor0;
 #define VSHSDT
 #include "/lib/sdt/SDTmain.glsl"
 void main() {
+PrepareTextureSynthesisVSH();
+
     vec4 colorMap, normalMap, specularMap, lightingMap;
     PbrLighting(colorMap, normalMap, specularMap, lightingMap);
 

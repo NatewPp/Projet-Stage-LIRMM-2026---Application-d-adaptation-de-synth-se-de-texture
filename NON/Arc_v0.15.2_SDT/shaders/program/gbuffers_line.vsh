@@ -16,7 +16,10 @@
 out vec2 lmcoord;
 out vec3 localPos;
 
+#ifndef MODELVIEWMATRIX
 uniform mat4 modelViewMatrix;
+#define MODELVIEWMATRIX
+#endif
 uniform mat4 projectionMatrix;
 #ifndef GBUFFERMODELVIEWINVERSE
 uniform mat4 gbufferModelViewInverse;

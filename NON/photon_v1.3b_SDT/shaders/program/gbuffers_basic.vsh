@@ -23,7 +23,10 @@ in vec3 vaNormal;
 in ivec2 vaUV2;
 
 uniform mat4 projectionMatrix;
+#ifndef MODELVIEWMATRIX
 uniform mat4 modelViewMatrix;
+#define MODELVIEWMATRIX
+#endif
 
 #if BOX_LINE_WIDTH != 2
 uniform int renderStage;

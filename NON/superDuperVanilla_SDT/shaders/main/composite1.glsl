@@ -1,0 +1,94 @@
+/*
+================================ /// Super Duper Vanilla v1.3.5 /// ================================
+
+    Developed by Eldeston, presented by FlameRender (C) Studios.
+
+    Copyright (C) 2023 Eldeston | FlameRender (C) Studios License
+
+
+    By downloading this content you have agreed to the license and its terms of use.
+
+================================ /// Super Duper Vanilla v1.3.5 /// ================================
+*/
+
+/// Buffer features: Temporal Anti-Aliasing (TAA)
+
+/// -------------------------------- /// Vertex Shader /// -------------------------------- ///
+
+#ifdef VERTEX
+    noperspective out vec2 texCoord;
+
+    void main(){
+        // Get buffer texture coordinates
+        texCoord = gl_MultiTexCoord0.xy;
+
+        gl_Position = vec4(gl_Vertex.xy * 2.0 - 1.0, 0, 1);
+    }
+#endif
+
+/// -------------------------------- /// Fragment Shader /// -------------------------------- ///
+
+#ifdef FRAGMENT
+    /* RENDERTARGETS: 0 */
+    layout(location = 0) out vec3 sceneColOut; // gcolor
+
+    #if (defined PREVIOUS_FRAME && (defined SSR || defined SSGI)) || ANTI_ALIASING >= 2
+        /* RENDERTARGETS: 0,5 */
+        #ifdef AUTO_EXPOSURE
+            out vec4 temporalDataOut; // colortex5
+        #else
+            out vec3 temporalDataOut; // colortex5
+        #endif
+    #endif
+
+    noperspective in vec2 texCoord;
+
+    uniform sampler2D gcolor;
+
+    #if (defined PREVIOUS_FRAME && (defined SSR || defined SSGI)) || ANTI_ALIASING >= 2
+        uniform sampler2D colortex5;
+    #endif
+
+    #if ANTI_ALIASING >= 2
+        #ifndef CAMERAPOSITION
+uniform vec3 cameraPosition;
+#define CAMERAPOSITION
+#endif
+        uniform vec3 previousCameraPosition;
+
+        #ifndef GBUFFERMODELVIEWINVERSE
+uniform mat4 gbufferModelViewInverse;
+#define GBUFFERMODELVIEWINVERSE
+#endif
+        uniform mat4 gbufferPreviousModelView;
+
+        #ifndef GBUFFERPROJECTIONINVERSE
+uniform mat4 gbufferProjectionInverse;
+#define GBUFFERPROJECTIONINVERSE
+#endif
+        uniform mat4 gbufferPreviousProjection;
+
+        uniform sampler2D depthtex0;
+
+        #include "/lib/utility/projectionFunctions.glsl"
+        #include "/lib/utility/prevProjectionFunctions.glsl"
+
+        #include "/lib/antialiasing/taa.glsl"
+    #endif
+
+    void main(){
+        #if ANTI_ALIASING >= 2
+            sceneColOut = textureTAA(ivec2(gl_FragCoord.xy));
+        #else
+            sceneColOut = texelFetch(gcolor, ivec2(gl_FragCoord.xy), 0).rgb;
+        #endif
+
+        #if (defined PREVIOUS_FRAME && (defined SSR || defined SSGI)) || ANTI_ALIASING >= 2
+            #ifdef AUTO_EXPOSURE
+                temporalDataOut = vec4(sceneColOut, texelFetch(colortex5, ivec2(0), 0).a);
+            #else
+                temporalDataOut = sceneColOut;
+            #endif
+        #endif
+    }
+#endif

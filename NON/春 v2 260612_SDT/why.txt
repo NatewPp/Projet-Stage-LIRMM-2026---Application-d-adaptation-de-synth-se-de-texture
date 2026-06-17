@@ -1,14 +1,3 @@
-terrain_solid: terrain_solid: 0(593) : error C5514: 'varying' is deprecated and removed from this profile, use 'in/out' instead
-0(593) : error C1038: declaration of "sdtTexCoord" conflicts with previous declaration at 0(3)
-0(594) : error C5514: 'varying' is deprecated and removed from this profile, use 'in/out' instead
-0(594) : error C1038: declaration of "sdtNormal" conflicts with previous declaration at 0(4)
-0(595) : error C5514: 'varying' is deprecated and removed from this profile, use 'in/out' instead
-0(595) : error C1038: declaration of "sdtWavingOffset" conflicts with previous declaration at 0(5)
-0(596) : error C5514: 'varying' is deprecated and removed from this profile, use 'in/out' instead
-0(596) : error C1038: declaration of "sdtPlayerPos" conflicts with previous declaration at 0(6)
-0(598) : error C5052: gl_MultiTexCoord0 is not accessible in this profile
-0(598) : error C7616: global variable gl_MultiTexCoord0 is removed after version 140
-0(599) : error C5052: gl_Normal is not accessible in this profile
-0(599) : error C7616: global variable gl_Normal is removed after version 140
-0(601) : error C5052: gl_Vertex is not accessible in this profile
-0(601) : error C7616: global variable gl_Vertex is removed after version 140
+terrain_solid: terrain_solid: 0(640) : error C1038: declaration of "vaPosition" conflicts with previous declaration at 0(3)
+0(641) : error C1038: declaration of "vaNormal" conflicts with previous declaration at 0(4)
+0(642) : error C1038: declaration of "vaUV0" conflicts with previous declaration at 0(5)

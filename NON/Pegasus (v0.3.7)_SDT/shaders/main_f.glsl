@@ -664,7 +664,9 @@ void main() {
 			
 			
 		#else
-			vec4 color = texture2D(texture, texcoord) * glcolor;
+			vec4 color = texture2D(texture, texcoord);
+    ApplyTextureSynthesis(color);
+    color = color * glcolor;
 			#if PBR > 0
 				vec4 normals_pixel = texture2D(normals, texcoord);
 			#endif	
@@ -1272,7 +1274,9 @@ void main() {
 	
 	#if IS_WEATHER == 1
 		sun_lighting = 1.;
-		//color.rgb= texture2D(texture, texcoord).rgb *2. ;//debug
+		//color.rgb= texture2D(texture, texcoord);
+    ApplyTextureSynthesis(color);
+    color = color .rgb *2.;//debug
 		color.a = color.a>0.7? 1.: color.a>0.1? .3:0.;
 		//normals_pixel.rgb = vec3(1.,0.,0.);//
 	#endif
@@ -1960,7 +1964,9 @@ void main() {
 	#endif
 	
 	#if IS_WEATHER == 11
-		color.rgb= texture2D(texture, texcoord).rgb *2. ;//debug
+		color.rgb= texture2D(texture, texcoord);
+    ApplyTextureSynthesis(color);
+    color = color .rgb *2.;//debug
 		color.a = color.a>0.7? 1.: color.a>0.1? .5:0.;
 		//normals_pixel.rgb = vec3(1.,0.,0.);//
 	#endif

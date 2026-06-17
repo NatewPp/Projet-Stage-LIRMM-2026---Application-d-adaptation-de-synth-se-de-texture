@@ -1,3 +1,4 @@
+//#modified
 //Terrain_VS
 
 
@@ -69,6 +70,8 @@ vec4 BicubicBlurTexture(sampler2D texSampler, vec2 coord){
 #define VSHSDT
 #include "/lib/sdt/SDTmain.glsl"
 void main(){
+PrepareTextureSynthesisVSH();
+
 	#ifdef WHITE_DEBUG_WORLD
 		#ifdef GTAO
 			v_color = vec3(1.0);

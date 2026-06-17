@@ -32,7 +32,10 @@ in vec3 vaNormal;
 in vec3 vaPosition;
 in vec4 vaColor;
 
+#ifndef MODELVIEWMATRIX
 uniform mat4 modelViewMatrix, projectionMatrix;
+#define MODELVIEWMATRIX
+#endif
 
 vec4 GetLinePosition(vec3 Position) {
     const vec3 LineViewShrink = vec3((255.0 / 256.0), 0.0, 1.0);

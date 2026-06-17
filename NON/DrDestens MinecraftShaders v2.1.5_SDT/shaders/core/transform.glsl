@@ -7,15 +7,24 @@ uniform float near;
 uniform float nearInverse;
 uniform float far;
 
+#ifndef CAMERAPOSITION
 uniform vec3 cameraPosition;
+#define CAMERAPOSITION
+#endif
 uniform vec3 previousCameraPosition;
 
 uniform mat4 gbufferModelView;
+#ifndef GBUFFERMODELVIEWINVERSE
 uniform mat4 gbufferModelViewInverse;
+#define GBUFFERMODELVIEWINVERSE
+#endif
 uniform mat4 gbufferPreviousModelView;
 
 uniform mat4 gbufferProjection;
+#ifndef GBUFFERPROJECTIONINVERSE
 uniform mat4 gbufferProjectionInverse;
+#define GBUFFERPROJECTIONINVERSE
+#endif
 uniform mat4 gbufferPreviousProjection;
 
 float fovScale = gbufferProjection[1][1] * 0.7299270073;

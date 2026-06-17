@@ -1,5 +1,5 @@
-//#modified
 #version 330 compatibility
+//#modified
 #include "/lib/settings.glsl"
 #include "/lib/stddef.glsl"
 

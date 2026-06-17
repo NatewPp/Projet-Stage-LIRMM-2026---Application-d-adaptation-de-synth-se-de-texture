@@ -1,3 +1,4 @@
+//#modified
 /*
 ====================================================================================================
 
@@ -175,6 +176,8 @@ vec3 waterNormal() {
 #define VSHSDT
 #include "/lib/sdt/SDTmain.glsl"
 void main() {
+PrepareTextureSynthesisVSH();
+
     if (OutsideDownscaleViewport()) discard;
     
     vec3 sceneNormal    = vertexNormal;

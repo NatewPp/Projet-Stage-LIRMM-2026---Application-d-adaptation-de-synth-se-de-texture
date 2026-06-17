@@ -507,10 +507,14 @@ void main() {
 			
 			#if IS_AN_ENTITY == 1 || IS_PARTICLE == 1
 				//color *= glcolor ; // they fade with alpha, unlike terrain since seperateAo is On
-				vec4 color = texture(texture, texcoord) * glcolor;
+				vec4 color = texture(texture, texcoord);
+    ApplyTextureSynthesis(color);
+    color = color * glcolor;
 			#else
 				//color.rgb*=glcolor.rgb; //*glcolor.a; // ao is in alpha for terrain
-				vec4 color = texture(texture, texcoord) * vec4(glcolor.rgb,1.);
+				vec4 color = texture(texture, texcoord);
+    ApplyTextureSynthesis(color);
+    color = color * vec4(glcolor.rgb,1.);
 			#endif
 			#if PBR > 0
 				vec4 normals_pixel = texture(normals, texcoord);
@@ -2111,7 +2115,9 @@ void main() {
 			
 		color.rgb = texture3D(cSampler3_colored_light, 
 					vec3(foot_pos2+fract(cameraPosition) +VOXEL_RADIUS +double_buffer_offset)/vec3(VOXEL_AREA,VOXEL_AREA_X_2,VOXEL_AREA)	
-					).rgb;	
+					);
+    ApplyTextureSynthesis(color);
+    color = color .rgb;	
 	#endif					
 	
 	

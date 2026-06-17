@@ -1,5 +1,5 @@
-//#modified
 #version 330 compatibility
+//#modified
 #define RENDER_TERRAIN
 #define RENDER_GBUFFER
 #define RENDER_FRAG

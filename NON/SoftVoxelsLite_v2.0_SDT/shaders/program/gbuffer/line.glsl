@@ -32,7 +32,10 @@ in vec3 vaNormal;
 in vec3 vaPosition;
 in vec4 vaColor;
 
+#ifndef MODELVIEWMATRIX
 uniform mat4 modelViewMatrix;
+#define MODELVIEWMATRIX
+#endif
 uniform mat4 projectionMatrix;
 
 const float VIEW_SHRINK = 1.0 - (1.0 / 256.0);

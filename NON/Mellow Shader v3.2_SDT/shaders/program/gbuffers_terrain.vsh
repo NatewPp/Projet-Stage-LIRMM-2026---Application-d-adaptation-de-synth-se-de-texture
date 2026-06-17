@@ -1,5 +1,5 @@
-//#modified
 #version 330 compatibility
+//#modified
 #include "/lib/all_the_libs.glsl"
 
 #include "/global/gbuffers.vsh"
