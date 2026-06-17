@@ -23,7 +23,7 @@ import customtkinter as ctk
 import tkinter.font as tkfont
 import pygame
 from tkinter import filedialog, messagebox
-import random
+import locale
 
 #Le script principal
 import regen_uvhints as engine
@@ -43,6 +43,23 @@ MC = {
     "entry_bd":  "#5a5a5a",   # contour des champs
     "text":      "#ffffff",
     "subtext":   "#a0a0a0",
+}
+
+TEXTS = {
+    "fr": {"title": "Implementeur Synthèse de texture",
+           "regen": "Régénérer",
+           "browse": "Parcourir",
+           "atlas_label": "1. Atlas de ta version (PNG)",
+           "atlas_label2": "2. Dossier du shaderpack",
+           "btnDebug": "MONTRER DEBUG",
+           "statut": "Prêt"},
+    "en": {"title": "Texture Synthesis Implementer",
+           "regen": "Regenerate",
+           "browse": "Browse",
+           "atlas_label": "1. Your version's atlas (PNG)",
+           "atlas_label2": "2. Shaderpack folder",
+           "btnDebug": "SHOW DEBUG",
+           "statut": "Ready"},
 }
 
 #Variables de chemin
@@ -100,11 +117,24 @@ def tiled_bg(w, h, scale=4, dark=0.4):
             bg.paste(tex, (x, y))
     return Image.eval(bg, lambda v: int(v * dark)) #retourne le bg avec les valeurs RGB * 0.35 pour l'effet sombre
 
+def detect_lang():
+    """Renvoie 'fr' si l'OS est en français, sinon 'en' (par défaut)."""
+    try:
+        code = locale.getlocale()[0] or ""
+    except Exception:
+        code = ""
+    # couvre 'fr_FR', 'French_France', 'fr-FR'... insensible à la casse
+    return "fr" if code.lower().startswith(("fr", "french")) else "en"
+
+T = TEXTS[detect_lang()]
+
 class App(ctk.CTk):
     def __init__(self):
         super().__init__() #hérite de Ctk
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
+
+        self._i18n = []   # liste de fonctions "mets à jour mon texte"
 
         self.canvas = tk.Canvas(self, highlightthickness=0, bg=MC["bg"])
         self.canvas.pack(fill="both", expand=True)
@@ -114,7 +144,8 @@ class App(ctk.CTk):
 
         self.geometry("1280x720")
         self.minsize(760, 620)
-        #self.resizable(False, False)
+        
+        self.lang = detect_lang()   
 
         #Fond + icone
         self.configure(fg_color=MC["bg"]) #Fond façon MC
@@ -139,24 +170,37 @@ class App(ctk.CTk):
         except Exception:
             pass
 
+        
         #Titre
-        self.canvas.create_text(382, 32, text="Texture Synthesis Implementer",
-                                font=("Monocraft", 22, "bold"), fill="#3f3f3f",tags="ui")  #Ombre
-        self.canvas.create_text(380, 30, text="Texture Synthesis Implementer",
-                                font=("Monocraft", 22, "bold"), fill="white",tags="ui") #Pas ombre
+        self._txt(382, 32, "title", font=("Monocraft", 22, "bold"), fill="#3f3f3f", tags="ui")
+        self._txt(380, 30, "title", font=("Monocraft", 22, "bold"), fill="white", tags="ui")
+
+        self.lang_btn = tk.Button(self.canvas, text=self.lang.upper(),
+                                font=mc_font(20, "bold"), fg="white",
+                                bg=MC["stone"], activebackground=MC["stone_hi"],
+                                bd=3, relief="raised", highlightthickness=0,
+                                cursor="hand2", command=self._toggle_lang)
+        self.canvas.create_window(700, 30, window=self.lang_btn, anchor="nw", width=50, height=30, tags="ui")
+        self._i18n.append(lambda: self.lang_btn.configure(text=self.lang.upper()))
+        self.canvas.create_window(10,10, window=self.lang_btn, anchor="nw",
+                                  width=150, height=50)
+        #Actionne le changement de couleur quand on survole le bouton
+        self.lang_btn.bind("<Enter>", lambda e: self.lang_btn.config(bg=MC["stone_hi"])) 
+        self.lang_btn.bind("<Leave>", lambda e: self.lang_btn.config(bg=MC["stone"]))
 
         #Selection atlas
         self.atlas_var = ctk.StringVar()
-        self._row(80, "1. Atlas de ta version (PNG)", self.atlas_var, self._pick_atlas)
+        self._row(80, "atlas_label", self.atlas_var, self._pick_atlas)
+        #self._register_widget(self.atlas_var, "atlas_label")
 
         #Selection Shader pack
         self.pack_var = ctk.StringVar()
-        self._row(150, "2. Dossier du shaderpack", self.pack_var, self._pick_pack)
+        self._row(150, "atlas_label2", self.pack_var, self._pick_pack)
 
         #Option debug
         self.debug_var = ctk.BooleanVar(value=False)
         cb2 = tk.Checkbutton( #bouton pour activer ou désactiver le debug
-            self.canvas, text="SHOW DEBUG",
+            self.canvas, text= self.t("btnDebug"),
             variable=self.debug_var,
             font=mc_font(12),                     
             indicatoron=False,                   
@@ -166,6 +210,7 @@ class App(ctk.CTk):
             bd=3, relief="raised",                
             highlightthickness=0, cursor="hand2",
             command=self._click)
+        self._register_widget(cb2, "btnDebug")
 
         #option si dossier de plusieurs shaderpacks ou si un seul shaderpack
         self.manyfolders_var = ctk.BooleanVar(value=False)
@@ -192,7 +237,7 @@ class App(ctk.CTk):
 
         #Bouton Générer
         self.run_btn = tk.Button(
-            self.canvas, text="Générer",
+            self.canvas, text=self.t("regen"),
             font=mc_font(16, "bold"),
             fg="white", bg=MC["green"], activebackground=MC["green_hi"],
             activeforeground="white", bd=3, relief="raised",
@@ -202,12 +247,11 @@ class App(ctk.CTk):
                                   width=728, height=46,tags="ui")
         self.run_btn.bind("<Enter>", lambda e: self.run_btn.config(bg=MC["green_hi"]))
         self.run_btn.bind("<Leave>", lambda e: self.run_btn.config(bg=MC["green"]))
+        self._register_widget(self.run_btn, "regen")
 
         #Etat de la génération
-        self.canvas.create_text(17, 371, text="Prêt.", anchor="w",
-                                font=("Monocraft", 12), fill="black", tags=("status_sh","ui"))
-        self.canvas.create_text(16, 370, text="Prêt.", anchor="w",
-                                font=("Monocraft", 12), fill=MC["subtext"], tags=("status","ui"))
+        self._statut(370,"statut","black")
+        self._statut(371,"statut",MC["subtext"])
         #Zone de log et debug
         self.log = ctk.CTkTextbox(self.canvas, corner_radius=0, fg_color=MC["entry"],
                                   border_color=MC["entry_bd"], border_width=2,
@@ -227,11 +271,11 @@ class App(ctk.CTk):
         messagebox.showerror(title, msg) #affiche une error box
 
     #UI
-    def _row(self, y, label, var, browse_cmd):
+    def _row(self, y, key, var, browse_cmd):
         """Fonction de création des zones pour mettre atlas et shader"""
-        self.canvas.create_text(17, y + 1, text=label, anchor="w",
+        self._txt(17, y + 1, key, anchor="w",
                                 font=("Monocraft", 13), fill="black",tags="ui")#Ombre
-        self.canvas.create_text(16, y, text=label, anchor="w",
+        self._txt(16, y, key, anchor="w",
                                 font=("Monocraft", 13), fill=MC["text"],tags="ui")
         entry = ctk.CTkEntry(self.canvas, textvariable=var, corner_radius=0, #zone pour rentrer manuellement un chemin
                              fg_color=MC["entry"], border_color=MC["entry_bd"],
@@ -239,7 +283,7 @@ class App(ctk.CTk):
         self.canvas.create_window(16, y + 16, window=entry, anchor="nw",
                                   width=610, height=30,tags="ui")
         btn = tk.Button( #bouton parcourir
-            self.canvas, text="Parcourir",
+            self.canvas, text=self.t("browse"),
             font=mc_font(12, "bold"),
             fg="white", bg=MC["stone"], activebackground=MC["stone_hi"],
             activeforeground="white", bd=3, relief="raised",
@@ -250,6 +294,11 @@ class App(ctk.CTk):
         #Actionne le changement de couleur quand on survole le bouton
         btn.bind("<Enter>", lambda e: btn.config(bg=MC["stone_hi"])) 
         btn.bind("<Leave>", lambda e: btn.config(bg=MC["stone"]))
+        self._register_widget(btn, "browse")
+
+    def _statut(self, y, key,color):
+        self._txt(17, y+1, key, anchor="w",
+                                font=("Monocraft", 12), fill = color, tags=("status_sh","ui"))
 
     def _pick_atlas(self):
         """Fonction pour séléctionner dans ses fichier son atlas.png"""
@@ -263,6 +312,27 @@ class App(ctk.CTk):
         d = filedialog.askdirectory(title="Choisir le dossier du shaderpack")
         if d:
             self.pack_var.set(d)
+    #fonction lier au texte et la langue
+    def t(self, key):
+        return TEXTS[self.lang][key]
+    
+    def _txt(self, x, y, key, **kw):
+        """Crée un texte canvas traduisible : il se mettra à jour au changement de langue."""
+        item = self.canvas.create_text(x, y, text=self.t(key), **kw)
+        self._i18n.append(lambda: self.canvas.itemconfigure(item, text=self.t(key)))
+        return item
+    
+    def _register_widget(self, widget, key):
+        self._i18n.append(lambda: widget.configure(text=self.t(key)))
+    
+    def _apply_lang(self):
+        for update in self._i18n:
+            update() 
+
+    def _toggle_lang(self):
+        self._click()                              
+        self.lang = "en" if self.lang == "fr" else "fr"
+        self._apply_lang()  
 
     def _clear_log(self):
         """Vide les logs"""
