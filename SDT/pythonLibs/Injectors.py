@@ -66,40 +66,52 @@ def includeSTDlibs(filepath: str, relative_to_root: str, colorvariable: str):
 
 def inject_SDTfunctionsinmain(filepath: str, shader_root: str, colorvariable: str = None):
     """"
-    Injecte les fonctions d'injections de SDT selon le type de fichier shader ciblé :
+    Injecte les fonctions d'injections de SDT en routant selon le CONTENU réel du
+    fichier (nombre de main() et présence d'une assignation de texture sur la
+    variable couleur), et non selon l'extension : certains packs (E-LITE…) mettent
+    le code fragment dans des .glsl inclus, qui seraient sinon mal classés.
     PRECONDITION : le fichier doit être un fichier texte lisible.
-    POSTCONDITION : le fichier est modifié avec l'injection de la fonction SDT correspondante, 
+    POSTCONDITION : le fichier est modifié avec l'injection de la fonction SDT correspondante,
                     ou reste inchangé si déjà modifié.
     """
     includeSTDlibs(filepath, shader_root, colorvariable)
-    if ".fsh" in filepath.lower():
+
+    with open(filepath, 'r', encoding='utf-8') as f:
+        content = f.read()
+    mains = extraire_blocs_main(content)
+
+    def _is_fragment_main(bloc):
+        # Un main est "fragment" s'il assigne une texture à la variable couleur.
         if not colorvariable:
-            print(f"[!] Variable couleur introuvable, injection FSH sautée : {filepath}")
-            return
-        injectFSHSDTinmain(filepath, colorvariable)
-    elif ".vsh" in filepath.lower():
-        injectVSHSDTinmain(filepath)
-    else:
+            return False
+        return bool(re.search(
+            rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z]+)?\s*=\s*"
+            rf"\btexture(?!Size\b)[a-zA-Z0-9_]*\b\s*\(", bloc))
+
+    if len(mains) >= 2:
         if not colorvariable:
             print(f"[!] Variable couleur introuvable, injection sautée : {filepath}")
             return
         injectBothSDTinmains(filepath, colorvariable)
-
-def injectModified(filepath: str):
-    """
-    Marque le fichier comme modifié en ajoutant un commentaire en tête.
-    PRECONDITION : le fichier doit être un fichier texte lisible.
-    POSTCONDITION : le fichier est modifié avec l'ajout du commentaire "//#modified" en tête,
-                    ou reste inchangé si déjà modifié.
-    """
-    with open(filepath, 'r', encoding='utf-8') as file:
-        content = file.read()
-        if not content.startswith("//#modified\n"):
-            content = "//#modified\n" + content
+    elif len(mains) == 1:
+        if _is_fragment_main(mains[0]):
+            injectFSHSDTinmain(filepath, colorvariable)
         else:
-            return False
-    with open(filepath, 'w', encoding='utf-8') as file:
-        file.write(content)
+            injectVSHSDTinmain(filepath)
+    else:
+        print(f"[!] Aucun bloc main détecté dans {filepath}")
+
+def ajouter_tampon_modified(content: str) -> str:
+    """Ajoute le marqueur "//#modified" de façon version-aware.
+    En GLSL, la directive #version doit rester le tout premier token du fichier ;
+    on insère donc le tampon juste APRÈS la ligne #version si elle existe, sinon en tête.
+    PRECONDITION : content est le contenu textuel du shader.
+    POSTCONDITION : retourne le contenu avec le marqueur ajouté sans casser #version.
+    """
+    if re.search(r"^\s*#version\b.*$", content, flags=re.MULTILINE):
+        return re.sub(r"^(\s*#version\b.*)$", r"\1\n//#modified",
+                      content, count=1, flags=re.MULTILINE)
+    return "//#modified\n" + content
 
 def injectFSHSDTinmain(filepath: str, colorvariable: str) -> bool:
     """
@@ -109,27 +121,28 @@ def injectFSHSDTinmain(filepath: str, colorvariable: str) -> bool:
     POSTCONDITION : le fichier est modifié avec l'injection de la fonction SDT du FSH 
                     ou reste inchangé si déjà modifié.
     """
-    isNotModified = injectModified(filepath)
-    if isNotModified is False:
-        print("already modified")
-        return False
     try:
         with open(filepath, 'r', encoding='utf-8') as file:
             content = file.read()
+
+        if "//#modified" in content:
+            print("already modified")
+            return False
 
         blocs = extraire_blocs_main(content)
         if not blocs:
             print(f"[!] Aucun bloc main trouvé par extraire_blocs_main dans {filepath}")
             return False
-            
+
         contenu_main_original = blocs[0]
-        contenu_main_modifie = inserer_applyFSH_dans_bloc_main(contenu_main_original, colorvariable)     
+        contenu_main_modifie = inserer_applyFSH_dans_bloc_main(contenu_main_original, colorvariable)
         if contenu_main_modifie is None:
             print(f"[!] Impossible de trouver l'assignation de texture pour '{colorvariable}' dans le main de {filepath}")
             return False
-        
+
         content_modifie = content.replace(contenu_main_original, contenu_main_modifie, 1)
-        
+        content_modifie = ajouter_tampon_modified(content_modifie)  # tampon version-aware, après succès
+
         with open(filepath, 'w', encoding='utf-8') as file:
             file.write(content_modifie)
         return True
@@ -147,25 +160,26 @@ def injectVSHSDTinmain(filepath: str):
     POSTCONDITION : le fichier est modifié avec l'injection de la fonction SDT du VSH, 
                     ou reste inchangé si déjà modifié.
     """
-    isNotModified = injectModified(filepath)
-    if isNotModified is False:
-        return False
     try:
         with open(filepath, 'r', encoding='utf-8') as file:
             content = file.read()
+
+        if "//#modified" in content:
+            return False
 
         blocs = extraire_blocs_main(content)
         if not blocs:
             print(f"[!] Aucun bloc main trouvé par extraire_blocs_main dans {filepath}")
             return False
-            
+
         contenu_main_original = blocs[0]
-        contenu_main_modifie = inserer_prepareVSH_dans_bloc_main(contenu_main_original)     
+        contenu_main_modifie = inserer_prepareVSH_dans_bloc_main(contenu_main_original)
         if contenu_main_modifie is None:
             print(f"[!] Impossible d'injecter PrepareTextureSynthesisVSH() dans le main de {filepath}")
             return False
 
         content_modifie = content.replace(contenu_main_original, contenu_main_modifie, 1)
+        content_modifie = ajouter_tampon_modified(content_modifie)  # tampon version-aware, après succès
         with open(filepath, 'w', encoding='utf-8') as file:
             file.write(content_modifie)
         return True
@@ -182,29 +196,32 @@ def injectBothSDTinmains(filepath: str,colorvariable: str):
                     et la variable couleur doit être présente dans le main du fragment.
     POSTCONDITION : le fichier est modifié avec l'injection des fonctions SDT dans les mains correspondants,
     """
-    isNotModified = injectModified(filepath)
-    if isNotModified is False:
-        return False
     try:
         with open(filepath, 'r', encoding='utf-8') as file:
             content = file.read()
-            mains = extraire_blocs_main(content)
-            if len(mains) < 2:
-                print(f"[!] Moins de 2 blocs main trouvés dans {filepath}, impossible d'injecter les fonctions SDT.")
-                return False
-            for main in mains:
-                if re.search(rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture(?!Size\b)[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b", main):
-                    contenu_main_modifie = inserer_applyFSH_dans_bloc_main(main, colorvariable)
-                    if contenu_main_modifie is None:
-                        print(f"[!] Impossible de trouver l'assignation de texture pour '{colorvariable}' dans le main de {filepath}")
-                        return False
-                    content = content.replace(main, contenu_main_modifie, 1)
-                else:
-                    contenu_main_modifie = inserer_prepareVSH_dans_bloc_main(main)
-                    if contenu_main_modifie is None:
-                        print(f"[!] Impossible d'injecter PrepareTextureSynthesisVSH() dans le main de {filepath}")
-                        return False
-                    content = content.replace(main, contenu_main_modifie, 1)
+
+        if "//#modified" in content:
+            return False
+
+        mains = extraire_blocs_main(content)
+        if len(mains) < 2:
+            print(f"[!] Moins de 2 blocs main trouvés dans {filepath}, impossible d'injecter les fonctions SDT.")
+            return False
+        for main in mains:
+            if re.search(rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture(?!Size\b)[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b", main):
+                contenu_main_modifie = inserer_applyFSH_dans_bloc_main(main, colorvariable)
+                if contenu_main_modifie is None:
+                    print(f"[!] Impossible de trouver l'assignation de texture pour '{colorvariable}' dans le main de {filepath}")
+                    return False
+                content = content.replace(main, contenu_main_modifie, 1)
+            else:
+                contenu_main_modifie = inserer_prepareVSH_dans_bloc_main(main)
+                if contenu_main_modifie is None:
+                    print(f"[!] Impossible d'injecter PrepareTextureSynthesisVSH() dans le main de {filepath}")
+                    return False
+                content = content.replace(main, contenu_main_modifie, 1)
+
+        content = ajouter_tampon_modified(content)  # tampon version-aware, après succès
         with open(filepath, 'w', encoding='utf-8') as file:
             file.write(content)
         return True

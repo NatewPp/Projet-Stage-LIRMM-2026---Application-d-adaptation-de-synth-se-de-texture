@@ -61,48 +61,60 @@ def includesPathList(filepath: str):
 
 import os
 
-def findMainFunction(filepath: str, shader_root: str) -> bool:
+def findMainFunction(filepath: str, shader_root: str, _visited: set = None) -> bool:
     """
     Recherche récursivement la fonction main() dans le fichier donné et ses fichiers inclus.
     PRECONDITION : le fichier doit être un fichier texte lisible.
-    POSTCONDITION : retourne une liste [filepath, shader_root, nom_variable_couleur] ou [filepath, shader_root] 
-                    si le fichier contient void main() et est soit un fichier de fragment, 
+    POSTCONDITION : retourne une liste [filepath, shader_root, nom_variable_couleur] ou [filepath, shader_root]
+                    si le fichier contient void main() et est soit un fichier de fragment,
                     soit un fichier de vertex, sinon retourne False.
+    NOTE : _visited protège contre les boucles d'includes (certains packs, ex. DrDestens,
+           ont des fichiers world*/gbuffers_terrain.fsh qui incluent /gbuffers_terrain.fsh).
     """
+    if _visited is None:
+        _visited = set()
+    real = os.path.normpath(os.path.realpath(filepath))
+    if real in _visited:
+        return False
+    _visited.add(real)
+
     if hasMain(filepath):
         if not ".vsh" in filepath.lower():
             return [filepath,shader_root ,obtenir_nom_variable_couleur_universel(filepath)]
         else:
             return [filepath,shader_root]
-        
+
+    shaders_dir = os.path.join(shader_root, "shaders")
     includes = includesPathList(filepath)
     for i in includes:
         i_clean = i.lstrip("/\\")
-        shaders_dir = os.path.join(shader_root, "shaders")
-            
-        path_relative_to_root = os.path.join(shader_root, i_clean)
-        path_relative_to_rootBIS = os.path.join(shaders_dir, i_clean)
 
-        path_relative_to_file = os.path.join(os.path.dirname(filepath), i_clean)
-        path_relative_to_fileBIS = os.path.join(os.path.dirname(filepath), "shaders", i_clean)
-        path_relative_to_root = os.path.normpath(path_relative_to_root)
-        path_relative_to_file = os.path.normpath(path_relative_to_file)
-        path_relative_to_fileBIS = os.path.normpath(path_relative_to_fileBIS)
-        path_relative_to_rootBIS = os.path.normpath(path_relative_to_rootBIS)
-        
-        if os.path.isfile(path_relative_to_root):
-            include_path = path_relative_to_root
-        elif os.path.isfile(path_relative_to_file):
-            include_path = path_relative_to_file
-        elif os.path.isfile(path_relative_to_fileBIS):
-            include_path = path_relative_to_fileBIS
-        elif os.path.isfile(path_relative_to_rootBIS):
-            include_path = path_relative_to_rootBIS
+        if i.startswith("/") or i.startswith("\\"):
+            # Include absolu (sémantique Iris) : relatif au dossier shaders/, jamais au fichier courant.
+            candidates = [
+                os.path.join(shaders_dir, i_clean),
+                os.path.join(shader_root, i_clean),
+            ]
         else:
+            # Include relatif : relatif au fichier courant.
+            candidates = [
+                os.path.join(os.path.dirname(filepath), i_clean),
+                os.path.join(os.path.dirname(filepath), "shaders", i_clean),
+                os.path.join(shaders_dir, i_clean),
+            ]
+
+        include_path = None
+        for cand in candidates:
+            cand = os.path.normpath(cand)
+            if os.path.isfile(cand):
+                include_path = cand
+                break
+
+        if include_path is None:
             print(f"[!] Impossible de localiser le fichier inclus : {i}")
             continue
-            
-        result = findMainFunction(include_path, shader_root)
+
+        result = findMainFunction(include_path, shader_root, _visited)
         if result is not False:
             return result
 
