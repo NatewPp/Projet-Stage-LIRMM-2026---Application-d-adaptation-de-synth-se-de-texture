@@ -61,7 +61,73 @@ def includesPathList(filepath: str):
 
 import os
 
-def findMainFunction(filepath: str, shader_root: str, _visited: set = None) -> bool:
+def collecter_macros(content: str, macros: dict = None) -> dict:
+    """Accumule les #define du contenu dans macros = {"obj": {...}, "func": {...}}.
+    - obj  : macros simples  #define NAME corps
+    - func : macros-fonction #define NAME(p1,p2) corps
+    PRECONDITION : content est le texte d'un shader.
+    POSTCONDITION : retourne le dict macros (créé si None) enrichi des #define trouvés.
+    """
+    if macros is None:
+        macros = {"obj": {}, "func": {}}
+    for m in re.finditer(r'^[ \t]*#define[ \t]+([A-Za-z_]\w*)(\([^)]*\))?[ \t]*(.*)$', content, re.M):
+        name, params, corps = m.group(1), m.group(2), m.group(3).strip()
+        if params is None:
+            if corps:                       # ignore les #define sans corps (ex. flags)
+                macros["obj"][name] = corps
+        else:
+            plist = [p.strip() for p in params[1:-1].split(",") if p.strip()]
+            macros["func"][name] = (plist, corps)
+    return macros
+
+def _split_args_top(s: str) -> list:
+    """Découpe les arguments d'un appel sur les virgules de premier niveau (hors parenthèses)."""
+    args, prof, cur = [], 0, ""
+    for c in s:
+        if c == "(":
+            prof += 1; cur += c
+        elif c == ")":
+            prof -= 1; cur += c
+        elif c == "," and prof == 0:
+            args.append(cur); cur = ""
+        else:
+            cur += c
+    if cur.strip() or args:
+        args.append(cur)
+    return [a.strip() for a in args]
+
+def resoudre_macros(content: str, macros: dict) -> str:
+    """Expanse (de façon best-effort) les macros object-like et function-like dans content.
+    Utilisé UNIQUEMENT pour la détection ; le fichier réel n'est jamais réécrit avec ça.
+    PRECONDITION : macros provient de collecter_macros.
+    POSTCONDITION : retourne content avec les macros substituées (bornage à 6 passes anti-boucle).
+    """
+    if not macros:
+        return content
+    obj, func = macros.get("obj", {}), macros.get("func", {})
+    for _ in range(6):
+        nouveau = content
+
+        for name, (plist, corps) in func.items():
+            def _repl(mm, plist=plist, corps=corps):
+                appel_args = _split_args_top(mm.group(1))
+                if len(appel_args) != len(plist):
+                    return mm.group(0)
+                res = corps
+                for p, a in zip(plist, appel_args):
+                    res = re.sub(rf"\b{re.escape(p)}\b", a, res)
+                return res
+            nouveau = re.sub(rf"\b{re.escape(name)}\b\s*\(([^()]*)\)", _repl, nouveau)
+
+        for name, corps in obj.items():
+            nouveau = re.sub(rf"\b{re.escape(name)}\b", corps, nouveau)
+
+        if nouveau == content:
+            break
+        content = nouveau
+    return content
+
+def findMainFunction(filepath: str, shader_root: str, _visited: set = None, _macros: dict = None) -> bool:
     """
     Recherche récursivement la fonction main() dans le fichier donné et ses fichiers inclus.
     PRECONDITION : le fichier doit être un fichier texte lisible.
@@ -70,17 +136,27 @@ def findMainFunction(filepath: str, shader_root: str, _visited: set = None) -> b
                     soit un fichier de vertex, sinon retourne False.
     NOTE : _visited protège contre les boucles d'includes (certains packs, ex. DrDestens,
            ont des fichiers world*/gbuffers_terrain.fsh qui incluent /gbuffers_terrain.fsh).
+           _macros accumule les #define rencontrés le long du graphe d'includes, afin de
+           résoudre les variables couleur masquées par des macros (ex. I Like Vanilla, Photon).
     """
     if _visited is None:
         _visited = set()
+    if _macros is None:
+        _macros = {"obj": {}, "func": {}}
     real = os.path.normpath(os.path.realpath(filepath))
     if real in _visited:
         return False
     _visited.add(real)
 
+    try:
+        with open(filepath, 'r', encoding='utf-8') as _f:
+            collecter_macros(_f.read(), _macros)
+    except Exception:
+        pass
+
     if hasMain(filepath):
         if not ".vsh" in filepath.lower():
-            return [filepath,shader_root ,obtenir_nom_variable_couleur_universel(filepath)]
+            return [filepath,shader_root ,obtenir_nom_variable_couleur_universel(filepath, _macros)]
         else:
             return [filepath,shader_root]
 
@@ -114,7 +190,7 @@ def findMainFunction(filepath: str, shader_root: str, _visited: set = None) -> b
             print(f"[!] Impossible de localiser le fichier inclus : {i}")
             continue
 
-        result = findMainFunction(include_path, shader_root, _visited)
+        result = findMainFunction(include_path, shader_root, _visited, _macros)
         if result is not False:
             return result
 
@@ -154,28 +230,39 @@ def extraire_blocs_main(contenu_fichier):
         
     return blocs_main
 
-def obtenir_nom_variable_couleur_universel(chemin_fichier):
+def obtenir_nom_variable_couleur_universel(chemin_fichier, macros: dict = None):
     """"
     Retourne le nom de la variable de couleur du pixel en cherchant dans les mains du shader passé en entrée.
-    PRECONDITION : le fichier doit être un fichier texte lisible.
+    Les macros (object-like et function-like) sont d'abord résolues, ce qui permet de détecter
+    la variable même quand l'échantillonnage est masqué par une macro :
+      - I Like Vanilla : texture2D(MAIN_TEXTURE, ...)  avec  #define MAIN_TEXTURE tex
+      - Photon         : read_tex(gtexture)            avec  #define read_tex(x) texture(x, ...)
+    PRECONDITION : le fichier doit être un fichier texte lisible. macros provient de collecter_macros.
     POSTCONDITION : retourne le nom de la variable de couleur du pixel si trouvé, sinon retourne False.
     """
     try:
         with open(chemin_fichier, 'r', encoding='utf-8') as f:
             contenu = f.read()
-            
-        les_main = extraire_blocs_main(contenu)
-        pattern_texture = r"\b([a-zA-Z_][a-zA-Z0-9_]*)\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture(?!Size\b)[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b"
-        
-        for index, contenu_main in enumerate(les_main):
+
+        # Macros locales au fichier + macros accumulées le long des includes.
+        macros_local = collecter_macros(contenu, {"obj": dict((macros or {}).get("obj", {})),
+                                                  "func": dict((macros or {}).get("func", {}))})
+        contenu_resolu = resoudre_macros(contenu, macros_local)
+
+        # Builtins d'échantillonnage acceptés (texture, texture2D, textureLod, textureGrad, texelFetch…)
+        # ; premier argument = un sampler de texture principale connu.
+        pattern_texture = (r"\b([a-zA-Z_][a-zA-Z0-9_]*)\b(?:\.[a-zA-Z]+)?\s*=\s*"
+                           r"(?:\btexture(?!Size\b)[a-zA-Z0-9_]*|\btexelFetch)\b\s*\(\s*"
+                           r"(?:g?texture|tex|gcolor)\b")
+
+        for contenu_main in extraire_blocs_main(contenu_resolu):
             match = re.search(pattern_texture, contenu_main)
             if match:
-                nom_variable = match.group(1)
-                return nom_variable
-                
+                return match.group(1)
+
         print("[!] Aucun main() ne correspond aux critères de texture principale.")
         return False
-        
+
     except Exception as e:
         print(f"[X] Erreur : {e}")
         return False

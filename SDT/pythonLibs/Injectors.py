@@ -28,7 +28,8 @@ def includeSTDlibs(filepath: str, relative_to_root: str, colorvariable: str):
 
     regex_fsh = None
     if colorvariable:
-        regex_fsh = rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture(?!Size\b)[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b"
+        # FSH = main qui assigne la variable couleur (robuste aux macros, cf. Photon/I Like Vanilla).
+        regex_fsh = rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z_]\w*)?\s*=(?!=)"
     
     matches_main = list(re.finditer(r"\bvoid\s+main\s*\(\s*\)", content))
     if len(matches_main) != len(liste_interieurs_mains):
@@ -81,12 +82,13 @@ def inject_SDTfunctionsinmain(filepath: str, shader_root: str, colorvariable: st
     mains = extraire_blocs_main(content)
 
     def _is_fragment_main(bloc):
-        # Un main est "fragment" s'il assigne une texture à la variable couleur.
+        # Un main est "fragment" s'il assigne (sous quelque forme que ce soit) la variable
+        # couleur détectée. Basé sur l'assignation, et non sur la forme texture(...), pour
+        # rester robuste quand l'échantillonnage est masqué par une macro (Photon, I Like Vanilla).
         if not colorvariable:
             return False
         return bool(re.search(
-            rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z]+)?\s*=\s*"
-            rf"\btexture(?!Size\b)[a-zA-Z0-9_]*\b\s*\(", bloc))
+            rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z_]\w*)?\s*=(?!=)", bloc))
 
     if len(mains) >= 2:
         if not colorvariable:
@@ -208,7 +210,7 @@ def injectBothSDTinmains(filepath: str,colorvariable: str):
             print(f"[!] Moins de 2 blocs main trouvés dans {filepath}, impossible d'injecter les fonctions SDT.")
             return False
         for main in mains:
-            if re.search(rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture(?!Size\b)[a-zA-Z0-9_]*\b\s*\(\s*(?:g?texture|tex)\b", main):
+            if re.search(rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z_]\w*)?\s*=(?!=)", main):
                 contenu_main_modifie = inserer_applyFSH_dans_bloc_main(main, colorvariable)
                 if contenu_main_modifie is None:
                     print(f"[!] Impossible de trouver l'assignation de texture pour '{colorvariable}' dans le main de {filepath}")
@@ -243,18 +245,26 @@ def inserer_applyFSH_dans_bloc_main(contenu_main: str, colorvariable: str) -> st
     color_esc = re.escape(colorvariable)
     pattern = rf"(\b{color_esc}\b(?:\.[a-zA-Z]+)?\s*=\s*\btexture(?!Size\b)[a-zA-Z0-9_]*\b\s*\([^;]*?\))(.*?);"
 
-    if not re.search(pattern, contenu_main):
-        return None
+    if re.search(pattern, contenu_main):
+        def _injecter(m):
+            assignation = m.group(1)
+            extra = m.group(2).strip()
+            seq = f"{assignation};\n    ApplyTextureSynthesis({colorvariable});"
+            if extra:
+                seq += f"\n    {colorvariable} = {colorvariable} {extra};"
+            return seq
+        return re.sub(pattern, _injecter, contenu_main)
 
-    def _injecter(m):
-        assignation = m.group(1)
-        extra = m.group(2).strip()
-        seq = f"{assignation};\n    ApplyTextureSynthesis({colorvariable});"
-        if extra:
-            seq += f"\n    {colorvariable} = {colorvariable} {extra};"
-        return seq
+    # Fallback : l'échantillonnage est masqué par une macro (Photon : read_tex(gtexture),
+    # I Like Vanilla : sampler macro). On ancre alors sur la PREMIÈRE assignation de la
+    # variable couleur et on insère ApplyTextureSynthesis juste après l'instruction complète.
+    fallback = rf"(\b{color_esc}\b(?:\.[a-zA-Z_]\w*)?\s*=(?!=)[^;]*;)"
+    m = re.search(fallback, contenu_main)
+    if m:
+        seq = f"{m.group(1)}\n    ApplyTextureSynthesis({colorvariable});"
+        return contenu_main[:m.start()] + seq + contenu_main[m.end():]
 
-    return re.sub(pattern, _injecter, contenu_main)
+    return None
     
 
 def inserer_prepareVSH_dans_bloc_main(contenu_main: str) -> str:
