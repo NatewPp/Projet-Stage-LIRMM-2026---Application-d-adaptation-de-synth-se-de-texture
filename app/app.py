@@ -235,6 +235,21 @@ class App(ctk.CTk):
         cb3.bind("<Enter>", lambda e: cb3.config(bg=MC["stone_hi"]))
         cb3.bind("<Leave>", lambda e: cb3.config(bg=MC["stone"]))
 
+        #Bouton pour choisir zip ou non en sortie
+        self.zip_var = ctk.BooleanVar(value=False)
+        cb4 = tk.Checkbutton(
+            self.canvas, text="ZIP",
+            variable=self.zip_var,
+            font=mc_font(12), indicatoron=False,
+            fg="white", bg=MC["stone"], selectcolor=MC["green_hi"],
+            activebackground=MC["stone_hi"], activeforeground="white",
+            bd=3, relief="raised", highlightthickness=0, cursor="hand2",
+            command=self._click)
+        self.canvas.create_window(272, 262, window=cb4, anchor="nw",
+                                width=80, height=34, tags="ui")
+        cb4.bind("<Enter>", lambda e: cb4.config(bg=MC["stone_hi"]))
+        cb4.bind("<Leave>", lambda e: cb4.config(bg=MC["stone"]))
+
         #Bouton Générer
         self.run_btn = tk.Button(
             self.canvas, text=self.t("regen"),
@@ -497,9 +512,13 @@ class App(ctk.CTk):
             shutil.move(out, glsl)       
 
             # Rezippage du pack traité
-            zip_path = shutil.make_archive(out_pack, "zip", out_pack)
-            shutil.rmtree(out_pack, ignore_errors=True)
-            self._say(f"Pack zippé : {zip_path}")
+            if self.zip_var.get() :
+                zip_path = shutil.make_archive(out_pack, "zip", out_pack)
+                shutil.rmtree(out_pack, ignore_errors=True)
+                self._say(f"Pack zippé : {zip_path}")
+            else :
+                self._say(f"Dossier créé : {out_pack}")
+
 
         except Exception as e:
             self._say("\nERREUR : " + str(e))
