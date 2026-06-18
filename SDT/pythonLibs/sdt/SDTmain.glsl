@@ -35,11 +35,13 @@ uniform sampler2D tex;
 #ifdef VSHSDT
 //========== VERTEX SHADER COMPONENT ==========
 
-// Declare varying variables for FSH
-varying vec2 sdtTexCoord;
-varying vec3 sdtNormal;
-varying vec4 sdtWavingOffset;
-varying vec3 sdtPlayerPos;
+// Inter-stage variables vers le FSH : 'out' dans le Vertex Shader.
+// (GLSL >= 130 : on n'utilise pas 'varying', déprécié et refusé par les
+//  packs écrits en style core comme Photon.)
+out vec2 sdtTexCoord;
+out vec3 sdtNormal;
+out vec4 sdtWavingOffset;
+out vec3 sdtPlayerPos;
 
 
 
@@ -63,10 +65,11 @@ void PrepareTextureSynthesisVSH() {
 //========== FRAGMENT SHADER COMPONENT ==========
 
 
-varying vec2 sdtTexCoord;
-varying vec3 sdtNormal;
-varying vec4 sdtWavingOffset;
-varying vec3 sdtPlayerPos;
+// Inter-stage variables depuis le VSH : 'in' dans le Fragment Shader.
+in vec2 sdtTexCoord;
+in vec3 sdtNormal;
+in vec4 sdtWavingOffset;
+in vec3 sdtPlayerPos;
 #include "/lib/sdt/textureSynthesis.glsl"
 #ifndef ATLASSIZE
 uniform ivec2 atlasSize;

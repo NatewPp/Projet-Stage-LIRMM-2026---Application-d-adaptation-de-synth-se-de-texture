@@ -346,12 +346,16 @@ def upgrade_glsl_version(filepath: str):
 
     m = re.search(r"#version\s+(\d+)[^\n]*", content)
     if m is None:
-        # pas de #version du tout : GLSL 1.10 implicite -> on en impose un en tête
-        content = "#version 330 compatibility\n" + content
-    else:
-        if int(m.group(1)) >= 130:
-            return False                       # déjà assez récent, rien à faire
-        content = content[:m.start()] + "#version 330 compatibility" + content[m.end():]
+        # Pas de #version : ce fichier est presque toujours un INCLUDE qui hérite
+        # du #version du programme qui l'inclut (ex. Arc : program/gbuffers_terrain.vsh
+        # est inclus par gbuffers_terrain.vsh qui porte déjà #version 430). Lui en
+        # préfixer un créerait un SECOND #version après aplatissement des includes,
+        # rejeté par le parseur d'Iris ("no viable alternative at input '#version'").
+        # On le laisse donc hériter, sans rien ajouter.
+        return False
+    if int(m.group(1)) >= 130:
+        return False                       # déjà assez récent, rien à faire
+    content = content[:m.start()] + "#version 330 compatibility" + content[m.end():]
 
     with open(filepath, 'w', encoding='utf-8') as f:
         f.write(content)
