@@ -1,5 +1,5 @@
 import sys
-import os
+import os, re
 
 from pythonLibs.Searchers import find_gbuffers_terrain, findMainFunction,searchforSDTUniforms,special450variables,GetVersion
 from pythonLibs.Injectors import inject_SDTfunctionsinmain, inject_DefineChecksForUniforms, upgrade_glsl_version,inject_in450_defines
@@ -17,6 +17,7 @@ def inject_sdt(pack_path, dest=None):
         dest = os.path.join(dir_path, base_name[0] + "_SDT" + base_name[1])
 
     copy_folder_with_overwrite(pack_path, dest)
+    add_sdt_screen_option(dest) 
     version = GetVersion(dest)
     print(version)
     shaders = find_gbuffers_terrain(dest)
@@ -35,6 +36,23 @@ def inject_sdt(pack_path, dest=None):
     if version is not None and version >= 450:
         inject_in450_defines(special450variables(dest))
     return dest
+
+def add_sdt_screen_option(pack_dir):
+    """Ajoute TEXTURE_SYNTHESIS à l'écran principal de shaders.properties.
+    Si le pack n'a pas de shaders.properties, ne fait rien (option auto-affichée)."""
+    sp = os.path.join(pack_dir, "shaders", "shaders.properties")
+    if not os.path.isfile(sp):
+        return                                   # pas d'écrans curés -> rien à faire
+    with open(sp, encoding="utf-8") as f:
+        content = f.read()
+    if "TEXTURE_SYNTHESIS" in content:
+        return                                   # déjà ajouté
+    # ajoute l'option à la fin de la 1re ligne "screen=" (l'écran principal)
+    new, n = re.subn(r"(?m)^(screen\s*=.*)$",
+                     r"\1 TEXTURE_SYNTHESIS", content, count=1)
+    if n:
+        with open(sp, "w", encoding="utf-8") as f:
+            f.write(new)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 // Required includes for texture synthesis
-
+#define TEXTURE_SYNTHESIS   // active/désactive la synthèse de texture
 
 #ifndef GBUFFERMODELVIEWINVERSE
 uniform mat4 gbufferModelViewInverse;
@@ -46,6 +46,7 @@ out vec3 sdtPlayerPos;
 
 
 void PrepareTextureSynthesisVSH() {
+#ifdef TEXTURE_SYNTHESIS
     // Pass texture coordinates
     sdtTexCoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
 
@@ -57,6 +58,7 @@ void PrepareTextureSynthesisVSH() {
 
     // Pass player position (relative to camera)
     sdtPlayerPos = (gbufferModelViewInverse * (gl_ModelViewMatrix * gl_Vertex)).xyz;
+#endif
 }
 
 #endif // VSHSDT
@@ -93,6 +95,7 @@ vec3 SDTSDTScreenToView(vec3 pos) {
 }
 
 void ApplyTextureSynthesis(inout vec4 color) {
+#ifdef TEXTURE_SYNTHESIS
     // Initialize variables
     vec2 texCoord = sdtTexCoord;
     vec3 normal = sdtNormal;
@@ -251,6 +254,7 @@ void ApplyTextureSynthesis(inout vec4 color) {
             color.rgba = textureAF(tex, texCoord);
         #endif
     }
+#endif
 }
 
 #endif // FSHSDT
