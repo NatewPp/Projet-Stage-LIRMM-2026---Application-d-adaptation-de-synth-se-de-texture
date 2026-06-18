@@ -234,9 +234,7 @@ def obtenir_nom_variable_couleur_universel(chemin_fichier, macros: dict = None):
     """"
     Retourne le nom de la variable de couleur du pixel en cherchant dans les mains du shader passé en entrée.
     Les macros (object-like et function-like) sont d'abord résolues, ce qui permet de détecter
-    la variable même quand l'échantillonnage est masqué par une macro :
-      - I Like Vanilla : texture2D(MAIN_TEXTURE, ...)  avec  #define MAIN_TEXTURE tex
-      - Photon         : read_tex(gtexture)            avec  #define read_tex(x) texture(x, ...)
+    la variable même quand l'échantillonnage est masqué par une macro 
     PRECONDITION : le fichier doit être un fichier texte lisible. macros provient de collecter_macros.
     POSTCONDITION : retourne le nom de la variable de couleur du pixel si trouvé, sinon retourne False.
     """

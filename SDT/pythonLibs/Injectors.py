@@ -1,9 +1,5 @@
-import os
 import re
 from .Searchers import extraire_blocs_main
-import re
-
-import re
 
 def includeSTDlibs(filepath: str, relative_to_root: str, colorvariable: str):  
     """"
@@ -28,7 +24,6 @@ def includeSTDlibs(filepath: str, relative_to_root: str, colorvariable: str):
 
     regex_fsh = None
     if colorvariable:
-        # FSH = main qui assigne la variable couleur (robuste aux macros, cf. Photon/I Like Vanilla).
         regex_fsh = rf"\b{re.escape(colorvariable)}\b(?:\.[a-zA-Z_]\w*)?\s*=(?!=)"
     
     matches_main = list(re.finditer(r"\bvoid\s+main\s*\(\s*\)", content))
@@ -82,9 +77,6 @@ def inject_SDTfunctionsinmain(filepath: str, shader_root: str, colorvariable: st
     mains = extraire_blocs_main(content)
 
     def _is_fragment_main(bloc):
-        # Un main est "fragment" s'il assigne (sous quelque forme que ce soit) la variable
-        # couleur détectée. Basé sur l'assignation, et non sur la forme texture(...), pour
-        # rester robuste quand l'échantillonnage est masqué par une macro (Photon, I Like Vanilla).
         if not colorvariable:
             return False
         return bool(re.search(
@@ -223,7 +215,7 @@ def injectBothSDTinmains(filepath: str,colorvariable: str):
                     return False
                 content = content.replace(main, contenu_main_modifie, 1)
 
-        content = ajouter_tampon_modified(content)  # tampon version-aware, après succès
+        content = ajouter_tampon_modified(content) 
         with open(filepath, 'w', encoding='utf-8') as file:
             file.write(content)
         return True
@@ -254,10 +246,6 @@ def inserer_applyFSH_dans_bloc_main(contenu_main: str, colorvariable: str) -> st
                 seq += f"\n    {colorvariable} = {colorvariable} {extra};"
             return seq
         return re.sub(pattern, _injecter, contenu_main)
-
-    # Fallback : l'échantillonnage est masqué par une macro (Photon : read_tex(gtexture),
-    # I Like Vanilla : sampler macro). On ancre alors sur la PREMIÈRE assignation de la
-    # variable couleur et on insère ApplyTextureSynthesis juste après l'instruction complète.
     fallback = rf"(\b{color_esc}\b(?:\.[a-zA-Z_]\w*)?\s*=(?!=)[^;]*;)"
     m = re.search(fallback, contenu_main)
     if m:
@@ -346,12 +334,6 @@ def upgrade_glsl_version(filepath: str):
 
     m = re.search(r"#version\s+(\d+)[^\n]*", content)
     if m is None:
-        # Pas de #version : ce fichier est presque toujours un INCLUDE qui hérite
-        # du #version du programme qui l'inclut (ex. Arc : program/gbuffers_terrain.vsh
-        # est inclus par gbuffers_terrain.vsh qui porte déjà #version 430). Lui en
-        # préfixer un créerait un SECOND #version après aplatissement des includes,
-        # rejeté par le parseur d'Iris ("no viable alternative at input '#version'").
-        # On le laisse donc hériter, sans rien ajouter.
         return False
     if int(m.group(1)) >= 130:
         return False                       # déjà assez récent, rien à faire
@@ -388,22 +370,16 @@ def inject_in450_defines(found_ins):
         for declaration in ins_list:
             if declaration.strip().startswith("//") or declaration.strip().startswith("/*"):
                 continue
-            # On itère name, macro : .items() renvoie des tuples (nom, MACRO).
-            # On détecte par NOM (ex. vaPosition), mais la garde utilise la MACRO (VAPOSITION).
             macros = [macro for name, macro in SDT450_MACROS.items()
                       if re.search(rf"\b{name}\b", declaration)]
             if not macros:
                 continue
-            # Le #define {macro} DOIT figurer dans la garde, sinon SDTmain.glsl
-            # (qui teste #ifndef MACRO) redéclarera la variable -> doublon.
             defines = "\n".join(f"#define {macro}" for macro in macros)
             clean_declaration = declaration.strip()
             injection = f"#ifndef {macros[0]}\n{clean_declaration}\n{defines}\n#endif"
 
             if injection in content:
                 continue
-            # Remplacement ANCRÉ EN DÉBUT DE LIGNE : ne touche que les vraies
-            # déclarations, jamais une occurrence nichée dans un commentaire « // in ... ; ».
             pattern = rf"(?m)^([ \t]*){re.escape(declaration)}"
             new_content, n = re.subn(pattern, lambda m: m.group(1) + injection, content)
             if n:
