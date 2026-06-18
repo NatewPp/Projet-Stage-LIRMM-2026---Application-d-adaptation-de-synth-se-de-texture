@@ -90,6 +90,10 @@ def inject_SDTfunctionsinmain(filepath: str, shader_root: str, colorvariable: st
     elif len(mains) == 1:
         if _is_fragment_main(mains[0]):
             injectFSHSDTinmain(filepath, colorvariable)
+        elif filepath.lower().endswith('.fsh'):
+            # Le fichier est un FSH mais la variable couleur n'a pas été détectée.
+            # Injecter quand même en FSH serait mieux que d'injecter en VSH par erreur.
+            print(f"[!] Variable couleur introuvable dans {filepath}, injection FSH sautée.")
         else:
             injectVSHSDTinmain(filepath)
     else:
@@ -241,6 +245,14 @@ def inserer_applyFSH_dans_bloc_main(contenu_main: str, colorvariable: str) -> st
         def _injecter(m):
             assignation = m.group(1)
             extra = m.group(2).strip()
+            # Si l'extra commence par un swizzle (.rgb, .xyz…), il appartient au résultat
+            # de texture() et doit rester collé à l'assignation pour préserver les types.
+            # Ex: "color = texture(tex, uv).rgb * k" → assignation="color = texture(tex, uv)"
+            #     extra=".rgb * k" → on rattache ".rgb" à l'assignation.
+            swizzle_m = re.match(r'^(\.[a-zA-Z]+)(.*)', extra, re.DOTALL)
+            if swizzle_m:
+                assignation = assignation + swizzle_m.group(1)
+                extra = swizzle_m.group(2).strip()
             seq = f"{assignation};\n    ApplyTextureSynthesis({colorvariable});"
             if extra:
                 seq += f"\n    {colorvariable} = {colorvariable} {extra};"

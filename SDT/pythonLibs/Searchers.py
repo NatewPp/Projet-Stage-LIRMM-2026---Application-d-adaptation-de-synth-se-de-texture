@@ -258,6 +258,14 @@ def obtenir_nom_variable_couleur_universel(chemin_fichier, macros: dict = None):
             if match:
                 return match.group(1)
 
+        # Fallback: shaders qui packent leur sortie (ex. Arc, Photon) —
+        # packUnorm4x8(colorVar) indique que colorVar est la variable couleur principale.
+        pattern_pack = r"\bpackUnorm4x8\s*\(\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\)"
+        for contenu_main in extraire_blocs_main(contenu_resolu):
+            match = re.search(pattern_pack, contenu_main)
+            if match:
+                return match.group(1)
+
         print("[!] Aucun main() ne correspond aux critères de texture principale.")
         return False
 
@@ -372,27 +380,29 @@ def special450variables(filepath: str):
 
 def GetVersion (filepath: str):
     """
-    Recherche la version du shader de terrain en fonction du #version déclaré
+    Recherche la version du shader de terrain en fonction du #version déclaré.
+    Pour un dossier, retourne la version MINIMALE trouvée dans tous les fichiers
+    (les shaders de terrain utilisent généralement la version la plus basse du pack).
     PRECONDITION : le fichier doit être un fichier texte lisible ou un dossier contenant des fichiers texte lisibles.
     POSTCONDITION : retourne un entier correspondant à la version GLSL trouvée dans le fichier, ou None si aucune version n'est trouvée ou en cas d'erreur.
     """
     try:
         if os.path.isdir(filepath):
-            items = os.listdir(filepath)
-            for item in items:
+            min_version = None
+            for item in os.listdir(filepath):
                 item_path = os.path.join(filepath, item)
                 version_rec = GetVersion(item_path)
                 if version_rec is not None:
-                    return version_rec
-            return None
+                    if min_version is None or version_rec < min_version:
+                        min_version = version_rec
+            return min_version
         else:
-            version_number = None
             with open(filepath, 'r', encoding='utf-8') as file:
                 content = file.read()
             version_match = re.search(r'^\s*#version\s+(\d+)', content, re.M)
             if version_match:
-                version_number = int(version_match.group(1))
-            return version_number
+                return int(version_match.group(1))
+            return None
     except Exception as e:
         print(f"Error reading file: {e}")
         return None

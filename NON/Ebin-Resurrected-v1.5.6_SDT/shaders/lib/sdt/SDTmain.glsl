@@ -89,6 +89,13 @@ vec3 SDTSDTScreenToView(vec3 pos) {
     return viewPos.xyz / viewPos.w;
 }
 
+// Surcharge pour les variables couleur déclarées en vec3.
+void ApplyTextureSynthesis(inout vec3 color) {
+    vec4 c = vec4(color, 1.0);
+    ApplyTextureSynthesis(c);
+    color = c.rgb;
+}
+
 void ApplyTextureSynthesis(inout vec4 color) {
     // Initialize variables
     vec2 texCoord = sdtTexCoord;

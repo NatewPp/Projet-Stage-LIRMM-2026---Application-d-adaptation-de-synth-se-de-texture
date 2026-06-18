@@ -45,19 +45,7 @@ uniform mat3 normalMatrix;
 #ifdef VSHSDT
 //========== VERTEX SHADER COMPONENT ==========
 
-// Attributs d'entrée (obligatoires en 450 si non déclarés dans le .vsh principal)
-#ifndef VAPOSITION
-in vec4 vaPosition;  // Remplace gl_Vertex
-#define VAPOSITION
-#endif
-#ifndef VANORMAL
-in vec3 vaNormal;
-#define VANORMAL
-#endif
-#ifndef VAUV0
-#define VAUV0
-in vec4 vaUV0;       // Remplace gl_MultiTexCoord0
-#endif
+// vaPosition, vaNormal, vaUV0 sont toujours injectés par Iris/Optifine — ne pas les redéclarer.
 // Les varyings deviennent des 'out' dans le Vertex Shader
 #ifndef VARYINGSDT
 #define VARYINGSDT
@@ -140,6 +128,13 @@ void ApplyTextureSynthesis(inout vec4 color) {
             color.rgba = textureAF(tex, texCoord);
         #endif
     }
+}
+
+// Surcharge pour les variables couleur déclarées en vec3.
+void ApplyTextureSynthesis(inout vec3 color) {
+    vec4 c = vec4(color, 1.0);
+    ApplyTextureSynthesis(c);
+    color = c.rgb;
 }
 
 #endif // FSHSDT

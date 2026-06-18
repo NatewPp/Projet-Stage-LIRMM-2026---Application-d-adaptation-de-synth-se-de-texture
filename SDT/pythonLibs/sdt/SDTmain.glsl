@@ -257,4 +257,11 @@ void ApplyTextureSynthesis(inout vec4 color) {
 #endif
 }
 
+// Surcharge pour les variables couleur déclarées en vec3.
+void ApplyTextureSynthesis(inout vec3 color) {
+    vec4 c = vec4(color, 1.0);
+    ApplyTextureSynthesis(c);
+    color = c.rgb;
+}
+
 #endif // FSHSDT

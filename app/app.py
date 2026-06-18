@@ -413,29 +413,24 @@ class App(ctk.CTk):
         self.NbShadersInjectes = 0
         self.NbShadersMax = len(ListeShaders)
         log_lock = threading.Lock()
+        semaphore = threading.Semaphore(5)
 
         def worker_shader(shader_path, shader_name):
-            self._say(f"[Début] Traitement de : {shader_name}")
-
-            # 1. On exécute le traitement (votre fonction de calcul)
-            # /!\ ATTENTION : Ici, appelez directement la fonction de calcul (ex: self._work) 
-            # SANS créer de nouveau thread à l'intérieur de _run.
-            self._run(shader_path) 
-            
-            # 2. Une fois le travail fini, on verrouille pour mettre à jour les logs proprement
-            with log_lock:
-                self.NbShadersInjectes += 1
-                nb_restants = self.NbShadersMax - self.NbShadersInjectes
-                
-                self._say(f"[Fini] {shader_name} terminé !")
-                progress_percent = (self.NbShadersInjectes / self.NbShadersMax) * 100
-                self._say(f"Progression : {progress_percent}% (Restants : {nb_restants})")
+            with semaphore:
+                self._say(f"[Début] Traitement de : {shader_name}")
+                self._run(shader_path)
+                with log_lock:
+                    self.NbShadersInjectes += 1
+                    nb_restants = self.NbShadersMax - self.NbShadersInjectes
+                    self._say(f"[Fini] {shader_name} terminé !")
+                    progress_percent = (self.NbShadersInjectes / self.NbShadersMax) * 100
+                    self._say(f"Progression : {progress_percent}% (Restants : {nb_restants})")
 
         for shader in ListeShaders:
             shader_path = os.path.join(self.pack_var.get(), shader)
             if os.path.isdir(shader_path):
-               t = threading.Thread(target=worker_shader, args=(shader_path, shader), daemon=True)
-               t.start()
+                t = threading.Thread(target=worker_shader, args=(shader_path, shader), daemon=True)
+                t.start()
 
     #Action principal
     def _run(self, pack):

@@ -17,10 +17,23 @@ def inject_sdt(pack_path, dest=None):
         dest = os.path.join(dir_path, base_name[0] + "_SDT" + base_name[1])
 
     copy_folder_with_overwrite(pack_path, dest)
-    add_sdt_screen_option(dest) 
-    version = GetVersion(dest)
-    print(version)
+    add_sdt_screen_option(dest)
     shaders = find_gbuffers_terrain(dest)
+    # Determine version from the terrain VSH itself, not from any file in the pack.
+    # Some packs mix versions (e.g. terrain at 430, composites at 450), so scanning
+    # the whole directory returns the wrong version.
+    version = None
+    for shader_path, shader_root, relative_to_root in shaders:
+        v = GetVersion(shader_path)
+        if v is not None:
+            version = v
+            break
+    if version is None:
+        # Terrain file has no #version: scan only the program/ folder (avoids
+        # compute/composite shaders that may declare a different version).
+        program_dir = os.path.join(dest, "shaders", "program")
+        version = GetVersion(program_dir) if os.path.isdir(program_dir) else GetVersion(dest)
+    print(version)
     if version >= 450:
         copySdtToShaders(dest,True)
     else:
