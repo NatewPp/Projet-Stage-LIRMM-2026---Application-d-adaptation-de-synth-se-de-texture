@@ -323,10 +323,16 @@ class App(ctk.CTk):
             self.atlas_var.set(f)
 
     def _pick_pack(self):
-        """Fonction pour séléctionner dans ses fichiers son shader"""
+        """Choisir un shaderpack : un .zip, ou (si on annule) un dossier."""
+        f = filedialog.askopenfilename(
+            title="Choisir un shaderpack .zip (ou Annuler pour un dossier)",
+            filetypes=[("Shaderpack zip", "*.zip"), ("Tous", "*.*")])
+        if f:
+            self.pack_var.set(f); return
         d = filedialog.askdirectory(title="Choisir le dossier du shaderpack")
         if d:
             self.pack_var.set(d)
+
     #fonction lier au texte et la langue
     def t(self, key):
         return TEXTS[self.lang][key]
@@ -491,8 +497,12 @@ class App(ctk.CTk):
         tmp = None
         try:
             #Copie + injection SDT, directement dans Téléchargements
-            name = os.path.basename(os.path.normpath(pack)) + "_SDT"
+            base = os.path.basename(os.path.normpath(pack))
+            if base.lower().endswith(".zip"):
+                base = base[:-4]
+            name = base + "_SDT"
             out_pack = os.path.join(DOWNLOADS, name)
+
             self._say(f"Injection du code SDT… dans : {out_pack}")
             ISDT.inject_sdt(pack, dest=out_pack)
 
