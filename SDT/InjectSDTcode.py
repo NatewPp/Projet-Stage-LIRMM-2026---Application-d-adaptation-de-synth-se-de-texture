@@ -61,8 +61,8 @@ def add_sdt_screen_option(pack_dir):
     if "TEXTURE_SYNTHESIS" in content:
         return                                   # déjà ajouté
     # ajoute l'option à la fin de la 1re ligne "screen=" (l'écran principal)
-    new, n = re.subn(r"(?m)^(screen\s*=.*)$",
-                     r"\1 TEXTURE_SYNTHESIS", content, count=1)
+    new, n = re.subn(r"(?m)^(\s*screen\s*=.*)$",
+                    r"\1 TEXTURE_SYNTHESIS", content, count=1)
     if n:
         with open(sp, "w", encoding="utf-8") as f:
             f.write(new)
