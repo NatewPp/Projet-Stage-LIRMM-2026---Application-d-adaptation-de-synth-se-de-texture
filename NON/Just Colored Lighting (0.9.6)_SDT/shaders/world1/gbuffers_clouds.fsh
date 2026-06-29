@@ -1,2 +1,0 @@
-#define IS_THE_END 1
-#include "/shaders/gbuffers_clouds.fsh"

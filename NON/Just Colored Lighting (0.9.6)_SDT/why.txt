@@ -1,1 +1,0 @@
-basic: basic: 0(65) : error C1038: declaration of "cameraPosition" conflicts with previous declaration at 0(64)

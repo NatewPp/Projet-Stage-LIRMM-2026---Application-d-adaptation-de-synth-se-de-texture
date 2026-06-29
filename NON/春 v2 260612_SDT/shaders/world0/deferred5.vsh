@@ -1,6 +1,0 @@
-#version 450 compatibility  
-
-#define VSH
-
-
-#include "/program/deferred5.glsl"

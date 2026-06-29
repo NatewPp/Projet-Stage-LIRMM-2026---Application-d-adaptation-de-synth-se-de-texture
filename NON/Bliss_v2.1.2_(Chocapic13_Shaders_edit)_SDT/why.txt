@@ -1,2 +1,0 @@
-composite12.fsh: composite12.fsh: 0(180) : error C1038: declaration of "viewWidth" conflicts with previous declaration at 0(41)
-0(181) : error C1038: declaration of "viewHeight" conflicts with previous declaration at 0(42)

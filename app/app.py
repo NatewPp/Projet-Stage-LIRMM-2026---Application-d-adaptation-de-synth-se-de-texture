@@ -17,7 +17,7 @@ import shutil
 import threading
 import traceback
 import tkinter as tk
-from PIL import Image, ImageDraw, ImageTk
+from PIL import Image, ImageTk
 import sys
 import customtkinter as ctk
 import tkinter.font as tkfont
@@ -45,21 +45,62 @@ MC = {
     "subtext":   "#a0a0a0",
 }
 
-TEXTS = {
-    "fr": {"title": "Implementeur Synthèse de texture",
-           "regen": "Régénérer",
-           "browse": "Parcourir",
-           "atlas_label": "1. Atlas de ta version (PNG)",
-           "atlas_label2": "2. Dossier du shaderpack",
-           "btnDebug": "MONTRER DEBUG",
-           "statut": "Prêt"},
-    "en": {"title": "Texture Synthesis Implementer",
-           "regen": "Regenerate",
-           "browse": "Browse",
-           "atlas_label": "1. Your version's atlas (PNG)",
-           "atlas_label2": "2. Shaderpack folder",
-           "btnDebug": "SHOW DEBUG",
-           "statut": "Ready"},
+TEXTS = { #variable pour modifier la lanque de l'application
+    "fr": {
+        "title": "Texture Synthesis Implementer",
+        "regen": "Générer",
+        "browse": "Parcourir",
+        "atlas_label": "1. Atlas de ta version (PNG)",
+        "atlas_label2": "2. Dossier du shaderpack",
+        # checkboxes
+        "debug": "DEBUG",
+        "multi": "MULTI-SHADER",
+        "zip": "ZIP",
+        # bouton pendant le run
+        "running": "En cours…",
+        # statuts
+        "ready": "Prêt.",
+        "generating": "Génération en cours…",
+        "done": "Terminé ✔",
+        "error_status": "Erreur — voir le journal.",
+        # dialogues
+        "pick_atlas": "Choisir l'atlas",
+        "pick_pack": "Choisir un shaderpack .zip (ou Annuler pour un dossier)",
+        "pick_dir": "Choisir le dossier du shaderpack",
+        # messages d'erreur (titre + corps)
+        "err_atlas_missing_t": "Atlas manquant",
+        "err_atlas_missing_m": "Choisis un fichier d'atlas.",
+        "err_format_t": "Mauvais format",
+        "err_format_m": "L'atlas doit être un fichier .png",
+        "err_invalid_t": "Fichier invalide",
+        "err_invalid_m": "Ce fichier n'est pas une image PNG valide.",
+        "err_notatlas_t": "Pas un atlas",
+    },
+    "en": {
+        "title": "Texture Synthesis Implementer",
+        "regen": "Generate",
+        "browse": "Browse",
+        "atlas_label": "1. Your version's atlas (PNG)",
+        "atlas_label2": "2. Shaderpack folder",
+        "debug": "DEBUG",
+        "multi": "MULTI-SHADER",
+        "zip": "ZIP",
+        "running": "Working…",
+        "ready": "Ready.",
+        "generating": "Generating…",
+        "done": "Done ✔",
+        "error_status": "Error — see the log.",
+        "pick_atlas": "Choose the atlas",
+        "pick_pack": "Choose a .zip shaderpack (or Cancel for a folder)",
+        "pick_dir": "Choose the shaderpack folder",
+        "err_atlas_missing_t": "Missing atlas",
+        "err_atlas_missing_m": "Choose an atlas file.",
+        "err_format_t": "Wrong format",
+        "err_format_m": "The atlas must be a .png file",
+        "err_invalid_t": "Invalid file",
+        "err_invalid_m": "This file is not a valid PNG image.",
+        "err_notatlas_t": "Not an atlas",
+    },
 }
 
 #Variables de chemin
@@ -80,22 +121,6 @@ def find_glsl(path):
             if GLSL_NAME in fn:
                 return os.path.join(dp, GLSL_NAME)
     return None
-
-def validate_glsl(glsl):
-    """Vérifie que le glsl est bien une table de synthèse de texture modifiable.
-    Renvoie (True, nb_blocs) si éligible, sinon (False, message d'erreur)"""
-    try:
-        txt = open(glsl, encoding="utf-8", errors="ignore").read() #lecture du fichier glsl
-    except Exception:
-        return False, "Fichier illisible."
-    #compte les lignes de données reconnues par le moteur de type (vec2(...,...) //bloc_name)
-    n = 0 
-    for ln in txt.splitlines(): 
-        if engine.LINE_RE.match(ln):
-            n += 1
-    if "normalBlockOffsets" not in txt or n == 0:
-        return False, ("Ce fichier ne contient pas de données de synthèse de texture. Shader non compatible.")
-    return True, n
 
 def mc_font(size, weight="normal"):
     """Applique à la police le thème monocraft si installer sur l'ordinateur"""
@@ -125,8 +150,6 @@ def detect_lang():
         code = ""
     # couvre 'fr_FR', 'French_France', 'fr-FR'... insensible à la casse
     return "fr" if code.lower().startswith(("fr", "french")) else "en"
-
-T = TEXTS[detect_lang()]
 
 class App(ctk.CTk):
     def __init__(self):
@@ -198,9 +221,9 @@ class App(ctk.CTk):
         self._row(150, "atlas_label2", self.pack_var, self._pick_pack)
 
         #Option debug
-        self.debug_var = ctk.BooleanVar(value=False)
+        self.debug_var = ctk.BooleanVar(value=True)
         cb2 = tk.Checkbutton( #bouton pour activer ou désactiver le debug
-            self.canvas, text= self.t("btnDebug"),
+            self.canvas, text= self.t("debug"),
             variable=self.debug_var,
             font=mc_font(12),                     
             indicatoron=False,                   
@@ -210,12 +233,12 @@ class App(ctk.CTk):
             bd=3, relief="raised",                
             highlightthickness=0, cursor="hand2",
             command=self._click)
-        self._register_widget(cb2, "btnDebug")
+        self._register_widget(cb2, "debug")
 
         #option si dossier de plusieurs shaderpacks ou si un seul shaderpack
         self.manyfolders_var = ctk.BooleanVar(value=False)
         cb3 = tk.Checkbutton( #bouton pour savoir si un ou plusieurs shaders
-            self.canvas, text="MULTI-SHADER",
+            self.canvas, text="multi",
             variable=self.manyfolders_var,
             font=mc_font(12),
             indicatoron=False,
@@ -225,6 +248,7 @@ class App(ctk.CTk):
             bd=3, relief="raised",
             highlightthickness=0, cursor="hand2",
             command=self._click)
+        self._register_widget(cb3, "multi")
 
         self.canvas.create_window(16, 262, window=cb2, anchor="nw",
                                 width=100, height=34, tags="ui") 
@@ -236,9 +260,9 @@ class App(ctk.CTk):
         cb3.bind("<Leave>", lambda e: cb3.config(bg=MC["stone"]))
 
         #Bouton pour choisir zip ou non en sortie
-        self.zip_var = ctk.BooleanVar(value=False)
+        self.zip_var = ctk.BooleanVar(value=True)
         cb4 = tk.Checkbutton(
-            self.canvas, text="ZIP",
+            self.canvas, text="zip",
             variable=self.zip_var,
             font=mc_font(12), indicatoron=False,
             fg="white", bg=MC["stone"], selectcolor=MC["green_hi"],
@@ -249,6 +273,7 @@ class App(ctk.CTk):
                                 width=80, height=34, tags="ui")
         cb4.bind("<Enter>", lambda e: cb4.config(bg=MC["stone_hi"]))
         cb4.bind("<Leave>", lambda e: cb4.config(bg=MC["stone"]))
+        self._register_widget(cb4, "zip")
 
         #Bouton Générer
         self.run_btn = tk.Button(
@@ -265,8 +290,13 @@ class App(ctk.CTk):
         self._register_widget(self.run_btn, "regen")
 
         #Etat de la génération
-        self._statut(370,"statut","black")
-        self._statut(371,"statut",MC["subtext"])
+        self.canvas.create_text(17, 371, text="", anchor="w",
+                        font=("Monocraft", 12), fill="black", tags=("status_sh", "ui"))
+        self.canvas.create_text(16, 370, text="", anchor="w",
+                                font=("Monocraft", 12), fill=MC["subtext"], tags=("status", "ui"))
+        self._status_key, self._status_color = "ready", MC["subtext"]
+        self._set_status("ready")
+
         #Zone de log et debug
         self.log = ctk.CTkTextbox(self.canvas, corner_radius=0, fg_color=MC["entry"],
                                   border_color=MC["entry_bd"], border_width=2,
@@ -311,13 +341,9 @@ class App(ctk.CTk):
         btn.bind("<Leave>", lambda e: btn.config(bg=MC["stone"]))
         self._register_widget(btn, "browse")
 
-    def _statut(self, y, key,color):
-        self._txt(17, y+1, key, anchor="w",
-                                font=("Monocraft", 12), fill = color, tags=("status_sh","ui"))
-
     def _pick_atlas(self):
         """Fonction pour séléctionner dans ses fichier son atlas.png"""
-        f = filedialog.askopenfilename(title="Choisir l'atlas",
+        f = filedialog.askopenfilename(title=self.t("pick_atlas"),
                                        filetypes=[("Images PNG", "*.png"), ("Tous", "*.*")])
         if f:
             self.atlas_var.set(f)
@@ -325,11 +351,11 @@ class App(ctk.CTk):
     def _pick_pack(self):
         """Choisir un shaderpack : un .zip, ou (si on annule) un dossier."""
         f = filedialog.askopenfilename(
-            title="Choisir un shaderpack .zip (ou Annuler pour un dossier)",
+            title=self.t("pick_dir"),
             filetypes=[("Shaderpack zip", "*.zip"), ("Tous", "*.*")])
         if f:
             self.pack_var.set(f); return
-        d = filedialog.askdirectory(title="Choisir le dossier du shaderpack")
+        d = filedialog.askdirectory(title=self.t("pick_dir"))
         if d:
             self.pack_var.set(d)
 
@@ -348,7 +374,9 @@ class App(ctk.CTk):
     
     def _apply_lang(self):
         for update in self._i18n:
-            update() 
+            update()
+        if hasattr(self, "_status_key"):
+            self._set_status(self._status_key, self._status_color)
 
     def _toggle_lang(self):
         self._click()                              
@@ -373,15 +401,17 @@ class App(ctk.CTk):
             self.log.see("end")
             self.log.configure(state="disabled")
         self.after(0, do) #execute le do dans le thread principal pour la sécurité
-    """
-    def _set_status(self, text, color="gray70"):
-        Modifie le message de statut pendant la génération pour une impréssion 
-        de progréssion dans le processus
-        self.after(0, lambda: self.status.configure(text=text, text_color=color))
-    """
+    
+    def _set_status(self, text, color=MC["subtext"]):
+        """Met à jour le message de statut (thread-safe via after)."""
+        def do():
+            self.canvas.itemconfigure("status", text=text, fill=color)
+            self.canvas.itemconfigure("status_sh", text=text)   # l'ombre suit le même texte
+        self.after(0, do)
+    
     def _set_running(self, running):
         def do():
-            self.run_btn.configure(state="disabled" if running else "normal")
+            self.run_btn.configure(text=self.t("running") if running else self.t("regen"))
             if self.debug_var.get():
                 self.run_btn.configure(text="En cours…" if running else "Générer")
         self.after(0, do)
@@ -407,8 +437,6 @@ class App(ctk.CTk):
             threading.Thread(target=self._multirun, daemon=True).start()
         else:
             threading.Thread(target=self._run, args=(self.pack_var.get(),), daemon=True).start()
-
-    
 
     def _multirun(self):
         contenu_brut = os.listdir(self.pack_var.get())
@@ -444,9 +472,6 @@ class App(ctk.CTk):
         pack = pack.strip()
         textures = DEFAULT_REF
 
-        #Nettoyage des logs
-        #self._clear_log()
-
         self._click()
 
         #Validations
@@ -455,14 +480,7 @@ class App(ctk.CTk):
             Error_sound.play()
             self._error("Atlas manquant", "Choisis un fichier d'atlas.")
             return
-        """
-        if not os.path.isdir(os.path.join(pack, "shaders")):
-            Error_sound = pygame.mixer.Sound(os.path.join(HERE, "sound", "boom.wav"))
-            Error_sound.play()
-            self._error("Pas un shaderpack",
-                        f"Pas de dossier shaders/ dans :\n{pack}")
-            return
-        """
+
         #Doit être un .png et un vrai PNG ouvrable
         if not atlas.lower().endswith(".png"):
             Error_sound = pygame.mixer.Sound(os.path.join(HERE, "sound", "boom.wav"))
@@ -486,9 +504,8 @@ class App(ctk.CTk):
             f"Dimensions {w}x{h} : ne ressemble pas à un atlas de blocs.")
             return
         self._set_running(True)
+        self._set_status("generating", "orange") 
         self._work(atlas, pack, textures)
-        #self._set_status("Injection + Génération en cours…", "orange")
-        #self._set_status("Régénération en cours…", "orange")
 
         #Le calcul tourne dans un thread pour ne pas geler la fenêtre
         #threading.Thread(target=self._work, args=(atlas, pack, textures), daemon=True).start()
@@ -512,7 +529,6 @@ class App(ctk.CTk):
                 raise RuntimeError("Injection SDT : aucun glsl de synthèse dans " + out_pack)
             blockdir, tmp = engine.resolve_textures(textures)
             out = glsl + ".generated"
-            res = engine.regenerate(atlas, blockdir, glsl, out)
             
             shutil.move(out, glsl)       
 
@@ -523,12 +539,12 @@ class App(ctk.CTk):
                 self._say(f"Pack zippé : {zip_path}")
             else :
                 self._say(f"Dossier créé : {out_pack}")
-
+            self._set_status("done", "lightgreen")
 
         except Exception as e:
             self._say("\nERREUR : " + str(e))
             self._say(traceback.format_exc())
-            #self._set_status("Erreur — voir le journal.", "red")
+            self._set_status("error_status", "red")
         finally:
             if tmp:
                 shutil.rmtree(tmp, ignore_errors=True)

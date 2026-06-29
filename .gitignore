@@ -1,4 +1,19 @@
-testfolder1/
-testfolder2/
-SDT/__pycache__/
-SDT/pythonLibs/__pycache__/
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Artefacts générés par l'app (packs traités en sortie)
+*_SDT/
+*_SDT.zip
+*.generated
+*.bak
+
+# Packs de test / sources non distribués
+NON/
+app/Base-330TestScript/

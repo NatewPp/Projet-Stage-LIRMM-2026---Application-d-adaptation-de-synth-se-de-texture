@@ -1,3 +1,0 @@
-terrain_solid: terrain_solid: 0(640) : error C1038: declaration of "vaPosition" conflicts with previous declaration at 0(3)
-0(641) : error C1038: declaration of "vaNormal" conflicts with previous declaration at 0(4)
-0(642) : error C1038: declaration of "vaUV0" conflicts with previous declaration at 0(5)

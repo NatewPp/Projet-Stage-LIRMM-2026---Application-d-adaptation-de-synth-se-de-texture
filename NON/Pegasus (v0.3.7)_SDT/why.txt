@@ -1,4 +1,0 @@
-basic: basic: 0(62) : error C1038: declaration of "gbufferModelViewInverse" conflicts with previous declaration at 0(61)
-0(479) : error C1038: declaration of "gbufferProjectionInverse" conflicts with previous declaration at 0(473)
-0(480) : error C1038: declaration of "gbufferModelViewInverse" conflicts with previous declaration at 0(61)
-0(711) : error C1038: declaration of "gbufferModelViewInverse" conflicts with previous declaration at 0(61)
