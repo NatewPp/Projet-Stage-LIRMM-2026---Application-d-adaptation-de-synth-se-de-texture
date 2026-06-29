@@ -76,7 +76,6 @@ L'outil sépare **interface** et **moteur** :
 ## Limites connues
 - Certains shaders très exotiques peuvent ne pas être supportés.
 - Le mode MULTI-SHADER attend un dossier **contenant plusieurs** shaderpacks.
-- <!-- ajoute les limites réelles que tu as constatées -->
 
 ## Auteurs
 - PHULPIN Nathan , ARDOUIN Ethan — stage LIRMM 2026 équipe ICAR.
